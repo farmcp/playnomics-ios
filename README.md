@@ -768,7 +768,7 @@ The Default message would be configured in the Control Panel to use this callbac
 }
 ```
 
-### Level Completion Placement
+### Level Complete Placement
 
 In the following example, we wish to generate third-party revenue from players unlikely to monetize by showing them a segmented message after completing a level or challenge: 
 
