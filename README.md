@@ -5,7 +5,7 @@ Playnomics PlayRM iOS SDK Integration Guide
 
 ## Considerations for Cross-Platform Games
 
-If you want to deploy your game to multiple platforms (eg: iOS, Android, etc), you'll need to create a separate Playnomics Applications in the control panel. Each application must incorporate a separate `<APPID>` particular to that application. In addition, message frames and their respective creative uploads will be particular to that app in order to ensure that they are sized appropriately - proportionate to your game screen size.
+If you want to deploy your game to multiple platforms (eg: iOS, Android, etc), you'll need to create a separate Playnomics Application in the control panel. Each application must incorporate a separate `<APPID>` particular to that application. In addition, message frames and their respective creative uploads will be particular to that app in order to ensure that they are sized appropriately - proportionate to your game screen size.
 
 Getting Started
 ===============
@@ -899,3 +899,4 @@ Change Log
 * First production release
 
 View version tags <a href="https://github.com/playnomics/playnomics-ios/tags">here</a>
+
