@@ -630,7 +630,7 @@ In this use-case, we want to configure a placement that is triggered when they s
 @end
 ```
 
-And then attaching this ‘AwardFrameDelegate’ class to the frame shown in the first game scene:
+And then attaching this `AwardFrameDelegate` class to the frame shown in the first game scene:
 
 ```objectiveC
 @implementation GameViewController{
