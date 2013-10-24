@@ -19,7 +19,7 @@ All of the necessary install files are in the *Playnomics* folder:
 * Playnomics.h
 * PNLogger.h
 
-You can also forking this [repo](https://github.com/playnomics/playnomics-ios), building the PlaynomicsSDK project.
+You can also fork this [repo](https://github.com/playnomics/playnomics-ios), building the PlaynomicsSDK project.
 
 Import the SDK files into your existing game through Xcode.
 
@@ -98,15 +98,15 @@ If you already have your own implementation of `UIApplication<UIApplicationDeleg
 
 Messaging Integration
 =====================
-This guide assumes you're already familiar with the concept of frames and messaging, and that you have all of the relevant `frames` setup for your application.
+This guide assumes you're already familiar with the concept of placements and messaging, and that you have all of the relevant `placements` setup for your application.
 
 If you are new to PlayRM's messaging feature, please refer to <a href="http://integration.playnomics.com" target="_blank">integration documentation</a>.
 
-Once you have all of your frames created with their associated `<PLAYRM-FRAME-ID>`s, you can start the integration process.
+Once you have all of your placements created with their associated `<PLAYRM-FRAME-ID>`s, you can start the integration process.
 
 ## SDK Integration
 
-We recommend that you preload all of your frames when your application loads, so that you can quickly show a frame when necessary:
+We recommend that you preload all placements when your application loads, so that you can quickly show a message when necessary:
 
 ```objectivec
 + (void) preloadFramesWithIds: (NSString *)firstFrameId, ... NS_REQUIRES_NIL_TERMINATION;
@@ -119,13 +119,13 @@ We recommend that you preload all of your frames when your application loads, so
     //...
     [Playnomics setTestMode:NO];
     [Playnomics startWithApplicationId:applicationId];
-    //preloads the frames at game start
+    //preloads placements at game start
     [Playnomics preloadFramesWithIds:@"frame-ID-1", @"frame-ID-2", @"frame-ID-2", @"frame-ID-3", nil];
     //...
 }
 ```
 
-Then when you're ready, you can show the frame:
+Then when you're ready, you can show the placement:
 
 ```objectivec
 + (void) showFrameWithId:(NSString *) frameId;
@@ -142,8 +142,8 @@ Then when you're ready, you can show the frame:
     <tbody>
         <tr>
             <td><code>frameId</code></td>
-            <td>NSString *</td>
-            <td>Unique identifier for the frame, the <code>&lt;PLAYRM-FRAME-ID&gt;</code></td>
+            <td>NSString*</td>
+            <td>Unique identifier for a placement, the <code>&lt;PLAYRM-FRAME-ID&gt;</code></td>
         </tr>
     </tbody>
 </table>
@@ -166,7 +166,7 @@ Optionally, associate a class that can respond to the `PlaynomicsFrameDelegate` 
         <tr>
             <td><code>frameId</code></td>
             <td>NSString*</td>
-            <td>Unique identifier for the frame, the <code>&lt;PLAYRM-FRAME-ID&gt;</code></td>
+            <td>Unique identifier for a placement, the <code>&lt;PLAYRM-FRAME-ID&gt;</code></td>
         </tr>
         <tr>
             <td><code>frameDelegate</code></td>
@@ -213,7 +213,7 @@ Do this before, calling `showFrameWithId`:
 
 ## Using Rich Data Callbacks
 
-Using an implementation of `PlaynomicsFrameDelegate` your game can receive notifications when a frame is:
+Using an implementation of `PlaynomicsFrameDelegate` your game can receive notifications when a placement:
 
 * Is shown in the screen.
 * Receives a touch event on the creative.
@@ -235,7 +235,7 @@ For each of these events, your delegate may also receive Rich Data that has been
 The actual contents of your JSON message can be delayed until the time of the messaging campaign configuration. However, the structure of your message needs to be decided before you can process it in your game. See [example use-cases for rich data](#example-use-cases-for-rich-data) below.
 
 ## Validate Integration
-After you've finished the installation, you should verify your that application is correctly integrated by checkout the integration verification section of your application page.
+After you've finished the installation, you should verify that your that application is correctly integrated by checkout the integration verification section of your application page.
 
 Simply visit the self-check page for your application: **`https://controlpanel.playnomics.com/applications/<APPID>`**
 
@@ -387,9 +387,9 @@ PlayRM allows you track and segment based on the source of install attribution. 
 
 ## Custom Event Tracking
 
-Milestones may be defined in a number of ways.  They may be defined at certain key gameplay points like, finishing a tutorial, or may they refer to other important milestones in a player's lifecycle. PlayRM, by default, supports up to five custom milestones.  Players can be segmented based on when and how many times they have achieved a particular milestone.
+Custom Events may be used in a number of ways.  They can be used to track certain key gameplay events such as finishing a tutorial or receiving a high score. They may also be used to track other important lifecycle events such as level up, zone unlocked, etc.  PlayRM, by default, supports up to five custom events.  You can then use these custom events to create more targeted custom segments.
 
-Each time a player reaches a milestone, track it with this call:
+Each time a player completes a certain event, track it with this call:
 
 ```objectivec
 + (void) milestone: (PNMilestoneType) milestoneType;
@@ -407,13 +407,13 @@ Each time a player reaches a milestone, track it with this call:
             <td><code>milestoneType</code></td>
             <td>PNMilestoneType</td>
             <td>
-                An enum for milestones 1 through 10. Note that a basic PlayRM account only supports 5 custom milestones.
+                An enum for custom events 1 through 10. Note that a basic PlayRM account only supports 5 custom events.
             </td>
         </tr>
     </tbody>
 </table>
 
-Example client-side calls for a player reaching a milestone, with generated IDs:
+Example client-side calls for players completing events, with generated IDs:
 
 ```objectivec
 //when milestone CUSTOM1 is reached
@@ -526,15 +526,15 @@ To do this, insert this code snippet in the `applicationWillResignActive` method
 Example Use-Cases for Rich Data
 ===============================
 
-Here are three common use cases for frames and a messaging campaigns:
+Here are three common use cases for placements and a messaging campaign:
 
-* [Game Start Frame](#game-start-frame)
-* [Event Driven Frame - Open the Store](#event-driven-frame-open-the-store) for instance, when the player is running low on premium currency
-* [Event Driven Frame - Level Completion](#event-driven-drame-level-completion)
+* [Game Start Placement](#game-start-placement)
+* [Currency Balance Low Placement](#currency-balance-low-placement) for instance, when the player is running low on premium currency
+* [Level Complete Placement](#level-complete-placement)
 
-### Game Start Frame
+### Game Start Placement
 
-In this use-case, we want to configure a frame that is always shown to players when they start playing a new game. The message shown to the player may change based on the desired segments:
+In this use-case, we want to configure a placement that is triggered when they start playing a new game. The message shown to the player may change based on the desired segments:
 
 <table>
     <thead>
@@ -688,11 +688,11 @@ Grant Bazooka
 }
 ```
 
-### Event Driven Frame - Open the Store
+### Currency Balance Low Placement
 
-An advantage of a *dynamic* frames is that they can be triggered by in-game events. For each in-game event you would configure a separate frame. While segmentation may be helpful in deciding what message you show, it may be sufficient to show the same message to all players.
+An advantage of a *dynamic* placement is that it can be triggered by in-game events. For each in-game event you would configure a separate placement. While segmentation may be helpful in deciding what message you show, it may be sufficient to show the same message to all players.
 
-In particular one event, for examle, a player may deplete their premium currency and you want to remind them that they can re-up through your store. In this context, we display the same message to all players.
+For example, a player may deplete their premium currency and you want to remind them that they can re-up through your store. In this context, we display the same message to all players.
 
 <table>
     <thead>
@@ -759,7 +759,7 @@ In particular one event, for examle, a player may deplete their premium currency
 @end
 ```
 
-The Default message would be configured in the Control Panel to use this callback by placing this in the **Target Data** for the message :
+The Default message would be configured in the Control Panel to use this callback by placing this in the **Target Data** for the message:
 
 ```json
 {
@@ -768,7 +768,7 @@ The Default message would be configured in the Control Panel to use this callbac
 }
 ```
 
-### Event Driven Frame - Level Completion
+### Level Completion Placement
 
 In the following example, we wish to generate third-party revenue from players unlikely to monetize by showing them a segmented message after completing a level or challenge: 
 
@@ -792,7 +792,7 @@ In the following example, we wish to generate third-party revenue from players u
     <tbody>
         <tr>
             <td>
-                Non-monetizers, in their 5th day of game play
+                Non Monetizers, in their 5th day of game play
             </td>
             <td>1st</td>
             <td>Show them a 3rd party ad, because they are unlikely to monetize.</td>
@@ -806,7 +806,7 @@ In the following example, we wish to generate third-party revenue from players u
             </td>
             <td>2nd</td>
             <td>
-                You simply congratulate them on completing the level and grant them some attention currency, "Mana" for completeing the level.
+                You simply congratulate them on completing the level and grant them some attention currency, "Mana" for completing the level.
             </td>
             <td>
                 <img src="http://playnomics.com/integration-dev/img/messaging/darn-good-job.png"/>
@@ -815,7 +815,7 @@ In the following example, we wish to generate third-party revenue from players u
     </tbody>
 </table>
 
-This another continuation on the `AwardFrameDelegate`, with some different data. The related messages would be configured in the Control Panel:
+This is another continuation on the `AwardFrameDelegate`, with some different data. The related messages would be configured in the Control Panel:
 
 * **Non-monetizers, in their 5th day of game play**, a Target URL: `HTTP URL for Third Party Ad`
 * **Default**, Target Data:
@@ -841,20 +841,20 @@ Change Log
 * Support for 64 bit architectures.
 
 #### Version 1.1.1
-* Send IDFA and allowTracking every time we request an ad for a frame.
+* Send IDFA and allowTracking every time we request an ad for a placement.
 
 #### Version 1.1.0
-* Support up to 25 custom milestones in the SDK
+* Support up to 25 custom events in the SDK
 
 #### Version 1.0.1
 * Minor bug fixes
 
 #### Version 1
 * Support for 3rd party html-based advertisements
-* Support for simplified, fullscreen frames and internal messaging creatives
+* Support for simplified, fullscreen placements and internal messaging creatives
 * A greatly simplified interface and API
 * More robust error and exception handling
-* Performance improvements, including background event queueing and better support for offline-mode
+* Performance improvements, including background event queuing and better support for offline-mode
 * Tested against iOS 7, with support for iOS 5 and 6
 * Version number reset
 
@@ -878,19 +878,19 @@ Change Log
 
 ####  Version 8
 * Support for internal messaging
-* Added milestone module
+* Added custom event module
 
 ####  Version 7
 * Support for new iOS hardware, iPhone 5s
 
 #### Version 6
 * Improved dual support for iOS4 and iOS5+ utilizing best methods depending on runtime version
-* This build is a courtesy build provided for debugging for an unreproducible customer-reported crash that was unrelated to PlayRM code. 
+* This build is a courtesy build provided for debugging for an irreproducible customer-reported crash that was unrelated to PlayRM code. 
 
 #### Version 4
-support for iOS version 4.x
+* Support for iOS version 4.x
 
-####  Version 3
+#### Version 3
 * Improved crash protection
 * Ability to run integrated app on the iOS simulator
 * Minor tweaks to improve connection to server
