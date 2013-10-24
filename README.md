@@ -25,7 +25,7 @@ Import the SDK files into your existing game through Xcode.
 
 ## Starting a PlayRM Session
 
-To start logging automatically tracking player engagement data, you need to first start a session. **No other SDK calls will work until you do this.**
+To start tracking player engagement data, you need to first start a session. **No other SDK calls will work until you do this.**
 
 In the class that implements `AppDelegate`, start the PlayRM Session in the `didFinishLaunchingWithOptions` method.
 
