@@ -415,7 +415,7 @@ Each time a user completes a certain event, track it with this call:
 Example client-side calls for users completing events, with generated IDs:
 
 ```objectivec
-//when milestone CUSTOM1 is reached
+// when custom event CUSTOM1 is completed
 [PlaynomicsSession milestone: PNMilestoneCustom1];
 ```
 
