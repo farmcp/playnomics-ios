@@ -2,10 +2,9 @@ Playnomics PlayRM iOS SDK Integration Guide
 =============================================
 
 [![Build Status](https://api.travis-ci.org/playnomics/playnomics-ios.png)](https://travis-ci.org/playnomics/playnomics-ios)
+## Considerations for Cross-Platform Applications
 
-## Considerations for Cross-Platform Games
-
-If you want to deploy your game to multiple platforms (eg: iOS, Android, etc), you'll need to create separate applications in the control panel. Each application must incorporate a separate `<APPID>` particular to that application. In addition, placements and their respective creative uploads will be particular to that app in order to ensure that they are sized appropriately - proportionate to your game screen size.
+If you want to deploy your app to multiple platforms (eg: Android and the Unity Web player), you'll need to create separate applications in the control panel. Each application must incorporate a separate `<APPID>` particular to that application. In addition, placements and their respective creative uploads will be particular to that app in order to ensure that they are sized appropriately - proportionate to your app screen size.
 
 Getting Started
 ===============	
@@ -21,11 +20,11 @@ All of the necessary install files are in the *Playnomics* folder:
 
 You can also fork this [repo](https://github.com/playnomics/playnomics-ios), building the PlaynomicsSDK project.
 
-Import the SDK files into your existing game through Xcode.
+Import the SDK files into your existing app through Xcode.
 
 ## Starting a PlayRM Session
 
-To start tracking player engagement data, you need to first start a session. **No other SDK calls will work until you do this.**
+To start tracking user engagement data, you need to first start a session. **No other SDK calls will work until you do this.**
 
 In the class that implements `AppDelegate`, start the PlayRM Session in the `didFinishLaunchingWithOptions` method.
 
@@ -37,7 +36,7 @@ In the class that implements `AppDelegate`, start the PlayRM Session in the `did
 
 - (BOOL) application: (UIApplication *) application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    //Enable test mode to view your events in the Validator. Remove this line of code before releasing your game to the app store.
+    //Enable test mode to view your events in the Validator. Remove this line of code before releasing your application to the app store.
     [Playnomics setTestMode: YES];
     const unsigned long long applicationId = <APPID>;
     [Playnomics startWithApplicationId:applicationId];
@@ -45,19 +44,19 @@ In the class that implements `AppDelegate`, start the PlayRM Session in the `did
     //other code to initialize your iOS application below this
 }
 ```
-You can either provide a dynamic `<USER-ID>` to identify each player:
+You can either provide a dynamic `<USER-ID>` to identify each user:
 
 ```objectivec
 + (BOOL) startWithApplicationId:(unsigned long long) applicationId andUserId: (NSString *) userId;
 ```
 
-or have PlayRM, generate a *best-effort* unique-identifier for the player:
+or have PlayRM, generate a *best-effort* unique-identifier for the user:
 
 ```objectivec
 + (BOOL) startWithApplicationId:(unsigned long long) applicationId;
 ```
 
-If you do choose to provide a `<USER-ID>`, this value should be persistent, anonymized, and unique to each player. This is typically discerned dynamically when a player starts the game. Some potential implementations:
+If you do choose to provide a `<USER-ID>`, this value should be persistent, anonymized, and unique to each user. This is typically discerned dynamically when a user starts the application. Some potential implementations:
 
 * An internal ID (such as a database auto-generated number).
 * A hash of the user's email address.
@@ -66,7 +65,7 @@ If you do choose to provide a `<USER-ID>`, this value should be persistent, anon
 
 ## Tracking Intensity
 
-To track player intensity, PlayRM needs to know about UI events occurring in the game. We provide an implementation of `UIApplication<UIApplicationDelegate>`, which automatically captures these events. In the **main.m** file of your iOS application, you pass this class name into the `UIApplicationMain` method:
+To track user intensity, PlayRM needs to know about UI events occurring in the app. We provide an implementation of `UIApplication<UIApplicationDelegate>`, which automatically captures these events. In the **main.m** file of your iOS application, you pass this class name into the `UIApplicationMain` method:
 
 ```objectivec
 #import <UIKit/UIKit.h>
@@ -119,7 +118,7 @@ We recommend that you preload all placements when your application loads, so tha
     //...
     [Playnomics setTestMode:NO];
     [Playnomics startWithApplicationId:applicationId];
-    //preloads placements at game start
+    //preloads placements at app start
     [Playnomics preloadFramesWithIds:@"frame-ID-1", @"frame-ID-2", @"frame-ID-2", @"frame-ID-3", nil];
     //...
 }
@@ -213,11 +212,11 @@ Do this before, calling `showFrameWithId`:
 
 ## Using Rich Data Callbacks
 
-Using an implementation of `PlaynomicsFrameDelegate` your game can receive notifications when a placement:
+Using an implementation of `PlaynomicsFrameDelegate` your application can receive notifications when a placement:
 
 * Is shown in the screen.
 * Receives a touch event on the creative.
-* Is dismissed by the player, when they press the close button.
+* Is dismissed by the user, when they press the close button.
 * Can't be rendered in the view because of connectivity or other issues.
 
 ```objectiveC
@@ -232,10 +231,10 @@ Using an implementation of `PlaynomicsFrameDelegate` your game can receive notif
 
 For each of these events, your delegate may also receive Rich Data that has been tied with this creative. Rich Data is a JSON message that you can associate with your message creative. In all cases, the `jsonData` value can be `nil`.
 
-The actual contents of your JSON message can be delayed until the time of the messaging campaign configuration. However, the structure of your message needs to be decided before you can process it in your game. See [example use-cases for rich data](#example-use-cases-for-rich-data) below.
+The actual contents of your JSON message can be delayed until the time of the messaging campaign configuration. However, the structure of your message needs to be decided before you can process it in your application. See [example use-cases for rich data](#example-use-cases-for-rich-data) below.
 
 ## Validate Integration
-After you've finished the installation, you should verify that your that application is correctly integrated by checkout the integration verification section of your application page.
+After you've finished the installation, you should verify that your application is correctly integrated by checkout the integration verification section of your application page.
 
 Simply visit the self-check page for your application: **`https://controlpanel.playnomics.com/applications/<APPID>`**
 
@@ -337,7 +336,7 @@ NSInteger  quantity = 1;
 
 ## Install Attribution
 
-PlayRM allows you track and segment based on the source of install attribution. You can track this at the level of a source like *AdMob* or *MoPub*, and optionally include a campaign and an install date. By default, PlayRM tracks the install date by the first day we started seeing engagement date for your player.
+PlayRM allows you track and segment based on the source of install attribution. You can track this at the level of a source like *AdMob* or *MoPub*, and optionally include a campaign and an install date. By default, PlayRM tracks the install date by the first day we started seeing engagement date for your users.
 
 ```objectivec
 + (void) attributeInstallToSource:(NSString *) source;
@@ -375,7 +374,7 @@ PlayRM allows you track and segment based on the source of install attribution. 
             <td><code>installDate</code></td>
             <td>NSDate *</td>
             <td>
-               The date this player installed your app.
+               The date this user installed your app.
             </td>
         </tr>
     </tbody>
@@ -387,9 +386,9 @@ PlayRM allows you track and segment based on the source of install attribution. 
 
 ## Custom Event Tracking
 
-Custom Events may be used in a number of ways.  They can be used to track certain key gameplay events such as finishing a tutorial or receiving a high score. They may also be used to track other important lifecycle events such as level up, zone unlocked, etc.  PlayRM, by default, supports up to five custom events.  You can then use these custom events to create more targeted custom segments.
+Custom Events may be used in a number of ways.  They can be used to track certain key in-app events such as finishing a tutorial or receiving a high score. They may also be used to track other important lifecycle events such as level up, zone unlocked, etc.  PlayRM, by default, supports up to five custom events.  You can then use these custom events to create more targeted custom segments.
 
-Each time a player completes a certain event, track it with this call:
+Each time a user completes a certain event, track it with this call:
 
 ```objectivec
 + (void) milestone: (PNMilestoneType) milestoneType;
@@ -413,7 +412,7 @@ Each time a player completes a certain event, track it with this call:
     </tbody>
 </table>
 
-Example client-side calls for players completing events, with generated IDs:
+Example client-side calls for users completing events, with generated IDs:
 
 ```objectivec
 //when milestone CUSTOM1 is reached
@@ -446,7 +445,7 @@ To get started with PlayRM Push Messaging, your app will need to register with A
 }
 ```
 
-Once the player, authorizes push notifications from your app, you need to provide Playnomics with player's device token:
+Once the user, authorizes push notifications from your app, you need to provide Playnomics with user’s device token:
 
 ```objectivec
 @implementation AppDelegate
@@ -528,13 +527,13 @@ Example Use-Cases for Rich Data
 
 Here are three common use cases for placements and a messaging campaign:
 
-* [Game Start Placement](#game-start-placement)
-* [Currency Balance Low Placement](#currency-balance-low-placement) for instance, when the player is running low on premium currency
+* [App Start Placement](#app-start-placement)
+* [Currency Balance Low Placement](#currency-balance-low-placement) - for instance, when the user is running low on premium currency
 * [Level Complete Placement](#level-complete-placement)
 
-### Game Start Placement
+### App Start Placement
 
-In this use-case, we want to configure a placement that is triggered when they start playing a new game. The message shown to the player may change based on the desired segments:
+In this use-case, we want to configure a placement that is always shown to users when they start a new session. The message shown to the user may change based on the desired segments:
 
 <table>
     <thead>
@@ -560,7 +559,7 @@ In this use-case, we want to configure a placement that is triggered when they s
             </td>
             <td>1st</td>
             <td>
-                In this case, we're worried once-active players are now in danger of leaving the game. We might offer them <strong>50 MonsterBucks</strong> to bring them back.
+                In this case, we're worried once-active users are now in danger of leaving the app. We might offer them <strong>50 MonsterBucks</strong> to bring them back.
             </td>
             <td>
                 <img src="http://playnomics.com/integration-dev/img/messaging/50-free-monster-bucks.png"/>
@@ -572,7 +571,7 @@ In this use-case, we want to configure a placement that is triggered when they s
             </td>
             <td>2nd</td>
             <td>
-                In this case, we want to thank the player for coming back and incentivize these lapsed players to continue doing so. We might offer them <strong>10 MonsterBucks</strong> to increase their engagement and loyalty.
+                In this case, we want to thank the user for coming back and incentivize these lapsed users to continue doing so. We might offer them <strong>10 MonsterBucks</strong> to increase their engagement and loyalty.
             </td>
             <td> 
                 <img src="http://playnomics.com/integration-dev/img/messaging/10-free-monster-bucks.png"/>
@@ -580,11 +579,11 @@ In this use-case, we want to configure a placement that is triggered when they s
         </tr>
         <tr>
             <td>
-                Default - players who don't fall into either segment.
+                Default - users who don't fall into either segment.
             </td>
             <td>3rd</td>
             <td>
-                In this case, we can offer a special item to them for returning to the grame.
+                In this case, we can offer a special item to them for returning to the app.
             </td>
             <td>
                 <img src="http://playnomics.com/integration-dev/img/messaging/free-bfb.png"/>
@@ -630,7 +629,7 @@ In this use-case, we want to configure a placement that is triggered when they s
 @end
 ```
 
-And then attaching this `AwardFrameDelegate` class to the frame shown in the first game scene:
+And then attaching this `AwardFrameDelegate` class to the frame shown in the first app scene:
 
 ```objectiveC
 @implementation GameViewController{
@@ -690,9 +689,9 @@ Grant Bazooka
 
 ### Currency Balance Low Placement
 
-An advantage of a *dynamic* placement is that it can be triggered by in-game events. For each in-game event you would configure a separate placement. While segmentation may be helpful in deciding what message you show, it may be sufficient to show the same message to all players.
+An advantage of a *dynamic* placement is that it can be triggered by in-app events. For each in-app event you would configure a separate placement. While segmentation may be helpful in deciding what message you show, it may be sufficient to show the same message to all users.
 
-For example, a player may deplete their premium currency and you want to remind them that they can re-up through your store. In this context, we display the same message to all players.
+For example, a user may deplete their premium currency and you want to remind them that they can re-up through your store. In this context, we display the same message to all users.
 
 <table>
     <thead>
@@ -714,11 +713,11 @@ For example, a player may deplete their premium currency and you want to remind 
     <tbody>
         <tr>
             <td>
-                Default - all players, because this message is intended for anyone playing the game.
+                Default - all users, because this message is intended for anyone using the app.
             </td>
             <td>1st</td>
             <td>
-                You notice that the player's in-game, premium currency drops below a certain threshold, now you can prompt them to re-up with this <strong>message</strong>.
+                You notice that the user’s in-app, premium currency drops below a certain threshold, now you can prompt them to re-up with this <strong>message</strong>.
             </td>
             <td>
                 <img src="http://playnomics.com/integration-dev/img/messaging/running-out-of-monster-bucks.png"/>
@@ -770,7 +769,7 @@ The Default message would be configured in the Control Panel to use this callbac
 
 ### Level Complete Placement
 
-In the following example, we wish to generate third-party revenue from players unlikely to monetize by showing them a segmented message after completing a level or challenge: 
+In the following example, we wish to generate third-party revenue from users unlikely to monetize by showing them a segmented message after completing a level or challenge: 
 
 <table>
     <thead>
@@ -792,7 +791,7 @@ In the following example, we wish to generate third-party revenue from players u
     <tbody>
         <tr>
             <td>
-                Non Monetizers, in their 5th day of game play
+                Non Monetizers, in their 5th day of app usage
             </td>
             <td>1st</td>
             <td>Show them a 3rd party ad, because they are unlikely to monetize.</td>
@@ -817,7 +816,7 @@ In the following example, we wish to generate third-party revenue from players u
 
 This is another continuation on the `AwardFrameDelegate`, with some different data. The related messages would be configured in the Control Panel:
 
-* **Non-monetizers, in their 5th day of game play**, a Target URL: `HTTP URL for Third Party Ad`
+* **Non-monetizers, in their 5th day of app usage**, a Target URL: `HTTP URL for Third Party Ad`
 * **Default**, Target Data:
 
 ```json
@@ -899,4 +898,3 @@ Change Log
 * First production release
 
 View version tags <a href="https://github.com/playnomics/playnomics-ios/tags">here</a>
-
