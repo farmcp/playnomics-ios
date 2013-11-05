@@ -24,8 +24,8 @@ SYMROOT="build"
 
 RELEASE_DEVICE_ARMV7_DIR=build/Release-iphoneos-armv7
 RELEASE_SIMULATOR_DIR=build/Release-iphonesimulator
+RELEASE_DEVICE_ARM64_DIR=build/Release-iphoneos-arm64
 
-DEVICE=iphoneos7.0
 SIMULATOR=iphonesimulator7.0
 
 LOG_PATH=${BIN_PATH}/build.log
@@ -39,22 +39,18 @@ mkdir ${TARGET_PATH}
 echo "Starting build for iOS SDK. Log file for xcodebuild is ${LOG_PATH}"
 
 echo "Building for arm7, arm7s"
-
-${XCODE5} -project ${SRC_PATH}/PlaynomicsSDK.xcodeproj -configuration Release -target PlaynomicsSDK -sdk ${DEVICE} clean build RUN_CLANG_STATIC_ANALYZER=NO CONFIGURATION_BUILD_DIR=${RELEASE_DEVICE_ARMV7_DIR} ONLY_ACTIVE_ARCH=NO ARCHS="armv7 armv7s" >> ${LOG_PATH}
-
+xcodebuild -project PlaynomicsSDK.xcodeproj -configuration 'Release' -sdk 'iphoneos7.0' clean build ARCHS='armv7 armv7s' IPHONEOS_DEPLOYMENT_TARGET='5.0' TARGET_BUILD_DIR='./build-arm' BUILT_PRODUCTS_DIR='./build-arm' >> ${LOG_PATH}
 echo "Building for i386"
-
-${XCODE5} -project ${SRC_PATH}/PlaynomicsSDK.xcodeproj -configuration Release -target PlaynomicsSDK -sdk ${SIMULATOR} clean build RUN_CLANG_STATIC_ANALYZER=NO CONFIGURATION_BUILD_DIR=${RELEASE_SIMULATOR_DIR} ONLY_ACTIVE_ARCH=NO ARCHS="i386" >> ${LOG_PATH}
+xcodebuild -project PlaynomicsSDK.xcodeproj -configuration 'Release' -sdk 'iphonesimulator7.0' clean build ARCHS='i386' IPHONEOS_DEPLOYMENT_TARGET='5.0' TARGET_BUILD_DIR='./build-i386' BUILT_PRODUCTS_DIR='./build-i386' >> ${LOG_PATH}
+echo "Building for arm64"
+xcodebuild -project PlaynomicsSDK.xcodeproj -configuration 'Release' -sdk 'iphoneos7.0' clean build ARCHS='arm64' IPHONEOS_DEPLOYMENT_TARGET='7.0' TARGET_BUILD_DIR='./build-arm64' BUILT_PRODUCTS_DIR='./build-arm64' >> ${LOG_PATH}
 
 echo "Merging build libraries into ${FINAL_FILE_NAME}"
 
-echo "ARM7 Source Library ${SRC_PATH}/${RELEASE_DEVICE_ARMV7_DIR}/${FILE_NAME}"
-echo "i386 Source Library ${SRC_PATH}/${RELEASE_SIMULATOR_DIR}/${FILE_NAME}"
+lipo -create -output "${FINAL_FILE_NAME}" "./build-arm/${FILE_NAME}" "./build-i386/${FILE_NAME}" "./build-arm64/${FILE_NAME}"
 
-lipo -create -output "${FINAL_FILE_NAME}" "${SRC_PATH}/${RELEASE_DEVICE_ARMV7_DIR}/${FILE_NAME}" "${SRC_PATH}/${RELEASE_SIMULATOR_DIR}/${FILE_NAME}"
-
-cp ${SRC_PATH}/PlaynomicsSDK/Playnomics.h ${TARGET_PATH}
-cp ${SRC_PATH}/PlaynomicsSDK/PNLogger.h ${TARGET_PATH}
+cp PlaynomicsSDK/Playnomics.h ${TARGET_PATH}
+cp PlaynomicsSDK/PNLogger.h ${TARGET_PATH}
 
 echo "Compressing build into file ${TARGET_PATH}/../playnomics_ios_sdk_v${VERSION_NUM}.tar.gz"
 
