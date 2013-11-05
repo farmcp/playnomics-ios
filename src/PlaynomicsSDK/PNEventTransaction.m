@@ -2,7 +2,7 @@
 #import "PNUtil.h"
 
 @implementation PNEventTransaction
-- (id) initWithSessionInfo: (PNGameSessionInfo *)info itemId: (NSString*) itemId quantity: (NSInteger) quantity type: (PNTransactionType) type currencyTypes: (NSArray*) currencyTypes currencyValues: (NSArray*) currencyValues currencyCategories: (NSArray*) currencyCategories {
+- (id) initWithSessionInfo: (PNGameSessionInfo *)info itemId: (NSString*) itemId quantity: (int) quantity type: (PNTransactionType) type currencyTypes: (NSArray*) currencyTypes currencyValues: (NSArray*) currencyValues currencyCategories: (NSArray*) currencyCategories {
     
     if ((self = [super initWithSessionInfo: info])) {
         unsigned long long transactionId = [PNUtil generateRandomLongLong];

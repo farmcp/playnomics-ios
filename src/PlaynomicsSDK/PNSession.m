@@ -46,8 +46,8 @@
     PNEventApiClient *_apiClient;
     PNMessaging *_messaging;
     
-    volatile NSInteger _clicks;
-    volatile NSInteger _totalClicks;
+    volatile int _clicks;
+    volatile int _totalClicks;
     
     NSMutableArray *_observers;
     NSObject *_syncLock;
@@ -457,7 +457,7 @@
         
         NSString *itemId = @"monetized";
         
-        PNEventTransaction *ev = [[PNEventTransaction alloc] initWithSessionInfo:[self getGameSessionInfo] itemId:itemId quantity:quantity type:PNTransactionBuyItem currencyTypes:currencyTypes currencyValues:currencyValues currencyCategories:currencyCategories];
+        PNEventTransaction *ev = [[PNEventTransaction alloc] initWithSessionInfo:[self getGameSessionInfo] itemId:itemId quantity:(int)quantity type:PNTransactionBuyItem currencyTypes:currencyTypes currencyValues:currencyValues currencyCategories:currencyCategories];
         [ev autorelease];
         [_apiClient enqueueEvent:ev];
     }

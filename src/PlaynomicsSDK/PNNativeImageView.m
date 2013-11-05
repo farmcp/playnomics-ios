@@ -74,7 +74,7 @@
 
 #pragma mark "Public Interface"
 -(void) renderAdInView:(UIView*) parentView {
-    int lastDisplayIndex = parentView.subviews.count;
+    int lastDisplayIndex = (int)parentView.subviews.count;
     [parentView insertSubview: _backgroundView atIndex:lastDisplayIndex + 1];
     _backgroundView.hidden = NO;
     [_backgroundView setNeedsDisplay];
