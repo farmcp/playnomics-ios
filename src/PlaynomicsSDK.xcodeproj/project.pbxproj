@@ -664,7 +664,7 @@
 				SDKROOT = iphoneos7.0;
 				SKIP_INSTALL = YES;
 				SYMROOT = build;
-				VALID_ARCHS = "armv7 armv7s i386";
+				VALID_ARCHS = "armv7 armv7s i386 arm64";
 			};
 			name = Debug;
 		};
@@ -698,7 +698,7 @@
 				SDKROOT = iphoneos7.0;
 				SKIP_INSTALL = YES;
 				SYMROOT = build;
-				VALID_ARCHS = "armv7 armv7s i386";
+				VALID_ARCHS = "armv7 armv7s i386 arm64";
 			};
 			name = Release;
 		};
