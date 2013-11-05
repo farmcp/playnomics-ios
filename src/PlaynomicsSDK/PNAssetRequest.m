@@ -72,7 +72,7 @@
 
     if([httpResponse statusCode] != 200){
         [connection cancel];
-        [_delegate requestDidFailWithStatusCode: [httpResponse statusCode]];
+        [_delegate requestDidFailWithStatusCode: (int)[httpResponse statusCode]];
     }
 }
 

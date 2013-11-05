@@ -7,4 +7,6 @@ src/build
 build.log
 target
 
-build
+src/build-arm/
+src/build-arm64/
+src/build-i386/

@@ -85,7 +85,7 @@ nativeCloseButton:(PNNativeCloseButton *)nativeCloseButton
 -(void) renderAdInView:(UIView *)parentView {
     [super setFrame:[PNUtil getScreenDimensionsInView]];
     [self tryPlaceCloseButtonInTopRight];
-    int lastDisplayIndex = parentView.subviews.count;
+    int lastDisplayIndex = (int) parentView.subviews.count;
     [parentView insertSubview:self atIndex:lastDisplayIndex+1];
     //[super setFrame: parentView.bounds];
 }
