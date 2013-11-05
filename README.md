@@ -802,6 +802,9 @@ If you have any questions or issues, please contact <a href="mailto:support@play
 
 Change Log
 ==========
+#### Version 1.2.0
+* Support for 64 bit architectures.
+
 #### Version 1.1.1
 * Send IDFA and allowTracking every time we request an ad for a frame.
 
