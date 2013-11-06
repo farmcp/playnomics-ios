@@ -140,7 +140,7 @@ Then when you're ready, you can show the frame:
     <tbody>
         <tr>
             <td><code>frameId</code></td>
-            <td>NSString*</td>
+            <td>NSString *</td>
             <td>Unique identifier for the frame, the <code>&lt;PLAYRM-FRAME-ID&gt;</code></td>
         </tr>
     </tbody>
@@ -175,6 +175,39 @@ Optionally, associate a class that can respond to the `PlaynomicsFrameDelegate` 
         </tr>
     </tbody>
 </table>
+
+By default, the SDK renders frames on the Root `ViewController`'s view. If your application uses multiple `ViewController`s, you need to explicitally set the parent View for the frame by calling:
+
+```objectivec
++ (void) setFrameParentView:(UIView *) parentView;
+```
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>parentView</code></td>
+            <td>UIView *</td>
+            <td>The parent view where the frame should be rendered.</td>
+        </tr>
+    </tbody>
+</table>
+
+Do this before, calling `showFrameWithId`:
+
+```objectivec
+-(void) viewDidLoad {
+    //Show the frame after the ViewController has been loaded
+    [Playnomics setFrameParentView: self.view];
+    [Playnomics showFrameWithId:@"frame-ID-1"];
+}
+```
 
 ## Using Rich Data Callbacks
 
