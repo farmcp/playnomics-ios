@@ -11,12 +11,19 @@
 - (id) initWithSessionInfo:(PNGameSessionInfo *)info milestoneType: (PNMilestoneType) milestoneType {
     
     if ((self = [super initWithSessionInfo:info])) {
-        
         unsigned long long milestoneId = [PNUtil generateRandomLongLong];
         NSString *milestoneName = [self getNameForMilestoneType: milestoneType];
         
         [self appendParameter: [NSNumber numberWithUnsignedLongLong: milestoneId] forKey: PNEventParameterMilestoneId];
         [self appendParameter: milestoneName forKey: PNEventParameterMilestoneName];
+    }
+    return self;
+}
+
+- (id) initWithSessionInfo:(PNGameSessionInfo *)info
+           customEventName:(NSString *) customEventName {
+    if ((self = [super initWithSessionInfo:info])) {
+        [self appendParameter: customEventName forKey: PNEventParameterMilestoneName];
     }
     return self;
 }

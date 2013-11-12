@@ -479,6 +479,20 @@
     }
 }
 
+- (void) customEventWithName: (NSString *)customEventName{
+    @try {
+        [self assertSessionHasStarted];
+        
+        PNEventMilestone *ev = [[PNEventMilestone alloc] initWithSessionInfo:[self getGameSessionInfo] customEventName: customEventName];
+        [ev autorelease];
+        [_apiClient enqueueEvent:ev];
+    }
+    @catch (NSException *exception) {
+        [PNLogger log:PNLogLevelWarning exception:exception format: @"Could not send milestone."];
+    }
+
+}
+
 - (void) attributeInstallToSource:(NSString *) source
                      withCampaign:(NSString *) campaign
                     onInstallDate:(NSDate *) installDate{

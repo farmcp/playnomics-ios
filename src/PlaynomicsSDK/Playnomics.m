@@ -51,6 +51,10 @@
     [[PNSession sharedInstance] milestone: milestoneType];
 }
 
++ (void) customEventWithName:(NSString *)customEventName {
+    [[PNSession sharedInstance] customEventWithName: customEventName];
+}
+
 + (void) transactionWithUSDPrice: (NSNumber *) priceInUSD
                         quantity: (NSInteger) quantity{
     [[PNSession sharedInstance] transactionWithUSDPrice:priceInUSD quantity: quantity];

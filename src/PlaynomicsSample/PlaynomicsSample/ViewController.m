@@ -98,11 +98,7 @@
 }
 
 - (IBAction) onMilestoneClick:(id)sender {
-    [Playnomics milestone : PNMilestoneCustom1];
-    [Playnomics milestone : PNMilestoneCustom2];
-    [Playnomics milestone : PNMilestoneCustom3];
-    [Playnomics milestone : PNMilestoneCustom4];
-    [Playnomics milestone : PNMilestoneCustom5];
+    [Playnomics  customEventWithName:@"my event"];
 }
 
 - (IBAction)onHttpClick:(id)sender {

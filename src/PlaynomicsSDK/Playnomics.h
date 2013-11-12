@@ -67,7 +67,8 @@ typedef NS_ENUM(int, PNMilestoneType){
 
 + (void) onUIEventReceived: (UIEvent *) event;
 //Explicit Events
-+ (void) milestone:(PNMilestoneType) milestoneType;
++ (void) milestone:(PNMilestoneType) milestoneType DEPRECATED_ATTRIBUTE;
++ (void) customEventWithName:(NSString *) customEventName;
 
 + (void) transactionWithUSDPrice:(NSNumber *) priceInUSD
                         quantity:(NSInteger) quantity;

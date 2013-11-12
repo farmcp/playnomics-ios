@@ -10,5 +10,7 @@
 
 @interface PNEventMilestone : PNExplicitEvent
 - (id) initWithSessionInfo:(PNGameSessionInfo *)info milestoneType: (PNMilestoneType) milestoneType;
+- (id) initWithSessionInfo:(PNGameSessionInfo *)info
+           customEventName:(NSString *) customEventName;
 - (NSString *) baseUrlPath;
 @end

@@ -50,6 +50,8 @@ typedef enum {
 //Explicit Events
 - (void) milestone: (PNMilestoneType) milestoneType;
 
+- (void) customEventWithName: (NSString *)customEventName;
+
 - (void) transactionWithUSDPrice:(NSNumber *) priceInUSD
                         quantity:(NSInteger) quantity;
 
