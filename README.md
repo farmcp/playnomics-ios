@@ -391,7 +391,7 @@ Custom Events may be used in a number of ways.  They can be used to track certai
 Each time a user completes a certain event, track it with this call:
 
 ```objectivec
-+ (void) milestone: (PNMilestoneType) milestoneType;
++ (void) customEventWithName: (NSString *) customEventName;
 ```
 <table>
     <thead>
@@ -403,10 +403,10 @@ Each time a user completes a certain event, track it with this call:
     </thead>
     <tbody>
         <tr>
-            <td><code>milestoneType</code></td>
-            <td>PNMilestoneType</td>
+            <td><code>customEventName</code></td>
+            <td>NSString *</td>
             <td>
-                An enum for custom events 1 through 10. Note that a basic PlayRM account only supports 5 custom events.
+                A string to indentify the event.
             </td>
         </tr>
     </tbody>
@@ -415,8 +415,7 @@ Each time a user completes a certain event, track it with this call:
 Example client-side calls for users completing events, with generated IDs:
 
 ```objectivec
-// when custom event CUSTOM1 is completed
-[PlaynomicsSession milestone: PNMilestoneCustom1];
+[Playnomics customEventWithName: @"level 1 complete"];
 ```
 
 Push Notifications
