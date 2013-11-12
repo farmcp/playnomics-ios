@@ -11,10 +11,7 @@
 - (id) initWithSessionInfo:(PNGameSessionInfo *)info milestoneType: (PNMilestoneType) milestoneType {
     
     if ((self = [super initWithSessionInfo:info])) {
-        unsigned long long milestoneId = [PNUtil generateRandomLongLong];
         NSString *milestoneName = [self getNameForMilestoneType: milestoneType];
-        
-        [self appendParameter: [NSNumber numberWithUnsignedLongLong: milestoneId] forKey: PNEventParameterMilestoneId];
         [self appendParameter: milestoneName forKey: PNEventParameterMilestoneName];
     }
     return self;

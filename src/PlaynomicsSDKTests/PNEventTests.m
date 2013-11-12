@@ -177,8 +177,14 @@
     PNEventMilestone *milestone = [[PNEventMilestone alloc] initWithSessionInfo:_info milestoneType:PNMilestoneCustom9];
     
     [self assertCommonInfoIsAvailable:milestone sessionInfo:_info];
-    XCTAssertNotNil([milestone.eventParameters valueForKey:@"mi"], @"Transaction ID is set");
     XCTAssertEqualObjects([milestone.eventParameters valueForKey:@"mn"], @"CUSTOM9", @"Milestone 9 is set");
+}
+
+- (void) testCustomEvent{
+    PNEventMilestone *customEvent = [[PNEventMilestone alloc] initWithSessionInfo:_info customEventName:@"eventName"];
+    
+    [self assertCommonInfoIsAvailable:customEvent sessionInfo:_info];
+    XCTAssertEqualObjects([customEvent.eventParameters valueForKey:@"mn"], @"eventName", @"Custom event name set");
 }
 
 - (void) testUserInfoAttribution{
