@@ -836,6 +836,13 @@ If you have any questions or issues, please contact <a href="mailto:support@play
 
 Change Log
 ==========
+#### Version 1.3.0
+* Frames are now Placements
+    * The frames interface is still usable, but has become deprecated. You will receive build warnings when using these old methods.
+* Milestones are now Custom Events
+    * The old milestones interface is still usable, but has become deprecated. You will receive build warnings when using these old methods.
+    * Custom events are flexible: they can be described by a string, as opposed to just an enum.
+
 #### Version 1.2.0
 * Support for 64 bit architectures.
 
