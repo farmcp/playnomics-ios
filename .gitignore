@@ -1,7 +1,6 @@
 .DS_Store
 .idea
 xcuserdata/
-libplaynomics.a
 src/build
 
 build.log
@@ -10,3 +9,5 @@ target
 src/build-arm/
 src/build-arm64/
 src/build-i386/
+
+PlaynomicsSDK.xccheckout
