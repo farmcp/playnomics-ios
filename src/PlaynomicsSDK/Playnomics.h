@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "PNLogger.h"
+#include <AvailabilityMacros.h>
 
 //this is available in iOS 6 and above, add this in for iOS 5 and below
 #ifndef NS_ENUM
@@ -41,13 +42,16 @@ typedef NS_ENUM(int, PNMilestoneType){
     PNMilestoneCustom25 = 25
 };
 
-
-@protocol PlaynomicsFrameDelegate <NSObject>
+@protocol PlaynomicsPlacementDelegate<NSObject>
 @optional
 -(void) onTouch:(NSDictionary *) jsonData;
 -(void) onClose:(NSDictionary *) jsonData;
 -(void) onShow:(NSDictionary *) jsonData;
 -(void) onDidFailToRender;
+@end
+
+@protocol PlaynomicsFrameDelegate <PlaynomicsPlacementDelegate>
+@optional
 @end
 
 @interface Playnomics : NSObject
@@ -83,16 +87,24 @@ typedef NS_ENUM(int, PNMilestoneType){
 
 + (void) pushNotificationsWithPayload:(NSDictionary *)payload;
 //Messaging
-+ (void) preloadFramesWithIds:(NSString *) firstFrameId, ... NS_REQUIRES_NIL_TERMINATION;
++ (void) preloadFramesWithIds:(NSString *) firstFrameId, ... NS_REQUIRES_NIL_TERMINATION DEPRECATED_ATTRIBUTE;
++ (void) preloadPlacementsWithNames:(NSString *) firstPlacementName, ... NS_REQUIRES_NIL_TERMINATION;
 
-+ (void) showFrameWithId:(NSString *) frameId;
++ (void) showFrameWithId:(NSString *) frameId DEPRECATED_ATTRIBUTE;
++ (void) showPlacementWithName:(NSString *) placementName;
 
 + (void) showFrameWithId:(NSString *) frameId
-                delegate:(id<PlaynomicsFrameDelegate>) delegate;
+                delegate:(id<PlaynomicsPlacementDelegate>) delegate DEPRECATED_ATTRIBUTE;
 
-+ (void) hideFrameWithId:(NSString *) frameId;
++ (void) showPlacementWithName:(NSString *) placementName
+                      delegate:(id<PlaynomicsPlacementDelegate>) delegate;
 
-+ (void) setFrameParentView:(UIView *) parentView;
++ (void) hideFrameWithId:(NSString *) frameId DEPRECATED_ATTRIBUTE;
++ (void) hidePlacementWithName: (NSString *) placementName;
+
++ (void) setFrameParentView:(UIView *) parentView DEPRECATED_ATTRIBUTE;
++ (void) setPlacementParentView:(UIView *) parentView;
+
 @end
 
 @interface PNApplication : UIApplication<UIApplicationDelegate>

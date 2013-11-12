@@ -108,7 +108,7 @@ Once you have all of your placements created with their associated `<PLAYRM-FRAM
 We recommend that you preload all placements when your application loads, so that you can quickly show a message when necessary:
 
 ```objectivec
-+ (void) preloadFramesWithIds: (NSString *)firstFrameId, ... NS_REQUIRES_NIL_TERMINATION;
++ (void) preloadPlacementsWithNames:(NSString *) firstPlacementName, ... NS_REQUIRES_NIL_TERMINATION;
 ```
 
 ```objectivec
@@ -119,7 +119,7 @@ We recommend that you preload all placements when your application loads, so tha
     [Playnomics setTestMode:NO];
     [Playnomics startWithApplicationId:applicationId];
     //preloads placements at app start
-    [Playnomics preloadFramesWithIds:@"frame-ID-1", @"frame-ID-2", @"frame-ID-2", @"frame-ID-3", nil];
+    [Playnomics preloadPlacementsWithNames:@"placement 1", @"placement 2", @"placement 3", @"placement 4", nil];
     //...
 }
 ```
@@ -127,7 +127,7 @@ We recommend that you preload all placements when your application loads, so tha
 Then when you're ready, you can show the placement:
 
 ```objectivec
-+ (void) showFrameWithId:(NSString *) frameId;
++ (void) showPlacementWithName:(NSString *) placementName;
 ```
 
 <table>
@@ -140,18 +140,18 @@ Then when you're ready, you can show the placement:
     </thead>
     <tbody>
         <tr>
-            <td><code>frameId</code></td>
+            <td><code>placementName</code></td>
             <td>NSString*</td>
             <td>Unique identifier for a placement, the <code>&lt;PLAYRM-FRAME-ID&gt;</code></td>
         </tr>
     </tbody>
 </table>
 
-Optionally, associate a class that can respond to the `PlaynomicsFrameDelegate` protocol, to process rich data callbacks. See [Using Rich Data Callbacks](#using-rich-data-callbacks) for more information.
+Optionally, associate a class that can respond to the `PlaynomicsPlacementDelegate` protocol, to process rich data callbacks. See [Using Rich Data Callbacks](#using-rich-data-callbacks) for more information.
 
 ```objectivec
-+ (void) showFrameWithId:(NSString *) frameId
-                delegate:(id<PlaynomicsFrameDelegate>) delegate;
++ (void) showPlacementWithName:(NSString *) placementName
+                      delegate:(id<PlaynomicsPlacementDelegate>) delegate;
 ```
 <table>
     <thead>
@@ -163,13 +163,13 @@ Optionally, associate a class that can respond to the `PlaynomicsFrameDelegate` 
     </thead>
     <tbody>
         <tr>
-            <td><code>frameId</code></td>
+            <td><code>placementName</code></td>
             <td>NSString*</td>
             <td>Unique identifier for a placement, the <code>&lt;PLAYRM-FRAME-ID&gt;</code></td>
         </tr>
         <tr>
-            <td><code>frameDelegate</code></td>
-            <td>id&lt;PlaynomicsFrameDelegate&gt;</td>
+            <td><code>delegate</code></td>
+            <td>id&lt;PlaynomicsPlacementDelegate&gt;</td>
             <td>
                 Processes rich data callbacks, see <a href="#using-rich-data-callbacks">Using Rich Data Callbacks</a>. This delegate is not <strong>retained</strong>, you are responsible for managing the lifecycle of this object.
             </td>
@@ -180,7 +180,7 @@ Optionally, associate a class that can respond to the `PlaynomicsFrameDelegate` 
 By default, the SDK renders frames on the Root `ViewController`'s view. If your application uses multiple `ViewController`s, you need to explicitally set the parent View for the frame by calling:
 
 ```objectivec
-+ (void) setFrameParentView:(UIView *) parentView;
++ (void) setPlacementParentView:(UIView *) parentView;
 ```
 
 <table>
@@ -200,19 +200,19 @@ By default, the SDK renders frames on the Root `ViewController`'s view. If your 
     </tbody>
 </table>
 
-Do this before, calling `showFrameWithId`:
+Do this before, calling `showPlacementWithName`:
 
 ```objectivec
 -(void) viewDidLoad {
     //Show the frame after the ViewController has been loaded
-    [Playnomics setFrameParentView: self.view];
-    [Playnomics showFrameWithId:@"frame-ID-1"];
+    [Playnomics setPlacementParentView: self.view];
+    [Playnomics showPlacementWithName:@"placement 1"];
 }
 ```
 
 ## Using Rich Data Callbacks
 
-Using an implementation of `PlaynomicsFrameDelegate` your application can receive notifications when a placement:
+Using an implementation of `PlaynomicsPlacementDelegate` your application can receive notifications when a placement:
 
 * Is shown in the screen.
 * Receives a touch event on the creative.
@@ -220,7 +220,7 @@ Using an implementation of `PlaynomicsFrameDelegate` your application can receiv
 * Can't be rendered in the view because of connectivity or other issues.
 
 ```objectiveC
-@protocol PlaynomicsFrameDelegate <NSObject>
+@protocol PlaynomicsPlacementDelegate <NSObject>
 @optional
 -(void) onShow: (NSDictionary *) jsonData;
 -(void) onTouch: (NSDictionary *) jsonData;

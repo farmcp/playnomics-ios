@@ -36,7 +36,7 @@
 
 - (void) showFrame:(NSString *) frameId
             inView:(UIView *) parentView
-      withDelegate:(id<PlaynomicsFrameDelegate>) delegate{
+      withDelegate:(id<PlaynomicsPlacementDelegate>) delegate{
     
     PNFrame *frame = [self getOrAddFrame: frameId];
     if(!(frame.state == PNFrameStateLoadingComplete || frame.state == PNFrameStateLoadingStarted)){

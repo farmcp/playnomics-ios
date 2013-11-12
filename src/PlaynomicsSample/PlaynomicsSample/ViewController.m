@@ -40,7 +40,7 @@
     
     _frameDelegate = [[FrameDelegate alloc] init];
     [super viewDidLoad];
-    [Playnomics preloadFramesWithIds:@"546e241b9b97149b", @"c6877f336e9d9dda", @"7a9138a971ce1773", @"15bec4e2b78424a2", @"33a3cf0ecfa71c1a", nil];
+    [Playnomics preloadPlacementsWithNames:@"546e241b9b97149b", @"c6877f336e9d9dda", @"7a9138a971ce1773", @"15bec4e2b78424a2", @"33a3cf0ecfa71c1a", nil];
 
     /*
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didReceiveTap:)];
@@ -106,23 +106,23 @@
 }
 
 - (IBAction)onHttpClick:(id)sender {
-    [self showFrame:@"546e241b9b97149b"];
+    [self showPlacement:@"546e241b9b97149b"];
 }
 
 - (IBAction)onJsonClick:(id)sender {
-    [self showFrame:@"c6877f336e9d9dda"];
+    [self showPlacement:@"c6877f336e9d9dda"];
 }
 
 - (IBAction)onNullTargetClick:(id)sender {
-    [self showFrame:@"7a9138a971ce1773"];
+    [self showPlacement:@"7a9138a971ce1773"];
 }
 
 -(IBAction)onNoAdsClick:(id)sender{
-    [self showFrame:@"15bec4e2b78424a2"];
+    [self showPlacement:@"15bec4e2b78424a2"];
 }
 
 -(IBAction) onThirdPartyAd:(id) sender{
-    [self showFrame:@"33a3cf0ecfa71c1a"];
+    [self showPlacement:@"33a3cf0ecfa71c1a"];
 }
 
 - (IBAction) onClearCache:(id)sender{
@@ -150,8 +150,8 @@
     }
 }
 
-- (void) showFrame: (NSString *) frameId {
-    [Playnomics showFrameWithId: frameId delegate: _frameDelegate];
+- (void) showPlacement: (NSString *) placementName {
+    [Playnomics showPlacementWithName:placementName delegate:_frameDelegate];
 }
 
 #pragma mark Misc Functions

@@ -37,7 +37,7 @@ typedef enum {
 @property (retain) PNCache *cache;
 
 
-+ (PNSession*) sharedInstance;
++ (PNSession *) sharedInstance;
 
 - (NSString *) getMessagingUrl;
 - (NSString *) getEventsUrl;
@@ -68,7 +68,7 @@ typedef enum {
 
 - (void) showFrameWithId:(NSString *) frameId;
 - (void) showFrameWithId:(NSString *) frameId
-                delegate:(id<PlaynomicsFrameDelegate>) delegate;
+                delegate:(id<PlaynomicsPlacementDelegate>) delegate;
 - (void) hideFrameWithID:(NSString *) frameId;
 - (void) setFrameParentView:(UIView *) parentView;
 @end

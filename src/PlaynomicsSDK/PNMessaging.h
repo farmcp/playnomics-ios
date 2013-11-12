@@ -15,7 +15,7 @@
 
 - (void) showFrame:(NSString *) frameId
             inView:(UIView *) parentView
-      withDelegate:(id<PlaynomicsFrameDelegate>) delegate;
+      withDelegate:(id<PlaynomicsPlacementDelegate>) delegate;
 
 -(void) hideFrame:(NSString *) frameId;
 

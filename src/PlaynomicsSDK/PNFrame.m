@@ -13,7 +13,7 @@
 @implementation PNFrame {
 @private
     UIInterfaceOrientation _currentOrientation;
-    id<PlaynomicsFrameDelegate> _frameDelegate;
+    id<PlaynomicsPlacementDelegate> _frameDelegate;
     BOOL _shouldRenderFrame;
     PNSession *_session;
     PNFrameResponse *_response;
@@ -206,7 +206,7 @@
 
 #pragma mark - Public Interface
 -(void) showInView:(UIView *) parentView
-      withDelegate:(id<PlaynomicsFrameDelegate>) delegate {
+      withDelegate:(id<PlaynomicsPlacementDelegate>) delegate {
     
     _frameDelegate = delegate;
     _shouldRenderFrame = YES;

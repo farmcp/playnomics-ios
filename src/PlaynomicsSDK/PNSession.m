@@ -576,7 +576,7 @@
 }
 
 
-- (void) showFrameWithId:(NSString *) frameId delegate:(id<PlaynomicsFrameDelegate>) delegate{
+- (void) showFrameWithId:(NSString *) frameId delegate:(id<PlaynomicsPlacementDelegate>) delegate{
     @try{
         [self assertSessionHasStarted];
         [_messaging showFrame:frameId inView:[self getViewForFrame] withDelegate:delegate];

@@ -102,21 +102,57 @@
     [frameIds autorelease];
 }
 
++ (void) preloadPlacementsWithNames:(NSString *)firstPlacementName, ...{
+    //TODO: Refactor this
+    NSMutableSet *placementNames = [NSMutableSet new];
+    va_list args;
+    va_start(args, firstPlacementName);
+    [placementNames addObject:firstPlacementName];
+    
+    NSString* placementName;
+    while( (placementName = va_arg(args, NSString *)) )
+    {
+        [placementNames addObject: placementName];
+    }
+    va_end(args);
+    
+    [[PNSession sharedInstance] preloadFramesWithIds: placementNames];
+    [placementNames autorelease];
+}
+
+
 + (void) showFrameWithId:(NSString *) frameId{
-    [[PNSession sharedInstance] showFrameWithId: frameId];
+    [self showPlacementWithName:frameId];
+}
+
++ (void) showPlacementWithName:(NSString *)placementName{
+    [[PNSession sharedInstance] showFrameWithId:placementName];
 }
 
 + (void) showFrameWithId:(NSString *) frameId
-                delegate:(id<PlaynomicsFrameDelegate>) delegate{
-    [[PNSession sharedInstance] showFrameWithId: frameId
+                delegate:(id<PlaynomicsPlacementDelegate>) delegate{
+    [self showPlacementWithName:frameId delegate:delegate];
+}
+
++ (void) showPlacementWithName:(NSString *)placementName
+                      delegate:(id<PlaynomicsPlacementDelegate>)delegate{
+    [[PNSession sharedInstance] showFrameWithId: placementName
                                        delegate: delegate];
 }
 
 + (void) hideFrameWithId:(NSString *) frameId{
-    [[PNSession sharedInstance] hideFrameWithID: frameId];
+    [self hidePlacementWithName: frameId];
+}
+
++ (void) hidePlacementWithName:(NSString *)placementName{
+    [[PNSession sharedInstance] hideFrameWithID: placementName];
 }
 
 + (void) setFrameParentView:(UIView *) parentView{
+    [self setPlacementParentView: parentView];
+}
+
++(void) setPlacementParentView:(UIView *)parentView{
     [[PNSession sharedInstance] setFrameParentView:parentView];
 }
 
