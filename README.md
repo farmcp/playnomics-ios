@@ -101,7 +101,7 @@ This guide assumes you're already familiar with the concept of placements and me
 
 If you are new to PlayRM's messaging feature, please refer to <a href="http://integration.playnomics.com" target="_blank">integration documentation</a>.
 
-Once you have all of your placements created with their associated `<PLAYRM-FRAME-ID>`s, you can start the integration process.
+Once you have all of your placements created with their associated `<PLACEMENT-ID>`s, you can start the integration process.
 
 ## SDK Integration
 
@@ -142,7 +142,7 @@ Then when you're ready, you can show the placement:
         <tr>
             <td><code>placementName</code></td>
             <td>NSString*</td>
-            <td>Unique identifier for a placement, the <code>&lt;PLAYRM-FRAME-ID&gt;</code></td>
+            <td>Unique identifier for a placement</code></td>
         </tr>
     </tbody>
 </table>
@@ -165,7 +165,7 @@ Optionally, associate a class that can respond to the `PlaynomicsPlacementDelega
         <tr>
             <td><code>placementName</code></td>
             <td>NSString*</td>
-            <td>Unique identifier for a placement, the <code>&lt;PLAYRM-FRAME-ID&gt;</code></td>
+            <td>Unique identifier for a placement</td>
         </tr>
         <tr>
             <td><code>delegate</code></td>
@@ -177,7 +177,7 @@ Optionally, associate a class that can respond to the `PlaynomicsPlacementDelega
     </tbody>
 </table>
 
-By default, the SDK renders frames on the Root `ViewController`'s view. If your application uses multiple `ViewController`s, you need to explicitally set the parent View for the frame by calling:
+By default, the SDK renders placements on the Root `ViewController`'s view. If your application uses multiple `ViewController`s, you need to explicitally set the parent View for the placement by calling:
 
 ```objectivec
 + (void) setPlacementParentView:(UIView *) parentView;
@@ -195,7 +195,7 @@ By default, the SDK renders frames on the Root `ViewController`'s view. If your 
         <tr>
             <td><code>parentView</code></td>
             <td>UIView *</td>
-            <td>The parent view where the frame should be rendered.</td>
+            <td>The parent view where the placement should be rendered.</td>
         </tr>
     </tbody>
 </table>
@@ -204,7 +204,7 @@ Do this before, calling `showPlacementWithName`:
 
 ```objectivec
 -(void) viewDidLoad {
-    //Show the frame after the ViewController has been loaded
+    //Show the placement after the ViewController has been loaded
     [Playnomics setPlacementParentView: self.view];
     [Playnomics showPlacementWithName:@"placement 1"];
 }
@@ -593,21 +593,21 @@ In this use-case, we want to configure a placement that is always shown to users
 </table>
 
 ```objectivec
-//AwardFrameDelegate.h
+//AwardPlacementDelegate.h
 
 #import <Foundation/Foundation.h>
 #import "Playnomics.h"
-@interface AwardFrameDelegate : NSObject<PlaynomicsFrameDelegate>
+@interface AwardPlacementDelegate : NSObject<PlaynomicsPlacementDelegate>
 @end
 
-//AwardFrameDelegate.m
+//AwardPlacementDelegate.m
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "AwardFrameDelegate.h"
+#import "AwardPlacementDelegate.h"
 #import "Inventory.h"
 
-@implementation AwardFrameDelegate
+@implementation AwardPlacementDelegate
 - (void)onTouch:(NSDictionary *)jsonData{
     
     if(jsonData){
@@ -629,16 +629,16 @@ In this use-case, we want to configure a placement that is always shown to users
 @end
 ```
 
-And then attaching this `AwardFrameDelegate` class to the frame shown in the first app scene:
+And then attaching this `AwardPlacementDelegate` class to the placement shown in the first app scene:
 
 ```objectiveC
 @implementation GameViewController{
-    AwardFrameDelegate* _awardDelegate;
+    AwardPlacementDelegate* _awardDelegate;
 }
 
 -(void) viewDidLoad{
-    _awardDelegate = [[AwardFrameDelegate alloc] init];
-    [Playnomics showFrameWithId: frameId delegate: _awardDelegate];
+    _awardDelegate = [[AwardPlacementDelegate alloc] init];
+    [Playnomics showPlacementWithName: placementName delegate: _awardDelegate];
 }
 
 -(void) dealloc{
@@ -727,21 +727,21 @@ For example, a user may deplete their premium currency and you want to remind th
 </table>
 
 ```objectivec
-//StoreFrameDelegate.h
+//StorePlacementDelegate.h
 
 #import <Foundation/Foundation.h>
 #import "Playnomics.h"
-@interface StoreFrameDelegate : NSObject<PlaynomicsFrameDelegate>
+@interface StorePlacementDelegate : NSObject<PlaynomicsPlacementDelegate>
 @end
 
-//StoreFrameDelegate.m
+//StorePlacementDelegate.m
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "StoreFrameDelegate.h"
+#import "StorePlacementDelegate.h"
 #import "Inventory.h"
 
-@implementation StoreFrameDelegate
+@implementation StorePlacementDelegate
 - (void)onTouch:(NSDictionary *)jsonData{
     if(jsonData){
         if([jsonData objectForKey: @"type"] != (id)[NSNull null] && 
@@ -814,7 +814,7 @@ In the following example, we wish to generate third-party revenue from users unl
     </tbody>
 </table>
 
-This is another continuation on the `AwardFrameDelegate`, with some different data. The related messages would be configured in the Control Panel:
+This is another continuation on the `AwardPlacementDelegate`, with some different data. The related messages would be configured in the Control Panel:
 
 * **Non-monetizers, in their 5th day of app usage**, a Target URL: `HTTP URL for Third Party Ad`
 * **Default**, Target Data:
