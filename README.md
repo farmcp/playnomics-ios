@@ -2,6 +2,7 @@ Playnomics PlayRM iOS SDK Integration Guide
 =============================================
 
 [![Build Status](https://api.travis-ci.org/playnomics/playnomics-ios.png)](https://travis-ci.org/playnomics/playnomics-ios)
+
 ## Considerations for Cross-Platform Applications
 
 If you want to deploy your app to multiple platforms (eg: Android and the Unity Web player), you'll need to create separate applications in the control panel. Each application must incorporate a separate `<APPID>` particular to that application. In addition, placements and their respective creative uploads will be particular to that app in order to ensure that they are sized appropriately - proportionate to your app screen size.
@@ -620,7 +621,7 @@ In this use-case, we want to configure a placement that is always shown to users
                 NSNumber* quantity = [award objectForKey: @"quantity"];
 
                 //call your own inventory object
-                [[Inventory sharedInstanced] addItem:item andQuantity: quanity];
+                [[Inventory sharedInstanced] addItem:item andQuantity: quantity];
             }
         }
     }
