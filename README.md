@@ -1,7 +1,6 @@
 Playnomics PlayRM iOS SDK Integration Guide
 =============================================
 
-[![Build Status](https://api.travis-ci.org/playnomics/playnomics-ios.png)](https://travis-ci.org/playnomics/playnomics-ios)
 
 ## Considerations for Cross-Platform Applications
 
