@@ -11,20 +11,27 @@
 
 @implementation PNGameSessionInfo
 
-@synthesize sessionId = _sessionId;
-@synthesize userId = _userId;
 @synthesize applicationId = _applicationId;
-@synthesize breadcrumbId = _breadcrumbId;
+@synthesize userId = _userId;
+@synthesize idfa = _idfa;
+@synthesize idfv = _idfv;
+@synthesize sessionId = _sessionId;
 
 -(id) initWithApplicationId:(unsigned long long)applicationId
                      userId:(NSString *) userId
-               breadcrumbId:(NSString *) breadcrumbId
+                       idfa:(NSString *) idfa
+                       idfv:(NSString *) idfv
                   sessionId:(PNGeneratedHexId *)sessionId{
     if((self = [super init])){
-        _sessionId = [sessionId retain];
-        _breadcrumbId = [breadcrumbId copy];
         _applicationId = [NSNumber numberWithUnsignedLongLong: applicationId];
         _userId = [userId copy];
+        if(idfa) {
+            _idfa = [idfa copy];
+        }
+        if(idfv) {
+            _idfv = [idfv copy];
+        }
+        _sessionId = [sessionId retain];
      }
     return self;
 }

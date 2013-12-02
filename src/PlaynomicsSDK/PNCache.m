@@ -15,12 +15,10 @@
 @synthesize idfa;
 @synthesize idfv;
 @synthesize limitAdvertising;
-@synthesize breadcrumbID;
 
 @synthesize idfaChanged = _idfaChanged;
 @synthesize idfvChanged = _idfvChanged;
 @synthesize limitAdvertisingChanged = _limitAdvertisingChanged;
-@synthesize breadcrumbIDChanged = _breadcrumbIDChanged;
 @synthesize deviceToken=_deviceToken;
 
 - (void)dealloc{
@@ -29,21 +27,11 @@
 
 -(void) loadDataFromCache {
     UIPasteboard *playnomicsPasteboard = [self getPlaynomicsPasteboard];
-    if([[playnomicsPasteboard items] count] == 0){
-        UIPasteboard *pasteBoard = [UIPasteboard pasteboardWithName:PNUserDefaultsLastDeviceID create:NO];
-        self.breadcrumbID = [pasteBoard string];
-    } else {
+    if([[playnomicsPasteboard items] count] > 0){
         NSDictionary *data = [[playnomicsPasteboard items] objectAtIndex:0];
-        self.breadcrumbID = [self deserializeStringFromData: data key: PNPasteboardLastBreadcrumbID];
-        
         self.idfa = [self deserializeStringFromData:data key:PNPasteboardLastIDFA];
         
         self.limitAdvertising = [PNUtil stringAsBool: [self deserializeStringFromData:data key:PNPasteboardLastLimitAdvertising]];
-    }
-    
-    if(self.breadcrumbID && [self.breadcrumbID length] == 0){
-        //it's possible that we get back a false positive
-        self.breadcrumbID=nil;
     }
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -61,7 +49,7 @@
 }
 
 -(void) writeDataToCache {
-    if(_breadcrumbIDChanged || _idfaChanged || _limitAdvertisingChanged){
+    if(_idfaChanged || _limitAdvertisingChanged){
         UIPasteboard *playnomicsPasteboard = [self getPlaynomicsPasteboard];
         NSMutableDictionary *pasteboardData = ([[playnomicsPasteboard items] count] == 1) ?
                                     [[playnomicsPasteboard items] objectAtIndex:0] :
@@ -69,7 +57,6 @@
 
         
         [pasteboardData setValue:self.idfa forKey:PNPasteboardLastIDFA];
-        [pasteboardData setValue:self.breadcrumbID forKey:PNPasteboardLastBreadcrumbID];
         [pasteboardData setValue:[PNUtil boolAsString: self.limitAdvertising] forKey: PNPasteboardLastLimitAdvertising];
         
         playnomicsPasteboard.items = [[[NSArray alloc] initWithObjects:pasteboardData, nil] autorelease];
@@ -92,17 +79,6 @@
     UIPasteboard *pasteboard = [UIPasteboard pasteboardWithName:PNPasteboardName create:YES];
     pasteboard.persistent = YES;
     return pasteboard;
-}
-
-- (NSString *) getBreadcrumbID {
-    return self.breadcrumbID;
-}
-
--(void)updateBreadcrumbID:(NSString *)value{
-    if(!(self.breadcrumbID && [value isEqualToString:self.breadcrumbID])){
-        self.breadcrumbID = value;
-        _breadcrumbIDChanged = TRUE;
-    }
 }
 
 - (NSString *) getIdfa{

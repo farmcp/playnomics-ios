@@ -13,7 +13,13 @@
         [_eventParameters setValue: [NSNumber numberWithLongLong: (_eventTime * 1000)] forKey: PNEventParameterTimeStamp];
         [_eventParameters setValue: info.applicationId forKey: PNEventParameterApplicationId];
         [_eventParameters setValue: info.userId forKey: PNEventParameterUserId];
-        [_eventParameters setValue: info.breadcrumbId forKey: PNEventParameterDeviceID];
+        
+        if(info.idfa) {
+            [_eventParameters setValue: info.idfa forKey: PNEventParameterIdfa];
+        }
+        if(info.idfv) {
+            [_eventParameters setValue: info.idfv forKey: PNEventParameterIdfv];
+        }
         
         [_eventParameters setValue: @"ios" forKey: PNEventParameterSdkName];
         [_eventParameters setValue: PNPropertyVersion forKey: PNEventParameterSdkVersion];

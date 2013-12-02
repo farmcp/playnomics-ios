@@ -23,7 +23,6 @@
 
 // Information that we store on the Pasteboard so they remain persistent across sessions
 #define PNPasteboardName @"com.playnomics.pasteboardData"
-#define PNPasteboardLastBreadcrumbID @"lastBreadcrumbId"
 #define PNPasteboardLastLimitAdvertising @"lastLimitAdvertising"
 #define PNPasteboardLastIDFA @"lastIDFA"
 
@@ -68,6 +67,5 @@
 #define PushResponse_InteractionUrl @"ti"
 #define PushInteractionUrl_AppIdParam @"a"
 #define PushInteractionUrl_UserIdParam @"u"
-#define PushInteractionUrl_BreadcrumbIdParam @"b"
 #define PushInteractionUrl_PushTokenParam @"pt"
 #define PushInteractionUrl_IgnoredParam @"pushIgnored"

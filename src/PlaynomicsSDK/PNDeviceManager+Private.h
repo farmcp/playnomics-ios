@@ -10,5 +10,4 @@
 - (BOOL) isAdvertisingTrackingEnabledFromDevice;
 - (NSString *) getAdvertisingIdentifierFromDevice;
 - (NSString *) getVendorIdentifierFromDevice;
-- (NSString *) generateBreadcrumbId;
 @end

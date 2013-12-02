@@ -7,7 +7,6 @@
 //
 
 @interface PNCache()
-@property (copy) NSString *breadcrumbID;
 @property (copy) NSString *idfa;
 @property (copy) NSString *idfv;
 @property (assign) BOOL limitAdvertising;

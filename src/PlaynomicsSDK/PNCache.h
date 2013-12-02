@@ -11,13 +11,9 @@
 
 @interface PNCache : NSObject
 
-@property (readonly) BOOL  breadcrumbIDChanged;
 @property (readonly) BOOL  idfaChanged;
 @property (readonly) BOOL  idfvChanged;
 @property (readonly) BOOL  limitAdvertisingChanged;
-
-- (NSString *) getBreadcrumbID;
-- (void) updateBreadcrumbID: (NSString*) value;
 
 - (NSString *) getIdfa;
 - (void) updateIdfa: (NSString *) value;

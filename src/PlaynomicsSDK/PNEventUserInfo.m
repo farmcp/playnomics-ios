@@ -20,11 +20,11 @@
         [self appendParameter:[PNUtil boolAsString:limitAdvertising] forKey:PNEventParameterUserInfoLimitAdvertising];
         
         if(idfa) {
-            [self appendParameter:idfa forKey:PNEventParameterUserInfoIdfa];
+            [self appendParameter:idfa forKey:PNEventParameterIdfa];
         }
         
         if(idfv) {
-            [self appendParameter:idfv forKey:PNEventParameterUserInfoIdfv];
+            [self appendParameter:idfv forKey:PNEventParameterIdfv];
         }
         [self appendParameter:@"update" forKey:PNEventParameterUserInfoType];
     }

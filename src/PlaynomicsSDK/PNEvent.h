@@ -4,9 +4,10 @@
 
 //all events
 #define PNEventParameterTimeStamp @"t"
-#define PNEventParameterUserId @"u"
 #define PNEventParameterApplicationId @"a"
-#define PNEventParameterDeviceID @"b"
+#define PNEventParameterUserId @"u"
+#define PNEventParameterIdfa @"idfa"
+#define PNEventParameterIdfv @"idfv"
 #define PNEventParameterSdkName @"esrc"
 #define PNEventParameterSdkVersion @"ever"
 //implicit event
@@ -31,8 +32,6 @@
 #define PNEventParameterUserInfoType @"pt"
 #define PNEventParameterUserInfoPushToken @"pushTok"
 #define PNEventParameterUserInfoLimitAdvertising @"limitAdvertising"
-#define PNEventParameterUserInfoIdfa @"idfa"
-#define PNEventParameterUserInfoIdfv @"idfv"
 #define PNEventParameterUserInfoSource @"po"
 #define PNEventParameterUserInfoCampaign @"pm"
 #define PNEventParameterUserInfoInstallDate @"pi"

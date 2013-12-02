@@ -57,7 +57,6 @@
 
 @synthesize applicationId=_applicationId;
 @synthesize userId=_userId;
-@synthesize cookieId=_cookieId;
 @synthesize sessionId=_sessionId;
 @synthesize instanceId=_instanceId;
 @synthesize state=_state;
@@ -111,7 +110,6 @@
     
     /** Tracking values */
     [_userId release];
-	[_cookieId release];
 	[_sessionId release];
 	[_instanceId release];
     
@@ -150,7 +148,7 @@
 
 #pragma mark - Session Control Methods
 -(PNGameSessionInfo *) getGameSessionInfo{
-    PNGameSessionInfo * info =  [[PNGameSessionInfo alloc] initWithApplicationId:self.applicationId userId:self.userId breadcrumbId:[_cache getBreadcrumbID] sessionId: self.sessionId];
+    PNGameSessionInfo * info =  [[PNGameSessionInfo alloc] initWithApplicationId:self.applicationId userId:self.userId idfa:[_cache getIdfa] idfv:[_cache getIdfv] sessionId: self.sessionId];
     [info autorelease];
     return info;
 }
@@ -236,15 +234,12 @@
 
     _state = PNSessionStateStarted;
     
-    _cookieId = [[_cache getBreadcrumbID] retain];
-    
     // Set userId to cookieId if it isn't present
     if (!(_userId && [_userId length] > 0)) {
-        _userId = [_cookieId retain];
+        _userId = [[_deviceManager generateUserId] retain];
     }
     
     _sequence = 1;
-    
     _clicks = 0;
     _totalClicks = 0;
     
@@ -544,10 +539,9 @@
             
             NSString *callbackurl = [payload valueForKeyPath:PushResponse_InteractionUrl];
             // append required parameters to the interaction tracking url
-            NSString *trackedCallback = [callbackurl stringByAppendingFormat:@"&%@=%lld&%@=%@&%@=%@&%@=%@",
+            NSString *trackedCallback = [callbackurl stringByAppendingFormat:@"&%@=%lld&%@=%@&%@=%@",
                                          PushInteractionUrl_AppIdParam, self.applicationId,
                                          PushInteractionUrl_UserIdParam, self.userId,
-                                         PushInteractionUrl_BreadcrumbIdParam, self.cookieId,
                                          PushInteractionUrl_PushTokenParam, lastDeviceToken];
             
             UIApplicationState state = [[UIApplication sharedApplication] applicationState];

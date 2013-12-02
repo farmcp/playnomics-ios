@@ -11,4 +11,5 @@
 @interface PNDeviceManager : NSObject
 - (id) initWithCache: (PNCache *) cache;
 - (BOOL) syncDeviceSettingsWithCache;
+- (NSString *) generateUserId;
 @end

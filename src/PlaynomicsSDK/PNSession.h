@@ -29,7 +29,6 @@ typedef enum {
 @property (atomic, assign) signed long long applicationId;
 @property (atomic, copy) NSString *userId;
 
-@property (nonatomic, readonly) NSString *cookieId;
 @property (nonatomic, readonly) PNGeneratedHexId *sessionId;
 @property (nonatomic, readonly) PNGeneratedHexId *instanceId;
 @property (nonatomic, readonly) PNSessionState state;

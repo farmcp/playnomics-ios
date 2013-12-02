@@ -32,7 +32,7 @@
     [super tearDown];
 }
 
--(id) mockCurrentDeviceInfo:(PNDeviceManager*) deviceInfo idfa: (NSString *) currentIdfa limitAdvertising : (BOOL) limitAdvertising idfv: (NSString *) currentIdfv generatedBreadcrumbID: (NSString*) breadcrumbId {
+-(id) mockCurrentDeviceInfo:(PNDeviceManager*) deviceInfo idfa: (NSString *) currentIdfa limitAdvertising : (BOOL) limitAdvertising idfv: (NSString *) currentIdfv {
     
     id mock = [OCMockObject partialMockForObject:deviceInfo];
     
@@ -41,33 +41,27 @@
     [[[mock stub] andReturn: currentIdfa] getAdvertisingIdentifierFromDevice];
     [[[mock stub] andReturn: currentIdfv] getVendorIdentifierFromDevice];
     
-    if(breadcrumbId){
-        [[[mock stub] andReturn: breadcrumbId] generateBreadcrumbId];
-    }
     return mock;
 }
 
 
 - (void) testGetDeviceInfoFromDevice {
-    NSString *breadcrumbId = @"breadcrumbId";
     NSString *idfa = [[[NSUUID alloc] init] UUIDString];
     BOOL limitAdvertising = NO;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
-    StubPNCache *cache = [[StubPNCache  alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
+    StubPNCache *cache = [[StubPNCache  alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
     id mockCache = [cache getMockCache];
     [cache loadDataFromCache];
 
     //the device settings have not changed
     PNDeviceManager *info = [[PNDeviceManager alloc] initWithCache: mockCache];
-    info = [self mockCurrentDeviceInfo: info idfa: idfa limitAdvertising: limitAdvertising idfv: idfv generatedBreadcrumbID:nil];
+    info = [self mockCurrentDeviceInfo: info idfa: idfa limitAdvertising: limitAdvertising idfv: idfv];
     
     BOOL dataChanged = [info syncDeviceSettingsWithCache];
     //Verify no data has changed
     XCTAssertFalse(dataChanged, @"No data should have changed");
     
-    XCTAssertEqual([mockCache getBreadcrumbID], breadcrumbId , @"Breadcrumb should be loaded from cache");
-    XCTAssertFalse([mockCache breadcrumbIDChanged], @"Breadcrumb should not have changed.");
     //use isEqualToString for string comparison
     XCTAssertTrue([[mockCache getIdfa] isEqual: idfa], @"IDFA should be loaded from cache");
     XCTAssertFalse([mockCache idfaChanged], @"IDFA should not have changed.");
@@ -80,12 +74,11 @@
 }
 
 - (void) testDeviceInfoWithNewDevice{
-    NSString *breadcrumbId = nil;
     NSString *idfa = nil;
     BOOL limitAdvertising = NO;
     NSString *idfv = nil;
     
-    StubPNCache *cache = [[StubPNCache  alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
+    StubPNCache *cache = [[StubPNCache  alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
     id mockCache = [cache getMockCache];
     [cache loadDataFromCache];
 
@@ -94,16 +87,12 @@
     BOOL newlimitAdvertising  = YES;
 
     PNDeviceManager *info = [[PNDeviceManager alloc] initWithCache: mockCache];
-    NSString *newBreadcrumb = [info generateBreadcrumbId];
-
-    info = [self mockCurrentDeviceInfo: info idfa: currentIdfa limitAdvertising: newlimitAdvertising idfv: currentIdfv generatedBreadcrumbID:newBreadcrumb];
-    
+    info = [self mockCurrentDeviceInfo: info idfa: currentIdfa limitAdvertising: newlimitAdvertising idfv: currentIdfv];
     
     BOOL dataChanged = [info syncDeviceSettingsWithCache];
     //Verify no data has changed
     XCTAssertTrue(dataChanged, @"Cached device data should have changed");
     
-    XCTAssertTrue([[mockCache getBreadcrumbID] isEqualToString: newBreadcrumb], @"Breadcrumb should be newly generated.");
     //use isEqualToString for string comparison
     XCTAssertTrue([[mockCache getIdfa] isEqual: currentIdfa], @"IDFA should be set from device.");
     XCTAssertTrue([mockCache idfaChanged], @"IDFA should have changed.");
@@ -116,12 +105,11 @@
 }
 
 -(void) testDeviceInfoUpdatesStaleValues{
-    NSString *breadcrumbId = @"breadcrumbId";
     NSString *idfa = [[[NSUUID alloc] init] UUIDString];
     BOOL limitAdvertising = NO;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
-    StubPNCache *cache = [[StubPNCache  alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
+    StubPNCache *cache = [[StubPNCache  alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
     id mockCache = [cache getMockCache];
     [cache loadDataFromCache];
     
@@ -131,15 +119,11 @@
     
     PNDeviceManager *info = [[PNDeviceManager alloc] initWithCache: mockCache];
     
-    info = [self mockCurrentDeviceInfo: info idfa: currentIdfa limitAdvertising: newlimitAdvertising idfv: currentIdfv generatedBreadcrumbID:nil];
+    info = [self mockCurrentDeviceInfo: info idfa: currentIdfa limitAdvertising: newlimitAdvertising idfv: currentIdfv];
     
     BOOL dataChanged = [info syncDeviceSettingsWithCache];
     //Verify no data has changed
     XCTAssertTrue(dataChanged, @"Cached device data should have changed");
-    
-    XCTAssertFalse([mockCache breadcrumbIDChanged], @"Breadcrumb did not change");
-    XCTAssertTrue([[mockCache getBreadcrumbID] isEqualToString: breadcrumbId], @"Breadcrumb value is still the initial cache value.");
-    XCTAssertFalse([mockCache breadcrumbIDChanged], @"Breadcrumb should not have changed.");
     
     XCTAssertTrue([[mockCache getIdfa] isEqual: currentIdfa], @"IDFA should be updated.");
     XCTAssertTrue([mockCache idfaChanged], @"IDFA should be updated.");

@@ -16,7 +16,6 @@
 #import "OCMArg.h"
 
 @implementation StubPNCache{
-    NSString *_initBreadcrumbId;
     NSString *_initIdfa;
     NSString *_initIdfv;
     BOOL _initLimitAdvertising;
@@ -31,12 +30,11 @@
     PNCache *_cache;
 }
 
--(id) initWithBreadcrumbID: (NSString *) breadcrumb idfa: (NSString *) idfa idfv: (NSString *) idfv limitAdvertising: (BOOL) limitAdvertising{
+-(id) initWithIdfa: (NSString *) idfa idfv: (NSString *) idfv limitAdvertising: (BOOL) limitAdvertising{
   
     if((self = [super init])){
         _cache = [[PNCache alloc] init];
         
-        _initBreadcrumbId = breadcrumb;
         _initIdfa = idfa;
         _initIdfv = idfv;
         _initLimitAdvertising = limitAdvertising;
@@ -46,13 +44,12 @@
     return self;
 }
 
--(id) initWithBreadcrumbID: (NSString *) breadcrumb idfa: (NSString *) idfa idfv: (NSString *) idfv limitAdvertising: (BOOL) limitAdvertising
+-(id) initWithIdfa: (NSString *) idfa idfv: (NSString *) idfv limitAdvertising: (BOOL) limitAdvertising
 lastEventTime: (NSTimeInterval) lastEventTime lastUserId: (NSString *)lastUserId lastSessionId: (PNGeneratedHexId *) sessionId
 {
     if((self = [super init])){
         _cache = [[PNCache alloc] init];
         
-        _initBreadcrumbId = breadcrumb;
         _initIdfa = idfa;
         _initIdfv = idfv;
         _initLimitAdvertising = limitAdvertising;
@@ -64,12 +61,11 @@ lastEventTime: (NSTimeInterval) lastEventTime lastUserId: (NSString *)lastUserId
     return self;
 }
 
--(id) initWithBreadcrumbID: (NSString *) breadcrumb idfa: (NSString *) idfa idfv: (NSString *) idfv limitAdvertising: (BOOL) limitAdvertising deviceToken:(StubDeviceToken *) token{
+-(id) initWithIdfa: (NSString *) idfa idfv: (NSString *) idfv limitAdvertising: (BOOL) limitAdvertising deviceToken:(StubDeviceToken *) token{
     
     if((self = [super init])){
         _cache = [[PNCache alloc] init];
         
-        _initBreadcrumbId = breadcrumb;
         _initIdfa = idfa;
         _initIdfv = idfv;
         _initLimitAdvertising = limitAdvertising;
@@ -89,7 +85,6 @@ lastEventTime: (NSTimeInterval) lastEventTime lastUserId: (NSString *)lastUserId
 
 -(void) loadDataFromCache{
     //mock out the calls for actually loading the data
-    _cache.breadcrumbID = _initBreadcrumbId;
     _cache.idfa = _initIdfa;
     _cache.idfv = _initIdfv;
     _cache.limitAdvertising = _initLimitAdvertising;

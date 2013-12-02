@@ -13,12 +13,14 @@
 
 @property (nonatomic, readonly) NSNumber *applicationId;
 @property (nonatomic, readonly) NSString *userId;
-@property (nonatomic, readonly) NSString *breadcrumbId;
+@property (nonatomic, readonly) NSString *idfa;
+@property (nonatomic, readonly) NSString *idfv;
 @property (nonatomic, readonly) PNGeneratedHexId *sessionId;
 
 -(id) initWithApplicationId:(unsigned long long)applicationId
                      userId:(NSString *) userId
-               breadcrumbId:(NSString *) breadcrumbId
+                       idfa:(NSString *) idfa
+                       idfv:(NSString *) idfv
                   sessionId:(PNGeneratedHexId *)sessionId;
 
 @end

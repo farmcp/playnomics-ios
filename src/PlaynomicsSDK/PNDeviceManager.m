@@ -1,5 +1,5 @@
 //
-//  PNUserInfo.m
+//  PNDeviceManager.m
 //  iosapi
 //
 //  Created by Shiraz Khan on 8/6/13.
@@ -26,11 +26,7 @@
     [super dealloc];
 }
 
-- (BOOL) syncDeviceSettingsWithCache {    
-    if(![_cache getBreadcrumbID]){
-        [_cache updateBreadcrumbID: [self generateBreadcrumbId]];
-    }
-    
+- (BOOL) syncDeviceSettingsWithCache {
     if (NSClassFromString(@"ASIdentifierManager")) {
         [_cache updateLimitAdvertising: ![self isAdvertisingTrackingEnabledFromDevice]];
         [_cache updateIdfa:[self getAdvertisingIdentifierFromDevice]];
@@ -42,14 +38,14 @@
     if ([currentDevice respondsToSelector:@selector(identifierForVendor)]) {
         [_cache updateIdfv: [self getVendorIdentifierFromDevice]];
     }
-    return _cache.breadcrumbIDChanged || _cache.idfaChanged || _cache.idfvChanged || _cache.limitAdvertisingChanged;
+    return _cache.idfaChanged || _cache.idfvChanged || _cache.limitAdvertisingChanged;
 }
 
-- (NSString *) generateBreadcrumbId {
+- (NSString *) generateUserId {
     CFUUIDRef uuidRef = CFUUIDCreate(kCFAllocatorDefault);
-    NSString *breadcrumb = [(NSString *) CFUUIDCreateString(NULL, uuidRef) autorelease];
+    NSString *userId = [(NSString *) CFUUIDCreateString(NULL, uuidRef) autorelease];
     CFRelease(uuidRef);
-    return breadcrumb;
+    return userId;
 }
 
 - (BOOL) isAdvertisingTrackingEnabledFromDevice {

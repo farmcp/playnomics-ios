@@ -45,6 +45,9 @@
     if(_session.cache.getIdfa){
         [params setObject:_session.cache.getIdfa forKey:@"idfa"];
     }
+    if(_session.cache.getIdfv){
+        [params setObject:_session.cache.getIdfv forKey:@"idfv"];
+    }
     [params setObject:[PNUtil boolAsString:!_session.cache.getLimitAdvertising] forKey:@"allowTracking"];
     
     NSString *language = [PNUtil getLanguage];

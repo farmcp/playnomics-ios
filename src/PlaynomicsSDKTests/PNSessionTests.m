@@ -43,7 +43,7 @@
     [_session release];
 }
 
--(id) mockCurrentDeviceInfo:(PNDeviceManager*) deviceInfo idfa: (NSString *) currentIdfa limitAdvertising : (BOOL) limitAdvertising idfv: (NSString *) currentIdfv generatedBreadcrumbID: (NSString*) breadcrumbId {
+-(id) mockCurrentDeviceInfo:(PNDeviceManager*) deviceInfo idfa: (NSString *) currentIdfa limitAdvertising : (BOOL) limitAdvertising idfv: (NSString *) currentIdfv {
     
     id mock = [OCMockObject partialMockForObject:deviceInfo];
     
@@ -52,20 +52,16 @@
     [[[mock stub] andReturn: currentIdfa] getAdvertisingIdentifierFromDevice];
     [[[mock stub] andReturn: currentIdfv] getVendorIdentifierFromDevice];
     
-    if(breadcrumbId){
-        [[[mock stub] andReturn: breadcrumbId] generateBreadcrumbId];
-    }
     return mock;
 }
 
 //runs app start with no initial device data, expects 2 events: appStart and userInfo
 -(void) testAppStartNewDevice{
-    NSString *breadcrumbId = nil;
     NSString *idfa = nil;
     BOOL limitAdvertising = NO;
     NSString *idfv = nil;
     
-    _cache = [[StubPNCache alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
     _session.cache = [_cache getMockCache];
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
     
@@ -73,9 +69,7 @@
     NSString *currentIdfv = [[[NSUUID alloc] init] UUIDString];
     BOOL currentLimit = NO;
     
-    NSString *breadcrumb = [_session.deviceManager generateBreadcrumbId];
-    
-    [self mockCurrentDeviceInfo: _session.deviceManager idfa: currentIdfa limitAdvertising:currentLimit idfv:currentIdfv generatedBreadcrumbID:breadcrumb];
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: currentIdfa limitAdvertising:currentLimit idfv:currentIdfv];
     
     _session.applicationId = 1;
     _session.userId = @"test-user";
@@ -85,7 +79,6 @@
     
     XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
     XCTAssertEqualObjects(_session.userId,  @"test-user", @"User ID should be set");
-    XCTAssertEqualObjects(_session.cookieId, breadcrumb, @"Breadcrumb ID should be set");
     
     XCTAssertTrue([_stubApiClient.events count] == 2, @"2 events should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart is the first event");
@@ -96,16 +89,15 @@
 
 //runs app start with initial device data, expects 1 event: appStart
 -(void) testAppStartNoDeviceChanges{
-    NSString *breadcrumbId = @"breadcrumbId";
     NSString *idfa = [[[NSUUID alloc] init] UUIDString];
     BOOL limitAdvertising = NO;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
-    _cache = [[StubPNCache alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
     _session.cache = [_cache getMockCache];
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
 
-    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv generatedBreadcrumbID:breadcrumbId];
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv];
 
     _session.applicationId = 1;
     _session.userId = @"test-user";
@@ -114,7 +106,6 @@
     
     XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
     XCTAssertEqualObjects(_session.userId,  @"test-user", @"User ID should be set");
-    XCTAssertEqualObjects(_session.cookieId, breadcrumbId, @"Breadcrumb ID should be set");
     
     XCTAssertTrue([_stubApiClient.events count] == 1, @"1 events should be queued");
     PNEventAppStart *appStart = [_stubApiClient.events objectAtIndex:0];
@@ -125,12 +116,9 @@
 
 //runs session start with initial device data, and lapsed previous session, expects 1 event: appStart
 -(void) testAppStartLapsedSession {
-    NSString *breadcrumbId = @"breadcrumbId";
     NSString *idfa = [[[NSUUID alloc] init] UUIDString];
     BOOL limitAdvertising = NO;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
-    
-    NSString *lastUserId = breadcrumbId;
     
     NSTimeInterval now = [[NSDate new] timeIntervalSinceNow];
     NSTimeInterval tenMinutesAgo = now - 60 * 10;
@@ -138,19 +126,18 @@
     PNGeneratedHexId *lastSessionId = [[PNGeneratedHexId alloc] initAndGenerateValue];
     
     
-    _cache = [[StubPNCache alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising lastEventTime: tenMinutesAgo lastUserId: lastUserId lastSessionId: lastSessionId];
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising lastEventTime: tenMinutesAgo lastUserId: nil lastSessionId: lastSessionId];
     _session.cache = [_cache getMockCache];
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
     
-    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv generatedBreadcrumbID:breadcrumbId];
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv];
     
     _session.applicationId = 1;
     [_session start];
     
     
     XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
-    XCTAssertEqualObjects(_session.userId, breadcrumbId, @"User ID should be set");
-    XCTAssertEqualObjects(_session.cookieId, breadcrumbId, @"Breadcrumb ID should be set");
+    XCTAssertEqualObjects(_session.userId, nil, @"User ID should be nil");
     
     XCTAssertTrue([_stubApiClient.events count] == 1, @"1 events should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart generated after session has lapsed");
@@ -161,7 +148,6 @@
 
 //runs session start with initial device data, and lapsed previous session, expects 1 event: appStart
 -(void) testAppStartSwappedUser {
-    NSString *breadcrumbId = @"breadcrumbId";
     NSString *idfa = [[[NSUUID alloc] init] UUIDString];
     BOOL limitAdvertising = NO;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
@@ -174,18 +160,17 @@
     PNGeneratedHexId *lastSessionId = [[PNGeneratedHexId alloc] initAndGenerateValue];
     
     
-    _cache = [[StubPNCache alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising lastEventTime: aMinuteAgo lastUserId: lastUserId lastSessionId: lastSessionId];
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising lastEventTime: aMinuteAgo lastUserId: lastUserId lastSessionId: lastSessionId];
     _session.cache = [_cache getMockCache];
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
     
-    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv generatedBreadcrumbID:breadcrumbId];
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv];
     
     _session.applicationId = 1;
     [_session start];
     
     XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
-    XCTAssertEqualObjects(_session.userId, breadcrumbId, @"User ID should be set");
-    XCTAssertEqualObjects(_session.cookieId, breadcrumbId, @"Breadcrumb ID should be set");
+    XCTAssertEqualObjects(_session.userId, nil, @"User ID should be nil");
 
     XCTAssertTrue([_stubApiClient.events count] == 1, @"1 events should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart is generated when a new user appears");
@@ -196,29 +181,27 @@
 
 //runs session start with device data changes, a previous startTime, expects 2 events: appPage and userInfo
 -(void) testAppPauseDeviceChanges{
-    NSString *breadcrumbId = @"breadcrumbId";
     NSString *idfa = [[[NSUUID alloc] init] UUIDString];
     BOOL limitAdvertising = NO;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
-    NSString *lastUserId = breadcrumbId;
+    NSString *lastUserId = @"lastUserId";
     NSTimeInterval now = [[NSDate new] timeIntervalSince1970];
     NSTimeInterval aMinuteAgo = now - 60;
     
     PNGeneratedHexId *lastSessionId = [[PNGeneratedHexId alloc] initAndGenerateValue];
    
-    _cache = [[StubPNCache alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising lastEventTime: aMinuteAgo lastUserId: lastUserId lastSessionId: lastSessionId];
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising lastEventTime: aMinuteAgo lastUserId: lastUserId lastSessionId: lastSessionId];
     _session.cache = [_cache getMockCache];
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
     
-    [self mockCurrentDeviceInfo: _session.deviceManager idfa: [[[NSUUID alloc] init] UUIDString] limitAdvertising: limitAdvertising idfv: idfv generatedBreadcrumbID: breadcrumbId];
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: [[[NSUUID alloc] init] UUIDString] limitAdvertising: limitAdvertising idfv: idfv];
 
     _session.applicationId = 1L;
     [_session start];
     
     XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
     XCTAssertEqualObjects(_session.userId, @"breadcrumbId", @"User ID should be set");
-    XCTAssertEqualObjects(_session.cookieId, @"breadcrumbId", @"Breadcrumb ID should be set");
     
     XCTAssertTrue([_stubApiClient.events count] == 2, @"2 events should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppPage class]], @"appPage is the first event");
@@ -230,30 +213,27 @@
 
 //runs session start with initial device data, a previous startTime, expects 2 events: appPage
 -(void) testAppPauseNoDeviceChanges{
-    NSString *breadcrumbId = @"breadcrumbId";
     NSString *idfa = [[[NSUUID alloc] init] UUIDString];
     BOOL limitAdvertising = NO;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
-    
-    NSString *lastUserId = [breadcrumbId retain];
-    
+
+    NSString *lastUserId = @"lastUserId";
     NSTimeInterval now = [[NSDate new] timeIntervalSince1970];
     NSTimeInterval aMinuteAgo = now - 60;
     
     PNGeneratedHexId *lastSessionId = [[PNGeneratedHexId alloc] initAndGenerateValue];
     
-    _cache = [[StubPNCache alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising lastEventTime: aMinuteAgo lastUserId: lastUserId lastSessionId: lastSessionId];
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising lastEventTime: aMinuteAgo lastUserId: lastUserId lastSessionId: lastSessionId];
     _session.cache = [_cache getMockCache];
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
     
-    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv generatedBreadcrumbID:breadcrumbId];
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv];
     
     _session.applicationId = 1;
     [_session start];
     
     XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
-    XCTAssertEqualObjects(_session.userId, breadcrumbId, @"User ID should be set");
-    XCTAssertEqualObjects(_session.cookieId, breadcrumbId, @"Breadcrumb ID should be set");
+    XCTAssertNotNil(_session.userId, @"User ID should be set");
     XCTAssertTrue([_stubApiClient.events count] == 1, @"1 event should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppPage class]], @"appPage is the first event");
     XCTAssertTrue(lastSessionId.generatedId == _session.sessionId.generatedId, @"Session ID should be loaded from cache.");
@@ -262,16 +242,15 @@
 
 //runs the start, and then milestone. expects 2 events: appStart and milestone
 -(void) testMilestone{
-    NSString *breadcrumbId = @"breadcrumbId";
     NSString *idfa = [[[NSUUID alloc] init] UUIDString];
     BOOL limitAdvertising = NO;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
-    _cache = [[StubPNCache alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
     _session.cache = [_cache getMockCache];
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
     
-    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv generatedBreadcrumbID:breadcrumbId];
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv];
     
     _session.applicationId = 1;
     _session.userId = @"test-user";
@@ -281,7 +260,6 @@
     
     XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
     XCTAssertEqualObjects(_session.userId, @"test-user", @"User ID should be set");
-    XCTAssertEqualObjects(_session.cookieId, breadcrumbId, @"Breadcrumb ID should be set");
     XCTAssertTrue([_stubApiClient.events count] == 2, @"2 events should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart is the first event");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:1] isKindOfClass:[PNEventMilestone class]], @"milestone is the second event");
@@ -289,16 +267,15 @@
 
 //runs the milestone without calling start first. expects 0 events
 -(void) testMilestoneNoStart{
-    NSString *breadcrumbId = @"breadcrumbId";
     NSString *idfa = [[[NSUUID alloc] init] UUIDString];
     BOOL limitAdvertising = NO;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
-    _cache = [[StubPNCache alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
     _session.cache = [_cache getMockCache];
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
     
-    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv generatedBreadcrumbID:breadcrumbId];
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv];
     
     [_session milestone:PNMilestoneCustom1];
     
@@ -307,16 +284,15 @@
 
 //runs start, and then transaction. expects 2 events: appStart and milestone
 -(void) testTransaction{
-    NSString *breadcrumbId = @"breadcrumbId";
     NSString *idfa = [[[NSUUID alloc] init] UUIDString];
     BOOL limitAdvertising = NO;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
-    _cache = [[StubPNCache alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
     _session.cache = [_cache getMockCache];
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
     
-    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv generatedBreadcrumbID:breadcrumbId];
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv];
     
     _session.applicationId = 1;
     _session.userId = @"test-user";
@@ -326,7 +302,6 @@
     
     XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
     XCTAssertEqualObjects(_session.userId, @"test-user", @"User ID should be set");
-    XCTAssertEqualObjects(_session.cookieId, breadcrumbId, @"Breadcrumb ID should be set");
     XCTAssertTrue([_stubApiClient.events count] == 2, @"2 events should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart is the first event");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:1] isKindOfClass:[PNEventTransaction class]], @"transaction is the second event");
@@ -334,16 +309,15 @@
 }
 //runs  transaction without calling start first. expects 0 events
 -(void) testTransactionNoStart{
-    NSString *breadcrumbId = @"breadcrumbId";
     NSString *idfa = [[[NSUUID alloc] init] UUIDString];
     BOOL limitAdvertising = NO;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
-    _cache = [[StubPNCache alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
     _session.cache = [_cache getMockCache];
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
     
-    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv generatedBreadcrumbID:breadcrumbId];
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv];
     
     [_session transactionWithUSDPrice:[NSNumber numberWithDouble:0.99] quantity:1];
     
@@ -352,18 +326,17 @@
 
 //runs start, and then enablePushNotifications, expects 2 events: appStart and enable push notifications
 -(void) testEnabledPush{
-    NSString *breadcrumbId = @"breadcrumbId";
     NSString *idfa = [[[NSUUID alloc] init] UUIDString];
     BOOL limitAdvertising = NO;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
     StubDeviceToken *oldToken = [[StubDeviceToken alloc] initWithToken:@"<12345 6789>" cleanToken:@"123456789"];
     
-    _cache = [[StubPNCache alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising deviceToken:oldToken];
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising deviceToken:oldToken];
     _session.cache = [_cache getMockCache];
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
     
-    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv generatedBreadcrumbID:breadcrumbId];
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv];
     
     _session.applicationId = 1;
     _session.userId = @"test-user";
@@ -376,7 +349,6 @@
     
     XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
     XCTAssertEqualObjects(_session.userId, @"test-user", @"User ID should be set");
-    XCTAssertEqualObjects(_session.cookieId, breadcrumbId, @"Breadcrumb ID should be set");
     XCTAssertTrue([_stubApiClient.events count] == 2, @"2 events should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart is the first event");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:1] isKindOfClass:[PNEventUserInfo class]], @"userInfo is the second event");
@@ -384,18 +356,17 @@
 
 //runs enablePushNotifications without calling start first. expects 0 events
 -(void) testEnabledPushNoStart{
-    NSString *breadcrumbId = @"breadcrumbId";
     NSString *idfa = [[[NSUUID alloc] init] UUIDString];
     BOOL limitAdvertising = NO;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
     StubDeviceToken *oldToken = [[StubDeviceToken alloc] initWithToken:@"<12345 6789>" cleanToken:@"123456789"];
     
-    _cache = [[StubPNCache alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising deviceToken:oldToken];
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising deviceToken:oldToken];
     _session.cache = [_cache getMockCache];
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
     
-    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv generatedBreadcrumbID:breadcrumbId];
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv];
 
     //token gets updated
     StubDeviceToken *newToken = [[StubDeviceToken alloc] initWithToken:@"<9876 54321>" cleanToken:@"987654321"];
@@ -406,18 +377,17 @@
 
 //runs enablePushTokens but the token has not changed. expects 1 event: appStart
 -(void) testEnabledPushNoTokenChange{
-    NSString *breadcrumbId = @"breadcrumbId";
     NSString *idfa = [[[NSUUID alloc] init] UUIDString];
     BOOL limitAdvertising = NO;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
     StubDeviceToken *oldToken = [[StubDeviceToken alloc] initWithToken:@"<12345 6789>" cleanToken:@"123456789"];
     
-    _cache = [[StubPNCache alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising deviceToken:oldToken];
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising deviceToken:oldToken];
     _session.cache = [_cache getMockCache];
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
     
-    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv generatedBreadcrumbID:breadcrumbId];
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv];
     
     _session.applicationId = 1;
     _session.userId = @"test-user";
@@ -428,25 +398,23 @@
 
     XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
     XCTAssertEqualObjects(_session.userId, @"test-user", @"User ID should be set");
-    XCTAssertEqualObjects(_session.cookieId, breadcrumbId, @"Breadcrumb ID should be set");
     XCTAssertTrue([_stubApiClient.events count] == 1, @"1 event should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart is the first event");
 }
 
 
 -(void) testAttribution{
-    NSString *breadcrumbId = @"breadcrumbId";
     NSString *idfa = [[[NSUUID alloc] init] UUIDString];
     BOOL limitAdvertising = NO;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
     StubDeviceToken *oldToken = [[StubDeviceToken alloc] initWithToken:@"<12345 6789>" cleanToken:@"123456789"];
     
-    _cache = [[StubPNCache alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising deviceToken:oldToken];
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising deviceToken:oldToken];
     _session.cache = [_cache getMockCache];
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
     
-    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv generatedBreadcrumbID:breadcrumbId];
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv];
     
     _session.applicationId = 1;
     _session.userId = @"test-user";
@@ -460,7 +428,6 @@
 
     XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
     XCTAssertEqualObjects(_session.userId, @"test-user", @"User ID should be set");
-    XCTAssertEqualObjects(_session.cookieId, breadcrumbId, @"Breadcrumb ID should be set");
     XCTAssertTrue([_stubApiClient.events count] == 2, @"2 events should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart is the first event");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:1] isKindOfClass:[PNEventUserInfo class]], @"userInfo is the second event");
@@ -468,18 +435,17 @@
 }
 
 -(void) testAttributionNoStart{
-    NSString *breadcrumbId = @"breadcrumbId";
     NSString *idfa = [[[NSUUID alloc] init] UUIDString];
     BOOL limitAdvertising = NO;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
     StubDeviceToken *oldToken = [[StubDeviceToken alloc] initWithToken:@"<12345 6789>" cleanToken:@"123456789"];
     
-    _cache = [[StubPNCache alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising deviceToken:oldToken];
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising deviceToken:oldToken];
     _session.cache = [_cache getMockCache];
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
     
-    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv generatedBreadcrumbID:breadcrumbId];
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv];
     
     _session.applicationId = 1;
     _session.userId = @"test-user";
@@ -493,16 +459,15 @@
 }
 
 -(void) testApplicationLifeCycle{
-    NSString *breadcrumbId = @"breadcrumbId";
     NSString *idfa = [[[NSUUID alloc] init] UUIDString];
     BOOL limitAdvertising = NO;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
-    _cache = [[StubPNCache alloc] initWithBreadcrumbID:breadcrumbId idfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
     _session.cache = [_cache getMockCache];
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
     
-    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv generatedBreadcrumbID:breadcrumbId];
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv];
     
     _session.applicationId = 1;
     _session.userId = @"test-user";
@@ -513,7 +478,6 @@
 
     XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
     XCTAssertEqualObjects(_session.userId, @"test-user", @"User ID should be set");
-    XCTAssertEqualObjects(_session.cookieId, breadcrumbId, @"Breadcrumb ID should be set");
     
     XCTAssertTrue([_stubApiClient.events count] == 3, @"3 events should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart is the first event");
