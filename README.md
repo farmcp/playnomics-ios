@@ -835,6 +835,11 @@ If you have any questions or issues, please contact <a href="mailto:support@play
 
 Change Log
 ==========
+#### Version 1.4.0
+* setTestMode is deprecated
+* Send IDFA and IDFV for all events
+* userId defaults to IDFA if none is passed
+
 #### Version 1.3.0
 * Frames are now Placements
     * The frames interface is still usable, but has become deprecated. You will receive build warnings when using these old methods.
