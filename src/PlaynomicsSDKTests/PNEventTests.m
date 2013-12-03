@@ -229,13 +229,9 @@
 
 -(void) testUserInfoDeviceSettings{
     BOOL limitDeviceTracking = YES;
-    NSString *idfa = [[[NSUUID alloc] init] UUIDString];
-    NSString *idfv = [[[NSUUID alloc] init] UUIDString];
-    PNEventUserInfo *userInfo = [[PNEventUserInfo alloc] initWithSessionInfo:_info limitAdvertising:limitDeviceTracking idfa:idfa idfv:idfv];
+    PNEventUserInfo *userInfo = [[PNEventUserInfo alloc] initWithSessionInfo:_info limitAdvertising:limitDeviceTracking];
     
     [self assertCommonInfoIsAvailable:userInfo sessionInfo:_info];
-     XCTAssertEqualObjects([userInfo.eventParameters valueForKey:@"idfa"], idfa, @"IDFA is set");
-    XCTAssertEqualObjects([userInfo.eventParameters valueForKey:@"idfv"], idfv, @"IDFV is set");
     XCTAssertEqualObjects([userInfo.eventParameters valueForKey:@"limitAdvertising"], @"true", @"Limit Advertising is set");
 }
 

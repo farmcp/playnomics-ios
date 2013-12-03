@@ -125,7 +125,6 @@
     
     PNGeneratedHexId *lastSessionId = [[PNGeneratedHexId alloc] initAndGenerateValue];
     
-    
     _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising lastEventTime: tenMinutesAgo lastUserId: nil lastSessionId: lastSessionId];
     _session.cache = [_cache getMockCache];
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
@@ -135,9 +134,8 @@
     _session.applicationId = 1;
     [_session start];
     
-    
     XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
-    XCTAssertEqualObjects(_session.userId, nil, @"User ID should be nil");
+    XCTAssertEqualObjects(_session.userId, [[_cache getMockCache] getIdfa], @"User ID should be same as IDFA");
     
     XCTAssertTrue([_stubApiClient.events count] == 1, @"1 events should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart generated after session has lapsed");
@@ -170,7 +168,7 @@
     [_session start];
     
     XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
-    XCTAssertEqualObjects(_session.userId, nil, @"User ID should be nil");
+    XCTAssertEqualObjects(_session.userId, [[_cache getMockCache] getIdfa], @"User ID should be same as IDFA");
 
     XCTAssertTrue([_stubApiClient.events count] == 1, @"1 events should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart is generated when a new user appears");
@@ -179,45 +177,13 @@
     XCTAssertTrue(_session.sessionId.generatedId == _session.instanceId.generatedId, @"Instance ID and Session ID should be equal.");
 }
 
-//runs session start with device data changes, a previous startTime, expects 2 events: appPage and userInfo
--(void) testAppPauseDeviceChanges{
-    NSString *idfa = [[[NSUUID alloc] init] UUIDString];
-    BOOL limitAdvertising = NO;
-    NSString *idfv = [[[NSUUID alloc] init] UUIDString];
-    
-    NSString *lastUserId = @"lastUserId";
-    NSTimeInterval now = [[NSDate new] timeIntervalSince1970];
-    NSTimeInterval aMinuteAgo = now - 60;
-    
-    PNGeneratedHexId *lastSessionId = [[PNGeneratedHexId alloc] initAndGenerateValue];
-   
-    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising lastEventTime: aMinuteAgo lastUserId: lastUserId lastSessionId: lastSessionId];
-    _session.cache = [_cache getMockCache];
-    _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
-    
-    [self mockCurrentDeviceInfo: _session.deviceManager idfa: [[[NSUUID alloc] init] UUIDString] limitAdvertising: limitAdvertising idfv: idfv];
-
-    _session.applicationId = 1L;
-    [_session start];
-    
-    XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
-    XCTAssertEqualObjects(_session.userId, @"breadcrumbId", @"User ID should be set");
-    
-    XCTAssertTrue([_stubApiClient.events count] == 2, @"2 events should be queued");
-    XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppPage class]], @"appPage is the first event");
-    XCTAssertTrue([[_stubApiClient.events objectAtIndex:1] isKindOfClass:[PNEventUserInfo class]], @"userInfo is the second event");
-    
-    XCTAssertTrue(lastSessionId.generatedId == _session.sessionId.generatedId, @"Session ID should be loaded from cache.");
-    XCTAssertTrue(_session.sessionId.generatedId != _session.instanceId.generatedId, @"Instance ID and Session ID should be different.");
-}
-
 //runs session start with initial device data, a previous startTime, expects 2 events: appPage
 -(void) testAppPauseNoDeviceChanges{
     NSString *idfa = [[[NSUUID alloc] init] UUIDString];
     BOOL limitAdvertising = NO;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
 
-    NSString *lastUserId = @"lastUserId";
+    NSString *lastUserId = idfa;
     NSTimeInterval now = [[NSDate new] timeIntervalSince1970];
     NSTimeInterval aMinuteAgo = now - 60;
     
@@ -233,7 +199,7 @@
     [_session start];
     
     XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
-    XCTAssertNotNil(_session.userId, @"User ID should be set");
+    XCTAssertEqualObjects(_session.userId, [[_cache getMockCache] getIdfa], @"User ID should be same as IDFA");
     XCTAssertTrue([_stubApiClient.events count] == 1, @"1 event should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppPage class]], @"appPage is the first event");
     XCTAssertTrue(lastSessionId.generatedId == _session.sessionId.generatedId, @"Session ID should be loaded from cache.");

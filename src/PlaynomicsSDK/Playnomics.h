@@ -55,7 +55,7 @@ typedef NS_ENUM(int, PNMilestoneType){
 @end
 
 @interface Playnomics : NSObject
-+ (void) setTestMode : (BOOL) testMode;
++ (void) setTestMode : (BOOL) testMode DEPRECATED_ATTRIBUTE;
 + (void) setLoggingLevel:(PNLoggingLevel) level;
 + (void) overrideMessagingURL:(NSString *) messagingUrl;
 + (void) overrideEventsURL:(NSString *) messagingUrl;

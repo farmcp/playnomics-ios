@@ -24,7 +24,6 @@
 }
 
 +(void) setTestMode : (BOOL) testMode{
-    [PNSession sharedInstance].testMode = testMode;
 }
 
 + (BOOL) startWithApplicationId:(unsigned long long) applicationId{

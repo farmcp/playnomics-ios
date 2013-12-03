@@ -20,7 +20,6 @@ typedef enum {
 
 @interface PNSession : NSObject
 
-@property (atomic, assign) bool testMode;
 @property (atomic, copy) NSString *overrideEventsUrl;
 @property (atomic, copy) NSString *overrideMessagingUrl;
 

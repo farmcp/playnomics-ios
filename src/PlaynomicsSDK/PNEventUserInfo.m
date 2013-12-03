@@ -12,20 +12,10 @@
 }
 
 - (id) initWithSessionInfo:(PNGameSessionInfo *)info
-          limitAdvertising: (BOOL) limitAdvertising
-                      idfa: (NSString *) idfa
-                      idfv: (NSString *) idfv {
+          limitAdvertising: (BOOL) limitAdvertising {
     if((self = [super initWithSessionInfo: info])){
         
         [self appendParameter:[PNUtil boolAsString:limitAdvertising] forKey:PNEventParameterUserInfoLimitAdvertising];
-        
-        if(idfa) {
-            [self appendParameter:idfa forKey:PNEventParameterIdfa];
-        }
-        
-        if(idfv) {
-            [self appendParameter:idfv forKey:PNEventParameterIdfv];
-        }
         [self appendParameter:@"update" forKey:PNEventParameterUserInfoType];
     }
     return self;

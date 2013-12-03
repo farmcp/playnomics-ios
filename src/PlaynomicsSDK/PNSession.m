@@ -63,7 +63,6 @@
 
 @synthesize cache=_cache;
 
-@synthesize testMode=_testMode;
 @synthesize overrideEventsUrl=_overrideEventsUrl;
 @synthesize overrideMessagingUrl=_overrideMessagingUrl;
 
@@ -130,18 +129,12 @@
     if(_overrideEventsUrl){
         return _overrideEventsUrl;
     }
-    if(_testMode){
-        return _testEventsUrl;
-    }
     return _prodEventsUrl;
 }
 
 -(NSString *) getMessagingUrl{
     if(_overrideMessagingUrl){
         return _overrideMessagingUrl;
-    }
-    if(_testMode){
-        return _testMessagingUrl;
     }
     return _prodMessagingUrl;
 }
@@ -236,7 +229,11 @@
     
     // Set userId to cookieId if it isn't present
     if (!(_userId && [_userId length] > 0)) {
-        _userId = [[_deviceManager generateUserId] retain];
+        if ([_cache getIdfa]) {
+            _userId = [[_cache getIdfa] retain];
+        } else {
+            _userId = [[_deviceManager generateUserId] retain];
+        }
     }
     
     _sequence = 1;
@@ -434,7 +431,7 @@
 #pragma mark - Device Identifiers
 
 -(void)onDeviceInfoChanged{
-    PNEventUserInfo *userInfo = [[PNEventUserInfo alloc] initWithSessionInfo:[self getGameSessionInfo] limitAdvertising:[_cache getLimitAdvertising] idfa:[_cache getIdfa] idfv: [_cache getIdfv]];
+    PNEventUserInfo *userInfo = [[PNEventUserInfo alloc] initWithSessionInfo:[self getGameSessionInfo] limitAdvertising:[_cache getLimitAdvertising]];
     [userInfo autorelease];
     [_apiClient enqueueEvent:userInfo];
 }
