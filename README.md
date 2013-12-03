@@ -36,8 +36,6 @@ In the class that implements `AppDelegate`, start the PlayRM Session in the `did
 
 - (BOOL) application: (UIApplication *) application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    //Enable test mode to view your events in the Validator. Remove this line of code before releasing your application to the app store.
-    [Playnomics setTestMode: YES];
     const unsigned long long applicationId = <APPID>;
     [Playnomics startWithApplicationId:applicationId];
 
@@ -115,8 +113,6 @@ We recommend that you preload all placements when your application loads, so tha
 //...
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    //...
-    [Playnomics setTestMode:NO];
     [Playnomics startWithApplicationId:applicationId];
     //preloads placements at app start
     [Playnomics preloadPlacementsWithNames:@"placement 1", @"placement 2", @"placement 3", @"placement 4", nil];
@@ -241,28 +237,6 @@ Simply visit the self-check page for your application: **`https://controlpanel.p
 The page will update with events as they occur in real-time, with any errors flagged. Visit the  <a href="http://integration.playnomics.com/technical/#self-check">self-check validation guide</a> for more information.
 
 We strongly recommend running the self-check validator before deploying your newly integrated application to production.
-
-## Switch SDK to Production Mode
-
-Once you have [validated](#validate-integration) your integration, switch the SDK from **test** to **production** mode by simply setting `setTestMode` field to `NO` (or by removing/commenting out the call entirely) in the initialization block:
-
-```objectivec
-//...
-
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    //...
-    [Playnomics setTestMode:NO];
-    [Playnomics startWithApplicationId:applicationId];
-    //...
-}
-```
-If you ever wish to test or troubleshoot your integration later on, simply set `setTestMode` back to `YES` and revisit the self-check validation tool for your application:
-
-**`https://controlpanel.playnomics.com/applications/<APPID>`**
-
-
-**Congratulations!** You've completed our basic integration. You will now be able to track engagement data through the PlayRM dashboard.
 
 Full Integration
 ================
