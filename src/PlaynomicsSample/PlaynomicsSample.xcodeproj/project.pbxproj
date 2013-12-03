@@ -8,12 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		322BEC5217A6CFF000C2623E /* FrameDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 322BEC5117A6CFF000C2623E /* FrameDelegate.m */; };
-		323B354817E9866C00A2F7BC /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 323B354717E9866C00A2F7BC /* AdSupport.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		323B354817E9866C00A2F7BC /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 323B354717E9866C00A2F7BC /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		323B354A17E9867200A2F7BC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 323B354917E9867200A2F7BC /* AVFoundation.framework */; };
 		323B354C17E9867B00A2F7BC /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 323B354B17E9867B00A2F7BC /* CFNetwork.framework */; };
 		323B354E17E9868100A2F7BC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 323B354D17E9868100A2F7BC /* CoreGraphics.framework */; };
 		323B355217E986A300A2F7BC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 323B355117E986A300A2F7BC /* CoreData.framework */; };
 		324160B717EA488200D471C4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 324160B617EA488200D471C4 /* UIKit.framework */; };
+		3270369D184D87D100CACA18 /* libPlaynomicsSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 328D118517F755820064BD18 /* libPlaynomicsSDK.a */; };
 		328652E617F75AF0007C461F /* PlaynomicsSample.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 328652E517F75AF0007C461F /* PlaynomicsSample.xcconfig */; };
 		5BBAA083159BAF0000AA4993 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5BBAA081159BAF0000AA4993 /* InfoPlist.strings */; };
 		5BBAA085159BAF0000AA4993 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BBAA084159BAF0000AA4993 /* main.m */; };
@@ -21,7 +22,6 @@
 		5BBAA08C159BAF0000AA4993 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BBAA08B159BAF0000AA4993 /* ViewController.m */; };
 		5BBAA08F159BAF0000AA4993 /* ViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BBAA08D159BAF0000AA4993 /* ViewController_iPhone.xib */; };
 		5BBAA092159BAF0000AA4993 /* ViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BBAA090159BAF0000AA4993 /* ViewController_iPad.xib */; };
-		682CB5BD1846861F00818DFF /* libPlaynomics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 682CB5BA1846861F00818DFF /* libPlaynomics.a */; };
 		6855CB7B17948E330058E101 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6855CB7A17948E330058E101 /* Default-568h@2x.png */; };
 		A1244D5516A8A38E001A93DD /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1244D5416A8A38D001A93DD /* Localizable.strings */; };
 		A18FFBAE16CADCA80099D6A5 /* dingdong.caf in Resources */ = {isa = PBXBuildFile; fileRef = A18FFBAD16CADCA80099D6A5 /* dingdong.caf */; };
@@ -62,7 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				682CB5BD1846861F00818DFF /* libPlaynomics.a in Frameworks */,
+				3270369D184D87D100CACA18 /* libPlaynomicsSDK.a in Frameworks */,
 				324160B717EA488200D471C4 /* UIKit.framework in Frameworks */,
 				323B355217E986A300A2F7BC /* CoreData.framework in Frameworks */,
 				323B354E17E9868100A2F7BC /* CoreGraphics.framework in Frameworks */,
