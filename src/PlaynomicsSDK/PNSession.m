@@ -227,11 +227,17 @@
 
     _state = PNSessionStateStarted;
     
+    NSString *lastUserId = [_cache getLastUserId];
+    
     // Set userId to cookieId if it isn't present
     if (!(_userId && [_userId length] > 0)) {
         if ([_cache getIdfa]) {
             _userId = [[_cache getIdfa] retain];
+        } else if (lastUserId) {
+            //use the previous user ID
+            _userId = [lastUserId retain] ;
         } else {
+            //autogenerate the user ID
             _userId = [[_deviceManager generateUserId] retain];
         }
     }
@@ -240,18 +246,13 @@
     _clicks = 0;
     _totalClicks = 0;
     
-    NSString *lastUserId = [_cache getLastUserId];
+    
     NSTimeInterval lastSessionStartTime = [_cache getLastEventTime];
-    
-    
     NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
     
     //per our events specification, the sessionStart is always when the session start call is made,
     //regardless of whether is an appPage or appStart
-   
-    
     bool sessionLapsed = (currentTime - lastSessionStartTime > PNSessionTimeout) || ![_userId isEqualToString:lastUserId];
-    
     // Send an appStart if it has been > 3 min since the last session or a different user
     // otherwise send an appPage
     if (sessionLapsed) {

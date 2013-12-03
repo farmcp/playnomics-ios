@@ -55,6 +55,7 @@
     return mock;
 }
 
+
 //runs app start with no initial device data, expects 2 events: appStart and userInfo
 -(void) testAppStartNewDevice{
     NSString *idfa = nil;
@@ -86,6 +87,38 @@
     
     XCTAssertTrue(_session.sessionId.generatedId == _session.instanceId.generatedId, @"Instance ID and Session ID should be equal.");
 }
+
+//ios5 tests
+-(void) testAppStartPreviousUserId{
+    NSString *idfa = nil;
+    BOOL limitAdvertising = NO;
+    NSString *idfv = nil;
+
+    NSString *lastUserId = @"lastUserId";
+    
+    NSTimeInterval tenMinutesAgo = NSTimeIntervalSince1970 - 10 * 60;
+    PNGeneratedHexId *sessionId = [[PNGeneratedHexId alloc] initAndGenerateValue];
+    
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising lastEventTime:tenMinutesAgo lastUserId:lastUserId lastSessionId:sessionId];
+    _session.cache = [_cache getMockCache];
+    _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
+    
+    //assume IDFA is not available
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfa];
+    
+    _session.applicationId = 1;
+    
+    [_session start];
+    
+    XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
+    XCTAssertEqualObjects(_session.userId,  lastUserId, @"User ID should be loaded from cache");
+    
+    XCTAssertTrue([_stubApiClient.events count] == 1, @"1 event should be queued");
+    XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart is the first event");
+    XCTAssertTrue(_session.sessionId.generatedId == _session.instanceId.generatedId, @"Instance ID and Session ID should be equal.");
+    
+}
+
 
 //runs app start with initial device data, expects 1 event: appStart
 -(void) testAppStartNoDeviceChanges{
