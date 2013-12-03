@@ -86,7 +86,7 @@
 }
 
 - (void) updateIdfa: (NSString *) value{
-    if(!(self.idfa && [value isEqualToString:self.idfa])){
+    if(value && !(self.idfa && [value isEqualToString:self.idfa])){
         self.idfa = value;
         _idfaChanged = TRUE;
     }
@@ -97,7 +97,7 @@
 }
 
 - (void) updateIdfv : (NSString *) value{
-    if(!(self.idfv && [value isEqualToString: self.idfv])){
+    if(value &&  !(self.idfv && [value isEqualToString: self.idfv])){
         self.idfv = value;
         _idfvChanged = TRUE;
     }
