@@ -234,9 +234,11 @@ The actual contents of your JSON message can be delayed until the time of the me
 ## Validate Integration
 After you've finished the installation, you should verify that your application is correctly integrated by checkout the integration verification section of your application page.
 
-Simply visit the self-check page for your application: **`https://controlpanel.playnomics.com/applications/<APPID>`**
+Using iOS SDK v1.4.0+ you can register your device as a Test Device and validate your events on the self-check page for your application: **`https://controlpanel.playnomics.com/applications/<APPID>`**
 
-The page will update with events as they occur in real-time, with any errors flagged. Visit the  <a href="http://integration.playnomics.com/technical/#self-check">self-check validation guide</a> for more information.
+To test your in-app campaigns, you can enter your device's IDFA and select which segments to fall into.  Optionally, you can opt to not select any segments to simply see your device's data flowing through the validator.
+
+This page will update with events as they occur in real-time, with any errors flagged. Visit the  <a href="http://integration.playnomics.com/technical/#self-check">self-check validation guide</a> for more information.
 
 We strongly recommend running the self-check validator before deploying your newly integrated application to production.
 
