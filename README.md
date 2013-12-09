@@ -238,7 +238,7 @@ Using iOS SDK v1.4.0+ you can register your device as a Test Device and validate
 
 To test your in-app campaigns, you can enter your device's IDFA and select which segments to fall into.  Optionally, you can opt to not select any segments to simply see your device's data flowing through the validator.
 
-This page will update with events as they occur in real-time, with any errors flagged. Visit the  <a href="http://integration.playnomics.com/technical/#self-check">self-check validation guide</a> for more information.
+This page will update with events as they occur in real-time, with any errors flagged.
 
 We strongly recommend running the self-check validator before deploying your newly integrated application to production.
 
