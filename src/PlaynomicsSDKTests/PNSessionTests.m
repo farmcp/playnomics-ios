@@ -16,6 +16,8 @@
 #import "StubPNCache.h"
 
 #import "PNEventAppPage.h"
+#import "PNEventAppPause.h"
+#import "PNEventAppResume.h"
 #import "PNEventAppStart.h"
 #import "PNEventUserInfo.h"
 #import "PNEventMilestone.h"
@@ -480,7 +482,46 @@
     
     XCTAssertTrue([_stubApiClient.events count] == 3, @"3 events should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart is the first event");
-    XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appPause is the first event");
-    XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appResume is the first event");
+    XCTAssertTrue([[_stubApiClient.events objectAtIndex:1] isKindOfClass:[PNEventAppPause class]], @"appPause is the second event");
+    XCTAssertTrue([[_stubApiClient.events objectAtIndex:2] isKindOfClass:[PNEventAppResume class]], @"appResume is the third event");
 }
+
+-(void) testApplicationRestartLifeCycle{
+    NSString *idfa = [[[NSUUID alloc] init] UUIDString];
+    BOOL limitAdvertising = NO;
+    NSString *idfv = [[[NSUUID alloc] init] UUIDString];
+    
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising];
+    _session.cache = [_cache getMockCache];
+    _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
+    
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv];
+    
+    _session.applicationId = 1;
+    _session.userId = @"test-user";
+    
+    [_session start];
+    [_session pause];
+    
+    PNGeneratedHexId *lastSessionId = _session.sessionId;
+    NSString *lastUserId = _session.userId;
+    
+    NSTimeInterval now = [[NSDate new] timeIntervalSinceNow];
+    NSTimeInterval thirtyMinutesAgo = now - 60 * 30;
+    _session.pauseTime = thirtyMinutesAgo;
+    
+    _cache = [[StubPNCache alloc] initWithIdfa:idfa idfv:idfv limitAdvertising:limitAdvertising lastEventTime: thirtyMinutesAgo lastUserId: lastUserId lastSessionId: lastSessionId];
+    _session.cache = [_cache getMockCache];
+    _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
+    
+    [self mockCurrentDeviceInfo: _session.deviceManager idfa: idfa limitAdvertising:limitAdvertising idfv:idfv];
+    
+    [_session resume];
+    
+    XCTAssertTrue([_stubApiClient.events count] == 3, @"3 events should be queued");
+    XCTAssertTrue([[_stubApiClient.events objectAtIndex:2] isKindOfClass:[PNEventAppStart class]], @"appStart is the third event");
+    XCTAssertTrue(lastSessionId.generatedId != _session.sessionId.generatedId, @"Session ID should be new.");
+    XCTAssertTrue(_session.sessionId.generatedId == _session.instanceId.generatedId, @"Instance ID and Session ID should be equal.");
+}
+
 @end

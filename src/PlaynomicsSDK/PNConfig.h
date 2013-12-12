@@ -19,7 +19,7 @@
 #define PNPropertyMessagingTestUrl @"https://ads.b.playnomics.net/v2/"
 #define PNPropertyMessagingProdUrl @"https://ads.a.playnomics.net/v2/"
 
-#define PNPropertyVersion @"1.4.0"
+#define PNPropertyVersion @"1.4.1"
 // Connection timeout in seconds
 #define PNPropertyConnectionTimeout 60
 
@@ -27,11 +27,13 @@
 
 #define PNUpdateTimeInterval (NSTimeInterval) 60
 #define PNSessionTimeout (NSTimeInterval) 180
+#define PNSessionRestartTimeout (NSTimeInterval) 1800
 
 #else
 
 #define PNUpdateTimeInterval (NSTimeInterval) 60
 #define PNSessionTimeout (NSTimeInterval) 180
+#define PNSessionRestartTimeout (NSTimeInterval) 1800
 // DEBUG
 #endif
 // iosapi_PNConfig_h

@@ -13,4 +13,5 @@
 @interface PNSession ()
 @property (retain) PNEventApiClient *apiClient;
 @property (retain) PNDeviceManager *deviceManager;
+@property (assign) NSTimeInterval pauseTime;
 @end

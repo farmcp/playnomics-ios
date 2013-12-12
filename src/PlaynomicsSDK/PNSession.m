@@ -320,10 +320,17 @@
         
         _state = PNSessionStateStarted;
         
-        PNEventAppResume *ev  = [[PNEventAppResume alloc] initWithSessionInfo: [self getGameSessionInfo] instanceId: _instanceId sessionPauseTime:_pauseTime sessionStartTime:_sessionStartTime sequenceNumber:_sequence];
-        [ev autorelease];
-        [_apiClient enqueueEvent: ev];
-        [_apiClient start];
+        NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
+        bool sessionLapsed = (currentTime - _pauseTime > PNSessionRestartTimeout);
+        
+        if (sessionLapsed) {
+            [self startSession];
+        } else {
+            PNEventAppResume *ev  = [[PNEventAppResume alloc] initWithSessionInfo: [self getGameSessionInfo] instanceId: _instanceId sessionPauseTime:_pauseTime sessionStartTime:_sessionStartTime sequenceNumber:_sequence];
+            [ev autorelease];
+            [_apiClient enqueueEvent: ev];
+            [_apiClient start];
+        }
     }
     @catch (NSException *exception) {
         [PNLogger log: PNLogLevelError exception: exception format:@"Could not resume the Playnomics Session"];

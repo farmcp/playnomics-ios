@@ -136,7 +136,6 @@
     XCTAssertEqualObjects([resume.eventParameters valueForKey:@"i"], [_instanceId toHex], @"Instance ID is set");
     XCTAssertEqualObjects([resume.eventParameters valueForKey:@"q"], [NSNumber numberWithInt:sequence], @"Sequence is set");
     XCTAssertEqualObjects([resume.eventParameters valueForKey:@"p"], [NSNumber numberWithLongLong: pauseTime * 1000], @"Pause time is set");
-    
 }
 
 - (void) testAppStart{

@@ -813,6 +813,9 @@ If you have any questions or issues, please contact <a href="mailto:support@play
 
 Change Log
 ==========
+#### Version 1.4.1
+* Start a new session if the last event was captured 30 or more minutes ago
+
 #### Version 1.4.0
 * setTestMode is deprecated
 * Send IDFA and IDFV for all events
