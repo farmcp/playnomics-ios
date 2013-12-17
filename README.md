@@ -260,7 +260,7 @@ Full Integration
             <a href="#push-notifications">Push Notifications</a>
         </li>
         <li>
-            <a href="https://github.com/playnomics/playnomics-ios/wiki/Push-Notifications">
+            <a href="https://github.com/playnomics/playnomics-ios/wiki/Rich-Data-Callbacks">
                 Rich Data Callbacks
             </a>
         </li>
