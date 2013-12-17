@@ -1,15 +1,14 @@
 Playnomics PlayRM iOS SDK Integration Guide
 =============================================
 
-
 ## Considerations for Cross-Platform Applications
 
-If you want to deploy your app to multiple platforms (eg: Android and the Unity Web player), you'll need to create separate applications in the control panel. Each application must incorporate a separate `<APPID>` particular to that application. In addition, placements and their respective creative uploads will be particular to that app in order to ensure that they are sized appropriately - proportionate to your app screen size.
+If you want to deploy your application to multiple platforms (eg: iOS, Android, etc), you'll need to create a separate Playnomics Applications in the control panel. Each application has a separate `<APPID>` used for tracking and messaging integration.
 
 Supports iOS versions 5+.
 
 Getting Started
-===============	
+===============
 
 ## Download and Installing the SDK
 
