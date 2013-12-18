@@ -144,7 +144,7 @@ Then when you're ready, you can show the placement:
     </tbody>
 </table>
 
-Optionally, associate a class that can respond to the `PlaynomicsPlacementDelegate` protocol, to process rich data callbacks. See [Using Rich Data Callbacks](https://github.com/playnomics/playnomics-ios/wiki/Rich-Data-Callbacks) for more information.
+Optionally, associate a class that can respond to the `PlaynomicsPlacementDelegate` protocol, to process rich data callbacks. See [Using Rich Data Callbacks](#using-rich-data-callbacks) for more information.
 
 ```objectivec
 + (void) showPlacementWithName:(NSString *) placementName
