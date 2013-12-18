@@ -168,7 +168,7 @@ Optionally, associate a class that can respond to the `PlaynomicsPlacementDelega
             <td><code>delegate</code></td>
             <td>id&lt;PlaynomicsPlacementDelegate&gt;</td>
             <td>
-                Processes rich data callbacks, see <a href="https://github.com/playnomics/playnomics-ios/wiki/Rich-Data-Callbacks">Using Rich Data Callbacks</a>. This delegate is not <strong>retained</strong>, you are responsible for managing the lifecycle of this object.
+                Processes rich data callbacks, see <a href="#using-rich-data-callbacks">Using Rich Data Callbacks</a>. This delegate is not <strong>retained</strong>, you are responsible for managing the lifecycle of this object.
             </td>
         </tr>
     </tbody>
