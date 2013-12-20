@@ -13,7 +13,8 @@
 @implementation PNFrame {
 @private
     UIInterfaceOrientation _currentOrientation;
-    id<PlaynomicsPlacementDelegate> _frameDelegate;
+    id<PlaynomicsBasePlacementDelegate> _frameDelegate;
+    
     BOOL _shouldRenderFrame;
     PNSession *_session;
     PNFrameResponse *_response;
@@ -125,9 +126,14 @@
     _statusBar = [UIApplication sharedApplication].statusBarHidden;
     [[UIApplication sharedApplication] setStatusBarHidden : YES];
     if(_frameDelegate && [_frameDelegate respondsToSelector:@selector(onShow:)]){
-        [_frameDelegate onShow: _response.ad.targetData];
+        if([_frameDelegate conformsToProtocol:@protocol(PlaynomicsPlacementDelegate)]){
+            id<PlaynomicsPlacementDelegate> delegate = (id<PlaynomicsPlacementDelegate>) _frameDelegate;
+            [delegate onShow: _response.ad.targetData];
+        } else if([_frameDelegate conformsToProtocol:@protocol(PlaynomicsPlacementRawDelegate)]){
+            id<PlaynomicsPlacementRawDelegate> rawDelegate = (id<PlaynomicsPlacementRawDelegate>) _frameDelegate;
+            [rawDelegate onShow: _response.ad.rawTargetData];
+        }
     }
-    
 }
 
 -(void) reloadFrame{
@@ -171,7 +177,13 @@
         
         if(_frameDelegate && [_frameDelegate respondsToSelector:@selector(onClose:)]){
             //notify the delegate
-            [_frameDelegate onClose: _response.ad.targetData];
+            if([_frameDelegate conformsToProtocol:@protocol(PlaynomicsPlacementDelegate)]){
+                id<PlaynomicsPlacementDelegate> delegate = (id<PlaynomicsPlacementDelegate>) _frameDelegate;
+                [delegate onClose: _response.ad.targetData];
+            } else if([_frameDelegate conformsToProtocol:@protocol(PlaynomicsPlacementRawDelegate)]){
+                id<PlaynomicsPlacementRawDelegate> rawDelegate = (id<PlaynomicsPlacementRawDelegate>) _frameDelegate;
+                [rawDelegate onClose: _response.ad.rawTargetData];
+            }
         }
     }
     
@@ -196,7 +208,14 @@
     
     //always notify the delegate that there was a touch event
     if(_frameDelegate && [_frameDelegate respondsToSelector:@selector(onTouch:)]){
-        [_frameDelegate onTouch: _response.ad.targetData];
+        if([_frameDelegate conformsToProtocol:@protocol(PlaynomicsPlacementDelegate)]){
+            id<PlaynomicsPlacementDelegate> delegate = (id<PlaynomicsPlacementDelegate>) _frameDelegate;
+            [delegate onTouch: _response.ad.targetData];
+        } else if([_frameDelegate conformsToProtocol:@protocol(PlaynomicsPlacementRawDelegate)]){
+            id<PlaynomicsPlacementRawDelegate> rawDelegate = (id<PlaynomicsPlacementRawDelegate>) _frameDelegate;
+            [rawDelegate onTouch: _response.ad.rawTargetData];
+        }
+        
     }
     //refresh the frame when the ad has been clicked
     

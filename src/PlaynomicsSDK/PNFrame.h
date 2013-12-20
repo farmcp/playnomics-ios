@@ -57,7 +57,7 @@ typedef NS_ENUM(int, PNFrameState){
              messaging:(PNMessaging *) messaging;
 
 - (void) showInView:(UIView *) parentView
-       withDelegate:(id<PlaynomicsPlacementDelegate>) delegate;
+       withDelegate:(id<PlaynomicsBasePlacementDelegate>) delegate;
 
 - (void) hide;
 

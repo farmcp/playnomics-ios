@@ -117,6 +117,7 @@
     
     if(ad.targetType == AdTargetData){
         NSString *targetDataString = [self cleanValue:[adResponse objectForKey:FrameResponseAd_TargetData]];
+        ad.rawTargetData = targetDataString;
         if(targetDataString){
             ad.targetData = [PNUtil deserializeJsonString: targetDataString];
         }

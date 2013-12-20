@@ -42,14 +42,26 @@ typedef NS_ENUM(int, PNMilestoneType){
     PNMilestoneCustom25 = 25
 };
 
-@protocol PlaynomicsPlacementDelegate<NSObject>
+@protocol PlaynomicsBasePlacementDelegate <NSObject>
+@optional
+-(void) onDidFailToRender;
+@end
+
+@protocol PlaynomicsPlacementDelegate <PlaynomicsBasePlacementDelegate>
 @optional
 -(void) onTouch:(NSDictionary *) jsonData;
 -(void) onClose:(NSDictionary *) jsonData;
 -(void) onShow:(NSDictionary *) jsonData;
--(void) onDidFailToRender;
 @end
 
+@protocol PlaynomicsPlacementRawDelegate <PlaynomicsBasePlacementDelegate>
+@optional
+-(void) onTouch:(NSString *) rawJson;
+-(void) onClose:(NSString *) rawJson;
+-(void) onShow:(NSString *) rawJson;
+@end
+
+//this is strictly for backwards compatibility
 @protocol PlaynomicsFrameDelegate <PlaynomicsPlacementDelegate>
 @optional
 @end
@@ -99,6 +111,9 @@ typedef NS_ENUM(int, PNMilestoneType){
 
 + (void) showPlacementWithName:(NSString *) placementName
                       delegate:(id<PlaynomicsPlacementDelegate>) delegate;
+
++ (void) showPlacementWithName:(NSString *)placementName
+                   rawDelegate:(id<PlaynomicsPlacementRawDelegate>)delegate;
 
 + (void) hideFrameWithId:(NSString *) frameId DEPRECATED_ATTRIBUTE;
 + (void) hidePlacementWithName: (NSString *) placementName;

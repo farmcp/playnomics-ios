@@ -143,6 +143,12 @@
                                        delegate: delegate];
 }
 
++(void) showPlacementWithName:(NSString *)placementName
+                  rawDelegate:(id<PlaynomicsPlacementRawDelegate>)delegate {
+    [[PNSession sharedInstance] showFrameWithId: placementName
+                                       delegate: delegate];
+}
+
 + (void) hideFrameWithId:(NSString *) frameId{
     [self hidePlacementWithName: frameId];
 }

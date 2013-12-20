@@ -45,6 +45,7 @@ typedef NS_ENUM(int, CloseButtonType){
 
 @property (retain) NSString *clickUrl;
 @property (retain) NSDictionary *targetData;
+@property (retain) NSString *rawTargetData;
 @property (retain) NSString *targetUrl;
 
 @property (assign) AdType adType;

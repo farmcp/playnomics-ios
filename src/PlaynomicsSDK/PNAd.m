@@ -6,6 +6,7 @@
 @synthesize fullscreen;
 @synthesize impressionUrl;
 @synthesize targetData;
+@synthesize rawTargetData;
 @synthesize targetType;
 @synthesize targetUrl;
 @end

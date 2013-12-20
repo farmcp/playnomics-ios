@@ -61,14 +61,14 @@ typedef enum {
 //push notifications
 - (void) enablePushNotificationsWithToken:(NSData *) deviceToken;
 - (void) pushNotificationsWithPayload:(NSDictionary *) payload;
-//UI Events/Users/jaredjenkins/Projects/mobile/playnomics-ios/iosapi/iosapi/PNSession.m
+//UI Events
 - (void) onUIEventReceived:(UIEvent *) event;
 //Messaging
 - (void) preloadFramesWithIds:(NSSet *) frameIDs;
 
 - (void) showFrameWithId:(NSString *) frameId;
 - (void) showFrameWithId:(NSString *) frameId
-                delegate:(id<PlaynomicsPlacementDelegate>) delegate;
+                delegate:(id<PlaynomicsBasePlacementDelegate>) delegate;
 - (void) hideFrameWithID:(NSString *) frameId;
 - (void) setFrameParentView:(UIView *) parentView;
 @end

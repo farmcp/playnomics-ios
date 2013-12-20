@@ -236,6 +236,7 @@ typedef enum{
               responseType == FrameResponseFullscreenInternalTargetData) {
         XCTAssertEqual(ad.targetType, AdTargetData, @"Target type is data");
         XCTAssertNil(ad.targetUrl, @"Target url is null");
+        XCTAssertEqualObjects(ad.rawTargetData, TestTargetData, @"Raw target data is set");
         
         NSMutableDictionary *targetData = [[NSMutableDictionary alloc] init];
         [targetData setObject:@"test" forKey:@"data"];
