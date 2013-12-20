@@ -53,6 +53,15 @@
 		3262420417F74C2000CB00C3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3262420317F74C2000CB00C3 /* libPods.a */; };
 		328652E717FD1F6B007C461F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 329D45EA17E9952C001A95BB /* UIKit.framework */; };
 		328D497217E990EA0067DAB7 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 323B354117E985B100A2F7BC /* XCTest.framework */; };
+		32955E261864C526007329A2 /* sample-internal-ad-native-null-target.json in Resources */ = {isa = PBXBuildFile; fileRef = 32955E251864C526007329A2 /* sample-internal-ad-native-null-target.json */; };
+		32955E281864C575007329A2 /* sample-internal-ad-native-target-data.json in Resources */ = {isa = PBXBuildFile; fileRef = 32955E271864C575007329A2 /* sample-internal-ad-native-target-data.json */; };
+		32955E2A1864C70E007329A2 /* sample-internal-ad-native-target-url.json in Resources */ = {isa = PBXBuildFile; fileRef = 32955E291864C70E007329A2 /* sample-internal-ad-native-target-url.json */; };
+		32955E2B1864CFAA007329A2 /* sample-internal-ad-all-html-null-target.json in Resources */ = {isa = PBXBuildFile; fileRef = 32955E211864C2E7007329A2 /* sample-internal-ad-all-html-null-target.json */; };
+		32955E2C1864CFAA007329A2 /* sample-internal-ad-all-html-target-data.json in Resources */ = {isa = PBXBuildFile; fileRef = 32955E221864C2E7007329A2 /* sample-internal-ad-all-html-target-data.json */; };
+		32955E2D1864CFAA007329A2 /* sample-internal-ad-all-html-target-url.json in Resources */ = {isa = PBXBuildFile; fileRef = 32955E231864C2E7007329A2 /* sample-internal-ad-all-html-target-url.json */; };
+		32955E2E1864CFAA007329A2 /* sample-third-party-ad-native-close.json in Resources */ = {isa = PBXBuildFile; fileRef = 32955E241864C2E7007329A2 /* sample-third-party-ad-native-close.json */; };
+		32955E301864D1A5007329A2 /* sample-empty-response.json in Resources */ = {isa = PBXBuildFile; fileRef = 32955E2F1864D1A5007329A2 /* sample-empty-response.json */; };
+		32955E321864E40B007329A2 /* sample-third-party-ad-html-close.json in Resources */ = {isa = PBXBuildFile; fileRef = 32955E311864E40B007329A2 /* sample-third-party-ad-html-close.json */; };
 		329D45EB17E9952C001A95BB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 329D45EA17E9952C001A95BB /* UIKit.framework */; };
 		329D460B17EA266A001A95BB /* StubPNCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 323B353717E980BA00A2F7BC /* StubPNCache.m */; };
 		329D460C17EA2673001A95BB /* StubDeviceToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 323B353517E980BA00A2F7BC /* StubDeviceToken.m */; };
@@ -183,6 +192,15 @@
 		323B354117E985B100A2F7BC /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		3262420317F74C2000CB00C3 /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
 		328D497317E993790067DAB7 /* PlaynomicsSDKTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "PlaynomicsSDKTests-Info.plist"; path = "PlaynomicsSDKTests/PlaynomicsSDKTests-Info.plist"; sourceTree = SOURCE_ROOT; };
+		32955E211864C2E7007329A2 /* sample-internal-ad-all-html-null-target.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "sample-internal-ad-all-html-null-target.json"; path = "PlaynomicsSDKTests/sample-internal-ad-all-html-null-target.json"; sourceTree = SOURCE_ROOT; };
+		32955E221864C2E7007329A2 /* sample-internal-ad-all-html-target-data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "sample-internal-ad-all-html-target-data.json"; path = "PlaynomicsSDKTests/sample-internal-ad-all-html-target-data.json"; sourceTree = SOURCE_ROOT; };
+		32955E231864C2E7007329A2 /* sample-internal-ad-all-html-target-url.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "sample-internal-ad-all-html-target-url.json"; path = "PlaynomicsSDKTests/sample-internal-ad-all-html-target-url.json"; sourceTree = SOURCE_ROOT; };
+		32955E241864C2E7007329A2 /* sample-third-party-ad-native-close.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "sample-third-party-ad-native-close.json"; path = "PlaynomicsSDKTests/sample-third-party-ad-native-close.json"; sourceTree = SOURCE_ROOT; };
+		32955E251864C526007329A2 /* sample-internal-ad-native-null-target.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "sample-internal-ad-native-null-target.json"; path = "PlaynomicsSDKTests/sample-internal-ad-native-null-target.json"; sourceTree = SOURCE_ROOT; };
+		32955E271864C575007329A2 /* sample-internal-ad-native-target-data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "sample-internal-ad-native-target-data.json"; path = "PlaynomicsSDKTests/sample-internal-ad-native-target-data.json"; sourceTree = SOURCE_ROOT; };
+		32955E291864C70E007329A2 /* sample-internal-ad-native-target-url.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "sample-internal-ad-native-target-url.json"; path = "PlaynomicsSDKTests/sample-internal-ad-native-target-url.json"; sourceTree = SOURCE_ROOT; };
+		32955E2F1864D1A5007329A2 /* sample-empty-response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "sample-empty-response.json"; path = "PlaynomicsSDKTests/sample-empty-response.json"; sourceTree = SOURCE_ROOT; };
+		32955E311864E40B007329A2 /* sample-third-party-ad-html-close.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "sample-third-party-ad-html-close.json"; path = "PlaynomicsSDKTests/sample-third-party-ad-html-close.json"; sourceTree = SOURCE_ROOT; };
 		329D45EA17E9952C001A95BB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		32D54F5B17F209490029848E /* Playnomics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Playnomics.h; path = PlaynomicsSDK/Playnomics.h; sourceTree = "<group>"; };
 		32D54F5C17F2096C0029848E /* PNLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PNLogger.h; path = PlaynomicsSDK/PNLogger.h; sourceTree = "<group>"; };
@@ -264,6 +282,7 @@
 		3238497717E96B9100DCA409 /* PlaynomicsSDKTests */ = {
 			isa = PBXGroup;
 			children = (
+				32955E201864C0EB007329A2 /* Resources */,
 				328D497317E993790067DAB7 /* PlaynomicsSDKTests-Info.plist */,
 				3290166717CD0B740041895A /* Mocks */,
 				32306C6B17E97A3B001240D7 /* Tests */,
@@ -414,6 +433,22 @@
 			path = ../PlaynomicsSDK;
 			sourceTree = "<group>";
 		};
+		32955E201864C0EB007329A2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				32955E211864C2E7007329A2 /* sample-internal-ad-all-html-null-target.json */,
+				32955E221864C2E7007329A2 /* sample-internal-ad-all-html-target-data.json */,
+				32955E231864C2E7007329A2 /* sample-internal-ad-all-html-target-url.json */,
+				32955E241864C2E7007329A2 /* sample-third-party-ad-native-close.json */,
+				32955E251864C526007329A2 /* sample-internal-ad-native-null-target.json */,
+				32955E271864C575007329A2 /* sample-internal-ad-native-target-data.json */,
+				32955E291864C70E007329A2 /* sample-internal-ad-native-target-url.json */,
+				32955E2F1864D1A5007329A2 /* sample-empty-response.json */,
+				32955E311864E40B007329A2 /* sample-third-party-ad-html-close.json */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		32D54F5A17F209370029848E /* Public */ = {
 			isa = PBXGroup;
 			children = (
@@ -516,6 +551,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32955E321864E40B007329A2 /* sample-third-party-ad-html-close.json in Resources */,
+				32955E2B1864CFAA007329A2 /* sample-internal-ad-all-html-null-target.json in Resources */,
+				32955E2C1864CFAA007329A2 /* sample-internal-ad-all-html-target-data.json in Resources */,
+				32955E2D1864CFAA007329A2 /* sample-internal-ad-all-html-target-url.json in Resources */,
+				32955E2E1864CFAA007329A2 /* sample-third-party-ad-native-close.json in Resources */,
+				32955E301864D1A5007329A2 /* sample-empty-response.json in Resources */,
+				32955E261864C526007329A2 /* sample-internal-ad-native-null-target.json in Resources */,
+				32955E281864C575007329A2 /* sample-internal-ad-native-target-data.json in Resources */,
+				32955E2A1864C70E007329A2 /* sample-internal-ad-native-target-url.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

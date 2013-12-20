@@ -9,13 +9,10 @@
 #import <XCTest/XCTest.h>
 #import "PNFrameResponse.h"
 
-
-#define TestClickLink @"pn://clickLink"
-
 #define TestTargetTypeExternal @"external"
 #define TestTargetTypeUrl @"url"
 #define TestTargetTypeData @"data"
-#define TestTargetData @"{\"data\":\"test\"}"
+#define TestTargetData @"{\"key\":\"value\"}"
 
 #define TestTargetUrl @"http://targetUrl"
 
@@ -27,10 +24,10 @@
 #define TestButtonTypeHtml @"html"
 
 #define TestCloseButtonImage @"http://closeButtonImage"
-#define TestImageUrl @"http://imageUrl"
+#define TestImageUrl @"http://primaryImage"
 
-#define TestCloseLink @"pn://closeLink"
-#define TestClickLink @"pn://clickLink"
+#define TestCloseLink @"pn://close"
+#define TestClickLink @"pn://click"
 
 #define TestCloseUrl @"http://closeUrl"
 #define TestClickUrl @"http://clickUrl"
@@ -72,156 +69,44 @@ typedef enum{
     [super tearDown];
 }
 
--(NSDictionary *) factoryForFrameResponseData: (FrameResponseType) responseType{
-    NSMutableDictionary * response = [[NSMutableDictionary alloc]init];
-    //m is always nil
-    [response setValue:[NSNull null] forKey:@"m"];
-    //the expiration time at this point is still constant
-    [response setValue:[NSNumber numberWithInt:3600] forKey:@"e"];
-    //status is Ok
-    [response setValue:@"Ok" forKey:@"s"];
+-(NSData *) factoryForFrameResponseData: (FrameResponseType) responseType{
     
-    NSMutableArray *ads = [[NSMutableArray alloc]init];
-    NSMutableDictionary *ad =  nil;
-    NSMutableDictionary *background = nil;
-    NSMutableDictionary *closeButton = nil;
-    NSMutableDictionary *location = nil;
+    NSString *resource = nil;
     
-    if(responseType == FrameResponseAdvancedInternalNullTarget ||
-       responseType == FrameResponseAdvancedInternalTargetData ||
-       responseType == FrameResponseAdvancedInternalTargetUrl){
-        
-        ad = [[NSMutableDictionary alloc] init];
-        [ad setObject:[NSNumber numberWithInt:0] forKey:@"fullscreen"];
-        [ad setObject:TestCloseUrl forKey:@"d"];
-        [ad setObject:[NSNull null] forKey:@"clickLink"];
-        [ad setObject:TestImageUrl forKey:@"i"];
-        [ad setObject:TestButtonTypeNative forKey:@"closeButtonType"];
-        [ad setObject:TestAdTypeImage forKey:@"adType"];
-        [ad setObject:[NSNull null] forKey:@"closeButtonLink"];
-        [ad setObject:TestImpressionUrl forKey:@"s"];
-        [ad setObject:TestClickUrl forKey:@"t"];
-        
-        if(responseType == FrameResponseAdvancedInternalTargetUrl){
-            [ad setObject:TestTargetUrl forKey:@"targetURL"];
-            [ad setObject:TestTargetTypeUrl forKey:@"targetType"];
-        } else if (responseType == FrameResponseAdvancedInternalTargetData){
-            [ad setObject:TestTargetData forKey:@"targetData"];
-            [ad setObject:TestTargetTypeData forKey:@"targetType"];
-        } else if (responseType == FrameResponseAdvancedInternalNullTarget){
-            [ad setObject:[NSNull null] forKey:@"targetURL"];
-            [ad setObject:TestTargetTypeUrl forKey:@"targetType"];
-        }
-        
-        //background settings
-        background = [[NSMutableDictionary alloc] init];
-        [background setObject:TestBackgroundImage forKey:@"i"];
-        [background setObject:[NSNumber numberWithFloat:250] forKey:@"h"];
-        [background setObject:[NSNumber numberWithFloat:300] forKey:@"w"];
-        [background setObject:TestBackgroundOrientationDetect forKey:@"o"];
-        
-        NSMutableDictionary *landscape = [[NSMutableDictionary alloc] init];
-        [landscape setObject:[NSNumber numberWithFloat:352] forKey:@"x"];
-        [landscape setObject:[NSNumber numberWithFloat:259] forKey:@"y"];
-        [background setObject:landscape forKey:@"l"];
-        
-        NSMutableDictionary *portrait = [[NSMutableDictionary alloc] init];
-        [portrait setObject:[NSNumber numberWithFloat:234] forKey:@"x"];
-        [portrait setObject:[NSNumber numberWithFloat:377] forKey:@"y"];
-        [background setObject:portrait forKey:@"p"];
-        
-        //close button settings
-        closeButton =  [[NSMutableDictionary alloc] init];
-        [closeButton setObject:TestCloseButtonImage forKey:@"i"];
-        [closeButton setObject:[NSNumber numberWithFloat:270] forKey:@"x"];
-        [closeButton setObject:[NSNumber numberWithFloat:0] forKey:@"y"];
-        [closeButton setObject:[NSNumber numberWithFloat:30] forKey:@"h"];
-        [closeButton setObject:[NSNumber numberWithFloat:30] forKey:@"w"];
-        //location settings for the ad
-        location = [[NSMutableDictionary alloc] init];
-        [location setObject:[NSNumber numberWithFloat:0] forKey:@"x"];
-        [location setObject:[NSNumber numberWithFloat:0] forKey:@"y"];
-        [location setObject:[NSNumber numberWithFloat:250] forKey:@"h"];
-        [location setObject:[NSNumber numberWithFloat:300] forKey:@"w"];
-        
-    } else if (responseType == FrameResponseFullscreenInternalTargetUrl ||
-               responseType == FrameResponseFullscreenInternalTargetData ||
-               responseType == FrameResponseFullscreenInternalNullTarget){
-        
-        
-        ad = [[NSMutableDictionary alloc] init];
-        [ad setObject:[NSNumber numberWithInt:1] forKey:@"fullscreen"];
-        [ad setObject:TestCloseUrl forKey:@"d"];
-        [ad setObject:TestClickLink forKey:@"clickLink"];
-        
-        
-        [ad setObject:TestHtmlContent forKey:@"htmlContent"];
-        
-        [ad setObject:TestImpressionUrl forKey:@"s"];
-        [ad setObject:TestClickUrl forKey:@"t"];
-        [ad setObject:TestButtonTypeHtml forKey:@"closeButtonType"];
-        [ad setObject:TestAdTypeHtml forKey:@"adType"];
-        [ad setObject:TestCloseLink forKey:@"closeButtonLink"];
-    
-        if(responseType == FrameResponseFullscreenInternalTargetUrl){
-            [ad setObject:TestTargetUrl forKey:@"targetURL"];
-            [ad setObject:TestTargetTypeUrl forKey:@"targetType"];
-        } else if (responseType == FrameResponseFullscreenInternalTargetData){
-            [ad setObject:TestTargetData forKey:@"targetData"];
-            [ad setObject:TestTargetTypeData forKey:@"targetType"];
-        } else if (responseType == FrameResponseFullscreenInternalNullTarget){
-            [ad setObject:[NSNull null] forKey:@"targetURL"];
-            [ad setObject:TestTargetTypeUrl forKey:@"targetType"];
-        }
-    } else if (responseType == FrameResponseThirdPartyHtmlClose || responseType == FrameResponseThirdPartyNativeClose){
-        
-        ad = [[NSMutableDictionary alloc] init];
-        [ad setObject:[NSNumber numberWithInt:1] forKey:@"fullscreen"];
-        [ad setObject:TestHtmlContent forKey:@"htmlContent"];
-        [ad setObject:[NSNull null] forKey:@"clickLink"];
-        [ad setObject:@"provider" forKey:@"adProvider"];
-        [ad setObject:TestTargetTypeExternal forKey:@"targetType"];
-        [ad setObject:TestImpressionUrl forKey:@"s"];
-        [ad setObject:TestCloseUrl forKey:@"d"];
-        [ad setObject:TestClickUrl forKey:@"t"];
-        [ad setObject:TestAdTypeHtml forKey:@"adType"];
-    
-        if(responseType == FrameResponseThirdPartyNativeClose){
-            [ad setObject:TestButtonTypeNative forKey:@"closeButtonType"];
-            [ad setObject:[NSNull null] forKey:@"closeLink"];
-            
-            closeButton =  [[NSMutableDictionary alloc] init];
-            [closeButton setObject:TestCloseButtonImage forKey:@"i"];
-            [closeButton setObject:[NSNumber numberWithFloat:26] forKey:@"h"];
-            [closeButton setObject:[NSNumber numberWithFloat:26] forKey:@"w"];
-        } else {
-            [ad setObject:TestButtonTypeHtml forKey:@"closeButtonType"];
-            [ad setObject:TestCloseLink forKey:@"closeButtonLink"];
-        }
+    if(responseType == FrameResponseAdvancedInternalNullTarget){
+        resource = @"sample-internal-ad-native-null-target";
+    } else if(responseType == FrameResponseAdvancedInternalTargetData){
+        resource = @"sample-internal-ad-native-target-data";
+    } else if(responseType == FrameResponseAdvancedInternalTargetUrl){
+        resource = @"sample-internal-ad-native-target-url";
+    } else if(responseType == FrameResponseEmpty){
+        resource = @"sample-empty-response";
+    } else if(responseType == FrameResponseFullscreenInternalNullTarget){
+        resource = @"sample-internal-ad-all-html-null-target";
+    } else if(responseType == FrameResponseFullscreenInternalTargetData){
+        resource = @"sample-internal-ad-all-html-target-data";
+    } else if(responseType == FrameResponseFullscreenInternalTargetUrl){
+        resource = @"sample-internal-ad-all-html-target-url";
+    } else if(responseType == FrameResponseThirdPartyNativeClose){
+        resource = @"sample-third-party-ad-native-close";
+    } else if(responseType == FrameResponseThirdPartyHtmlClose){
+        resource = @"sample-third-party-ad-html-close";
     }
     
-    if(ad){
-        [ads addObject:ad];
-    }
+    NSAssert(resource != nil, @"Frame Response must be valid");
     
-    if(background){
-        [response setObject:background forKey:@"b"];
-    }
-    
-    if(closeButton){
-        [response setObject:closeButton forKey:@"c"];
-    }
-    
-    if(location){
-        [response setObject:location forKey:@"l"];
-    }
-    
-    [response setObject:ads forKey:@"a"];
-    return response;
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSString *jsonPath = [bundle pathForResource: resource ofType:@"json"];
+    return [[NSData alloc] initWithContentsOfFile:jsonPath];
 }
 
--(void) assertAdTrackingInfo:(PNAd *) ad{
-    XCTAssertEqualObjects(ad.clickUrl, TestClickUrl, @"Click url is set up correctly");
+-(void) assertAdTrackingInfo:(PNAd *) ad responseType: (FrameResponseType) responseType{
+    if(responseType == FrameResponseFullscreenInternalNullTarget || responseType == FrameResponseAdvancedInternalNullTarget){
+        XCTAssertNil(ad.clickUrl, @"Click url is null");
+    } else {
+        XCTAssertEqualObjects(ad.clickUrl, TestClickUrl, @"Click url is set up correctly");
+    }
+        
     XCTAssertEqualObjects(ad.closeUrl, TestCloseUrl, @"Close url is set up correctly");
     XCTAssertEqualObjects(ad.impressionUrl, TestImpressionUrl, @"Impression url is set");
 }
@@ -239,7 +124,7 @@ typedef enum{
         XCTAssertEqualObjects(ad.rawTargetData, TestTargetData, @"Raw target data is set");
         
         NSMutableDictionary *targetData = [[NSMutableDictionary alloc] init];
-        [targetData setObject:@"test" forKey:@"data"];
+        [targetData setObject:@"value" forKey:@"key"];
         XCTAssertEqualObjects(ad.targetData, targetData, @"Target data is set");
     } else if(responseType == FrameResponseFullscreenInternalTargetUrl ||
               responseType == FrameResponseFullscreenInternalTargetUrl) {
@@ -256,14 +141,9 @@ typedef enum{
 
 -(void) assertFullscreenInternalAdWithType: (FrameResponseType) responseType {
     
-    NSDictionary * response = [self factoryForFrameResponseData:responseType];
+    NSData * response = [self factoryForFrameResponseData : responseType];
     
-    NSError *error = nil;
-    NSData * jsonData = [NSJSONSerialization dataWithJSONObject:response options:NSJSONWritingPrettyPrinted error:&error];
-    
-    XCTAssertNil(error, @"Test data was serialized properly");
-    
-    PNFrameResponse *frame = [[PNFrameResponse alloc] initWithJSONData:jsonData];
+    PNFrameResponse *frame = [[PNFrameResponse alloc] initWithJSONData:response];
     
     XCTAssertNil(frame.background, @"The background should be nil");
     
@@ -279,19 +159,14 @@ typedef enum{
     PNHtmlCloseButton *closeButton = (PNHtmlCloseButton *)frame.closeButton;
     XCTAssertEqualObjects(closeButton.closeButtonLink, TestCloseLink, @"Close Link is set correctly");
     
-    [self assertAdTrackingInfo:htmlAd];
+    [self assertAdTrackingInfo:htmlAd responseType: responseType];
     [self assertAdTargetInfo:responseType ad:htmlAd];
 }
 
 -(void) assertThirdPartyAds:(FrameResponseType) responseType{
-    NSDictionary * response = [self factoryForFrameResponseData:responseType];
+    NSData * response = [self factoryForFrameResponseData : responseType];
     
-    NSError *error = nil;
-    NSData * jsonData = [NSJSONSerialization dataWithJSONObject:response options:NSJSONWritingPrettyPrinted error:&error];
-    
-    XCTAssertNil(error, @"Test data was serialized properly");
-    
-    PNFrameResponse *frame = [[PNFrameResponse alloc] initWithJSONData:jsonData];
+    PNFrameResponse *frame = [[PNFrameResponse alloc] initWithJSONData:response];
     
     XCTAssertNil(frame.background, @"The background should be nil");
     
@@ -300,36 +175,31 @@ typedef enum{
     
     XCTAssertNil(htmlAd.clickLink, @"Click link is set up correctly");
     XCTAssertEqual(htmlAd.fullscreen, YES, @"Html ad is fullscreen");
-    XCTAssertEqualObjects(htmlAd.htmlContent, TestHtmlContent, @"Html content is set");
+    XCTAssertEqualObjects(htmlAd.htmlContent, @"<html>Third party ad here</html>", @"Html content is set");
     [self assertAdTargetInfo:responseType ad:htmlAd];
-    [self assertAdTrackingInfo:htmlAd];
+    [self assertAdTrackingInfo:htmlAd responseType: responseType];
     
     if(responseType == FrameResponseThirdPartyHtmlClose){
         XCTAssertTrue([frame.closeButton isKindOfClass:[PNHtmlCloseButton class]], @"This close button is an HTML close button");
         PNHtmlCloseButton *closeButton = (PNHtmlCloseButton *)frame.closeButton;
-        XCTAssertEqualObjects(closeButton.closeButtonLink, TestCloseLink, @"Close Link is set correctly");
+        XCTAssertEqualObjects(closeButton.closeButtonLink, @"applovin://com.applovin.sdk/adservice/close_ad", @"Close Link is set correctly");
     } else if(responseType == FrameResponseThirdPartyNativeClose) {
         XCTAssertTrue([frame.closeButton isKindOfClass:[PNNativeCloseButton class]], @"This close button is a native close button");
         PNNativeCloseButton *closeButton = (PNNativeCloseButton *)frame.closeButton;
         XCTAssertEqual(closeButton.dimensions, CGRectMake(0,0, 26, 26), @"Close button dimensions set correctly");
-        XCTAssertEqualObjects(closeButton.imageUrl, TestCloseButtonImage, @"Close button image set correctly");
+        XCTAssertEqualObjects(closeButton.imageUrl, @"http://s3.amazonaws.com/pn-assets/close/default/glyphicons_470_remove_white_background.png", @"Close button image set correctly");
     } else {
         XCTFail(@"You're holding it wrong.. Bad test setup");
     }
 }
 
 -(void) assertAdvancedAd:(FrameResponseType) responseType{
-    NSDictionary * response = [self factoryForFrameResponseData:responseType];
+    NSData * response = [self factoryForFrameResponseData : responseType];
     
-    NSError *error = nil;
-    NSData * jsonData = [NSJSONSerialization dataWithJSONObject:response options:NSJSONWritingPrettyPrinted error:&error];
-    
-    XCTAssertNil(error, @"Test data was serialized properly");
-    
-    PNFrameResponse *frame = [[PNFrameResponse alloc] initWithJSONData:jsonData];
-    
+    PNFrameResponse *frame = [[PNFrameResponse alloc] initWithJSONData:response];
     PNBackground *background = frame.background;
-    XCTAssertEqualObjects(background.imageUrl, TestBackgroundImage, @"Background image is set");
+    
+    XCTAssertNil(background.imageUrl, @"Background image is nil");
     XCTAssertEqual(background.landscapeDimensions, CGRectMake(352, 259, 300, 250), @"Background landscape dimensions is set");
     XCTAssertEqual(background.portraitDimensions, CGRectMake(234, 377, 300, 250), @"Background portrait dimensions is set");
     
@@ -346,14 +216,8 @@ typedef enum{
 }
 
 -(void) testEmptyAdArray{
-    NSDictionary * response = [self factoryForFrameResponseData:FrameResponseEmpty];
-
-    NSError *error = nil;
-    NSData * jsonData = [NSJSONSerialization dataWithJSONObject:response options:NSJSONWritingPrettyPrinted error:&error];
-    
-    XCTAssertNil(error, @"Test data was serialized properly");
-    
-    PNFrameResponse *frame = [[PNFrameResponse alloc] initWithJSONData:jsonData];
+    NSData * response = [self factoryForFrameResponseData : FrameResponseEmpty];
+    PNFrameResponse *frame = [[PNFrameResponse alloc] initWithJSONData:response];
     
     XCTAssertNil(frame.background, @"The background should be nil");
     XCTAssertNil(frame.closeButton, @"The close button should be nil");

@@ -1,0 +1,23 @@
+{
+    "a":[
+         {
+         "adType"          : "html",
+         "adProvider"      : "applovin",
+         "htmlContent"     : "<html>Third party ad here</html>",
+         "s"               : "http://impressionUrl",
+         "d"               : "http://closeUrl",
+         "t"               : "http://clickUrl",
+         "clickLink"       : null,
+         "targetType"      : "external",
+         "closeButtonType" : "native",
+         "closeButtonLink" : null,
+         "fullscreen"      : true
+         }
+    ],
+    "c" : {
+        "h" : 26,
+        "w" : 26,
+        "i" : "http://s3.amazonaws.com/pn-assets/close/default/glyphicons_470_remove_white_background.png"
+    },
+    "e" : 3600
+}

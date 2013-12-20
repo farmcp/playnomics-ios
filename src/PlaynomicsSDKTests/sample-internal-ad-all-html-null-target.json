@@ -1,0 +1,18 @@
+{
+    "a":[
+         {
+         "adType"          : "html",
+         "htmlContent"     : "<html></html>",
+         "s"               : "http://impressionUrl",
+         "d"               : "http://closeUrl",
+         "t"               : null,
+         "clickLink"       : "pn://click",
+         "targetType"      : "url",
+         "targetURL"       : null,
+         "closeButtonType" : "html",
+         "closeButtonLink" : "pn://close",
+         "fullscreen"      : true
+         }
+    ],
+    "e" : 3600
+}

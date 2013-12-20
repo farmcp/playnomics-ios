@@ -1,0 +1,46 @@
+{
+    "a":[
+         {
+         "adType"          : "image",
+         "i"               : "http://primaryImage",
+         "r"               : "http://rolloverImage",
+         "s"               : "http://impressionUrl",
+         "d"               : "http://closeUrl",
+         "t"               : "http://clickUrl",
+         "targetType"      : "data",
+         "targetData"       : "{\"key\":\"value\"}",
+         "closeButtonType" : "native",
+         "closeButtonLink" : null,
+         "clickLink"       : null,
+         "fullscreen"      : false
+         }
+         ],
+    "b" : {
+        "i": null,
+        "h": 250,
+        "w": 300,
+        "l": {
+            "x" : 352,
+            "y" : 259
+        },
+        "p": {
+            "x" : 234,
+            "y" : 377
+        }
+    },
+    "c" : {
+        "i" : "http://closeButtonImage",
+        "x" : 270,
+        "y" : 0,
+        "h" : 30,
+        "w" : 30
+    },
+    "l" : {
+        "x" : 0,
+        "y" : 0,
+        "h" : 250,
+        "w" : 300
+    },
+
+    "e" : 3600
+}

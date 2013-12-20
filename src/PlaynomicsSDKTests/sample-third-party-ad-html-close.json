@@ -1,0 +1,18 @@
+{
+    "a":[
+         {
+         "adType"          : "html",
+         "adProvider"      : "applovin",
+         "htmlContent"     : "<html>Third party ad here</html>",
+         "s"               : "http://impressionUrl",
+         "d"               : "http://closeUrl",
+         "t"               : "http://clickUrl",
+         "clickLink"       : null,
+         "targetType"      : "external",
+         "closeButtonType" : "html",
+         "closeButtonLink" : "applovin://com.applovin.sdk/adservice/close_ad",
+         "fullscreen"      : true
+         }
+         ],
+    "e" : 3600
+}
