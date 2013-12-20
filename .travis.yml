@@ -3,7 +3,9 @@
     email:
       - engineering@playnomics.com
   language: objective-c
-  before_install:
-    - brew update
-    - brew upgrade xctool
-  script: xctool -workspace src/PlaynomicsSDK.xcworkspace -scheme PlaynomicsSDKTests test -freshInstall -test-sdk iphonesimulator
+  xcode_project: src/PlaynomicsSDK.xcworkspace
+  xcode_scheme: PlaynomicsSDKTests
+  #before_install:
+  #  - brew update
+  #  - brew upgrade xctool
+  #script: xctool -workspace src/PlaynomicsSDK.xcworkspace -scheme PlaynomicsSDKTests -configuration Debug clean test -freshInstall -test-sdk iphonesimulator 
