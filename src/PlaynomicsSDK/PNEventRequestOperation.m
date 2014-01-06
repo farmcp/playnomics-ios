@@ -65,14 +65,25 @@
                format:@"Request for %@ completed with error %@", _urlPath, error.description];
         [_delegate onDidFailToProcessUrl:_urlPath tryAgain:YES];
         
-        if([error code] == NSURLErrorNotConnectedToInternet){
-            [_delegate onInternetUnavailable];
+        if([error code] == NSURLErrorNotConnectedToInternet ||
+           [error code] == NSURLErrorCannotConnectToHost ||
+           [error code] == NSURLErrorNetworkConnectionLost){
+            [_delegate onConnectionUnavailable];
         }
     } else {
         NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse *)response;
+        
+        int statusCode = [httpResponse statusCode];
         [PNLogger log:PNLogLevelDebug
-               format:@"Request for %@ completed with status code %d", _urlPath, [httpResponse statusCode]];
-        [_delegate onDidProcessUrl: _urlPath];
+               format:@"Request for %@ completed with status code %d", _urlPath, statusCode];
+        
+        BOOL serverSideError = statusCode >= 500;
+        if(statusCode == 200){
+            [_delegate onDidProcessUrl: _urlPath];
+        } else {
+            //only retry requests where we have a server side error
+            [_delegate onDidFailToProcessUrl:_urlPath tryAgain:serverSideError];
+        }
     }
     
     [self willChangeValueForKey:@"isFinished"];

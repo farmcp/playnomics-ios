@@ -11,5 +11,5 @@
 @protocol PNUrlProcessorDelegate <NSObject>
 -(void) onDidProcessUrl: (NSString *) url;
 -(void) onDidFailToProcessUrl: (NSString *) url tryAgain:(BOOL) tryAgain;
--(void) onInternetUnavailable;
+-(void) onConnectionUnavailable;
 @end

@@ -5,10 +5,12 @@
 #import "PNUrlProcessorDelegate.h"
 
 @interface PNEventApiClient : NSObject<PNUrlProcessorDelegate>
+
+@property (readonly, getter = isEmpty) BOOL queueIsEmpty;
+
 - (id) initWithSession: (PNSession *) session;
 - (void) enqueueEvent: (PNEvent *) event;
 - (void) enqueueEventUrl: (NSString *) url;
-
 
 + (NSString *) buildUrlWithBase: (NSString *) base
                        withPath: (NSString *) path

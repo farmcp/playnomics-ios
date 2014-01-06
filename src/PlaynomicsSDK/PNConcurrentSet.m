@@ -50,4 +50,10 @@
         return setCopy;
     }
 }
+
+-(NSUInteger) count{
+    @synchronized(_syncLock){
+        return [_set count];
+    }
+}
 @end

@@ -69,12 +69,12 @@
 - (void) onDidFailToProcessUrl: (NSString *) url
                       tryAgain:(BOOL) tryAgain{
     if(tryAgain){
-        [self enqueueEventUrl: url];
         [_inprocessEvents removeObject:url];
+        [self enqueueEventUrl: url];
     }
 }
 
--(void) onInternetUnavailable{
+-(void) onConnectionUnavailable{
     if([self running]){
         [PNLogger log:PNLogLevelWarning format:@"Can't make an internet connection, pausing the event queue."];
         [self pause];
@@ -144,6 +144,10 @@
     //wait for all cancellations
     [_operationQueue waitUntilAllOperationsAreFinished];
     _running = NO;
+}
+
+-(BOOL) isEmpty{
+    return _inprocessEvents == nil || [_inprocessEvents count] == 0;
 }
 
 - (NSSet *) getAllUnprocessedUrls{

@@ -11,5 +11,6 @@
 -(void) addObject: (id) obj;
 -(void) removeObject: (id) obj;
 -(BOOL) containsObject: (id) obj;
+-(NSUInteger) count;
 -(NSSet *) copyOfData;
 @end

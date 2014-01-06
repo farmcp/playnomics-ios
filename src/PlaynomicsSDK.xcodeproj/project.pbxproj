@@ -47,6 +47,7 @@
 		32306C8517E97AA0001240D7 /* PNGeneratedHexIdTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32306C7317E97A5D001240D7 /* PNGeneratedHexIdTests.m */; };
 		32306C8717E97AA0001240D7 /* PNSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32306C7517E97A5D001240D7 /* PNSessionTests.m */; };
 		32306C8917E97AA0001240D7 /* PNUtilTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32306C7717E97A5D001240D7 /* PNUtilTests.m */; };
+		3231D098186519EA00774C6F /* PNEventQueueTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3231D097186519EA00774C6F /* PNEventQueueTest.m */; };
 		323B353E17E9859400A2F7BC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 323B353D17E9859400A2F7BC /* Foundation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		323B354017E985AD00A2F7BC /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 323B353F17E985AD00A2F7BC /* AdSupport.framework */; };
 		323B355417E9894700A2F7BC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 323B353D17E9859400A2F7BC /* Foundation.framework */; };
@@ -179,6 +180,7 @@
 		32306C7317E97A5D001240D7 /* PNGeneratedHexIdTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PNGeneratedHexIdTests.m; path = PlaynomicsSDKTests/PNGeneratedHexIdTests.m; sourceTree = SOURCE_ROOT; };
 		32306C7517E97A5D001240D7 /* PNSessionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PNSessionTests.m; path = PlaynomicsSDKTests/PNSessionTests.m; sourceTree = SOURCE_ROOT; };
 		32306C7717E97A5D001240D7 /* PNUtilTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PNUtilTests.m; path = PlaynomicsSDKTests/PNUtilTests.m; sourceTree = SOURCE_ROOT; };
+		3231D097186519EA00774C6F /* PNEventQueueTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNEventQueueTest.m; sourceTree = SOURCE_ROOT; };
 		3238496317E96B9100DCA409 /* libPlaynomicsSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPlaynomicsSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3238497017E96B9100DCA409 /* PlaynomicsSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlaynomicsSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		323B353417E980BA00A2F7BC /* StubDeviceToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StubDeviceToken.h; path = PlaynomicsSDKTests/StubDeviceToken.h; sourceTree = SOURCE_ROOT; };
@@ -259,6 +261,7 @@
 				32306C7317E97A5D001240D7 /* PNGeneratedHexIdTests.m */,
 				32306C7517E97A5D001240D7 /* PNSessionTests.m */,
 				32306C7717E97A5D001240D7 /* PNUtilTests.m */,
+				3231D097186519EA00774C6F /* PNEventQueueTest.m */,
 			);
 			name = Tests;
 			sourceTree = "<group>";
@@ -655,6 +658,7 @@
 				329D460B17EA266A001A95BB /* StubPNCache.m in Sources */,
 				32306C7F17E97AA0001240D7 /* PNDeviceManagerTests.m in Sources */,
 				32306C8117E97AA0001240D7 /* PNEventApiClientTests.m in Sources */,
+				3231D098186519EA00774C6F /* PNEventQueueTest.m in Sources */,
 				32306C8317E97AA0001240D7 /* PNEventTests.m in Sources */,
 				32306C8517E97AA0001240D7 /* PNGeneratedHexIdTests.m in Sources */,
 				32306C8717E97AA0001240D7 /* PNSessionTests.m in Sources */,
