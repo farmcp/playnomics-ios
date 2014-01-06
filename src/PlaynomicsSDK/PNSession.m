@@ -52,6 +52,8 @@
     NSMutableArray *_observers;
     NSObject *_syncLock;
     UIView *_parentView;
+    
+    NSData *_newDeviceToken;
 }
 
 
@@ -120,6 +122,8 @@
     
     [_syncLock release];
     [_parentView release];
+    
+    [_newDeviceToken release];
     
     [super dealloc];
 }
@@ -267,6 +271,11 @@
     
     if(settingsChanged){
         [self onDeviceInfoChanged];
+    }
+    
+    if(_newDeviceToken){
+        //push notifications were enabled before the session was actually started
+        [self enablePushNotificationsWithToken: _newDeviceToken];
     }
     
     [_cache writeDataToCache];
@@ -505,24 +514,27 @@
 
 - (void) enablePushNotificationsWithToken:(NSData *)deviceToken {
     @try {
-        [self assertSessionHasStarted];
-        NSString *oldToken = [_cache getDeviceToken];
-        NSString *newToken = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
-        newToken = [newToken stringByReplacingOccurrencesOfString:@" " withString:@""];
-        
-        if (!(oldToken && [newToken isEqualToString:oldToken])) {
-            [_cache updateDeviceToken: newToken];
-            [_cache writeDataToCache];
+        if(_state == PNSessionStateStarted){
+            NSString *oldToken = [_cache getDeviceToken];
+            NSString *newToken = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+            newToken = [newToken stringByReplacingOccurrencesOfString:@" " withString:@""];
             
-            PNEventUserInfo *ev = [[PNEventUserInfo alloc] initWithSessionInfo:[self getGameSessionInfo] pushToken: newToken];
-            [ev autorelease];
-            [_apiClient enqueueEvent: ev];
+            if (!(oldToken && [newToken isEqualToString:oldToken])) {
+                [_cache updateDeviceToken: newToken];
+                [_cache writeDataToCache];
+                
+                PNEventUserInfo *ev = [[PNEventUserInfo alloc] initWithSessionInfo:[self getGameSessionInfo] pushToken: newToken];
+                [ev autorelease];
+                [_apiClient enqueueEvent: ev];
+            }
+        } else {
+            _newDeviceToken = [deviceToken copy];
         }
-    }
-    @catch (NSException *exception) {
+    } @catch (NSException *exception) {
        [PNLogger log:PNLogLevelWarning exception:exception format: @"Could not send device token."];
     }
 }
+
 
 - (void) pushNotificationsWithPayload:(NSDictionary *)payload {
     @try {
