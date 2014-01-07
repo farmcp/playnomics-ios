@@ -1,11 +1,3 @@
-    //
-//  AppDelegate.m
-//  PlaynomicsSample
-//
-//  Created by Martin Harkins on 6/27/12.
-//  Copyright (c) 2012 Grio. All rights reserved.
-//
-
 #import "AppDelegate.h"
 #import "ViewController.h"
 #import "Playnomics.h"
@@ -55,7 +47,6 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     long appId = 2L;
-    //[Playnomics setTestMode:YES];
     [Playnomics setLoggingLevel:PNLogLevelDebug];
     [Playnomics startWithApplicationId:appId];
     
@@ -128,19 +119,7 @@
      */
 }
 
-/*
-- (NSString*)adColonyApplicationID{
-    return @"app76fb8d133f0146be909926";
-}
-
-- (NSDictionary*)adColonyAdZoneNumberAssociation{
-    return [NSDictionary dictionaryWithObjectsAndKeys:
-            @"vz774c388f2c404a5ca8a22a", [NSNumber numberWithInt:1],
-            @"vz642fb9a5f0e44409bd5483", [NSNumber numberWithInt:2],
-            nil];
-}
-*/
-- (BOOL)prefersStatusBarHidden
+- (BOOL) prefersStatusBarHidden
 {
     return YES;
 }
