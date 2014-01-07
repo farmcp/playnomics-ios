@@ -408,6 +408,9 @@ If you have any questions or issues, please contact <a href="mailto:support@play
 
 Change Log
 ==========
+#### Version 1.4.2
+* Bug fix for tracking push notification at application launch
+
 #### Version 1.4.1
 * Start a new session if the last event was captured 30 or more minutes ago
 
