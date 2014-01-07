@@ -63,15 +63,7 @@
         NSDictionary *pushInfo = [notif.userInfo valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
         [Playnomics pushNotificationsWithPayload:pushInfo];
     }
-    
-    //[Playnomics overrideMessagingURL: @"https://ads.c.playnomics.net/v1/"];
-    //[Playnomics overrideEventsURL: @"https://e.c.playnomics.net/v1/"];
-    
-    //[PlaynomicsSession changeUserWithUserId: @"gmaddux311"];
-    //[Playnomics startWithApplicationId:appId andUserId:@"55C23316-FB55-430A-8593-21934C02C16C"];
-    
-    //[AdColony initAdColonyWithDelegate:self];
-    
+
     //enable notifications
     UIApplication *app = [UIApplication sharedApplication];
     [app registerForRemoteNotificationTypes: (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
