@@ -58,6 +58,12 @@
     //[Playnomics setTestMode:YES];
     [Playnomics setLoggingLevel:PNLogLevelDebug];
     [Playnomics startWithApplicationId:appId];
+    
+    if (launchOptions && [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey]) {
+        NSDictionary *pushInfo = [notif.userInfo valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+        [Playnomics pushNotificationsWithPayload:pushInfo];
+    }
+    
     //[Playnomics overrideMessagingURL: @"https://ads.c.playnomics.net/v1/"];
     //[Playnomics overrideEventsURL: @"https://e.c.playnomics.net/v1/"];
     

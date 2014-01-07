@@ -181,22 +181,11 @@
             [self stop];
         };
         
-        void (^applicationLaunched)(NSNotification *notif) = ^(NSNotification *notif){
-            if ([notif userInfo] != nil && [notif.userInfo valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey] != nil) {
-                NSDictionary *push = [notif.userInfo valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-                [self pushNotificationsWithPayload:push];
-            }
-        };
         [_observers addObject: [center addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:mainQueue usingBlock:applicationPaused]];
         [_observers addObject: [center addObserverForName:UIApplicationWillTerminateNotification
                                                    object:nil
                                                     queue:mainQueue
                                                usingBlock:applicationTerminating]];
-        
-        [_observers addObject: [center addObserverForName:UIApplicationDidFinishLaunchingNotification
-                                                   object:nil
-                                                    queue:mainQueue
-                                               usingBlock:applicationLaunched]];
         
         [_observers addObject: [center addObserverForName:UIApplicationDidBecomeActiveNotification
                                                    object:nil
@@ -539,7 +528,7 @@
     @try {
         [self assertSessionHasStarted];
         
-        if ([payload valueForKeyPath:PushResponse_InteractionUrl]!=nil) {
+        if ([payload valueForKeyPath:PushResponse_InteractionUrl] != nil) {
             NSString *lastDeviceToken = [_cache getDeviceToken];
             
             NSString *callbackurl = [payload valueForKeyPath:PushResponse_InteractionUrl];
