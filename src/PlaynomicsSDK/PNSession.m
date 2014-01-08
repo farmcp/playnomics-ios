@@ -546,6 +546,8 @@
 
 
 - (void) pushNotificationsWithPayload:(NSDictionary *)payload {
+    if(!payload){ return; }
+    
     @try {
         if(_state == PNSessionStateStarted){
             if ([payload valueForKeyPath:PushResponse_InteractionUrl] != nil) {
