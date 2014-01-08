@@ -54,6 +54,7 @@
     UIView *_parentView;
     
     NSData *_newDeviceToken;
+    NSDictionary *_newPushInfo;
 }
 
 
@@ -124,6 +125,7 @@
     [_parentView release];
     
     [_newDeviceToken release];
+    [_newPushInfo release];
     
     [super dealloc];
 }
@@ -276,6 +278,13 @@
     if(_newDeviceToken){
         //push notifications were enabled before the session was actually started
         [self enablePushNotificationsWithToken: _newDeviceToken];
+        [_newDeviceToken release];
+    }
+    
+    if(_newPushInfo){
+        //a push notification was received before the session was actually started
+        [self pushNotificationsWithPayload:_newPushInfo];
+        [_newPushInfo release];
     }
     
     [_cache writeDataToCache];
@@ -538,25 +547,27 @@
 
 - (void) pushNotificationsWithPayload:(NSDictionary *)payload {
     @try {
-        [self assertSessionHasStarted];
-        
-        if ([payload valueForKeyPath:PushResponse_InteractionUrl] != nil) {
-            NSString *lastDeviceToken = [_cache getDeviceToken];
-            
-            NSString *callbackurl = [payload valueForKeyPath:PushResponse_InteractionUrl];
-            // append required parameters to the interaction tracking url
-            NSString *trackedCallback = [callbackurl stringByAppendingFormat:@"&%@=%lld&%@=%@&%@=%@",
-                                         PushInteractionUrl_AppIdParam, self.applicationId,
-                                         PushInteractionUrl_UserIdParam, self.userId,
-                                         PushInteractionUrl_PushTokenParam, lastDeviceToken];
-            
-            UIApplicationState state = [[UIApplication sharedApplication] applicationState];
-            // only append the flag "pushIgnored" if the app is in Active state and either
-            // the game developer doesn't pass us the flag "pushIgnored" in the dictionary or they do pass the flag and set it to YES
-            if (state == UIApplicationStateActive && !([payload objectForKey:PushInteractionUrl_IgnoredParam] && [[payload objectForKey:PushInteractionUrl_IgnoredParam] isEqual:[NSNumber numberWithBool:NO]])) {
-                trackedCallback = [trackedCallback stringByAppendingFormat:@"&%@",PushInteractionUrl_IgnoredParam];
+        if(_state == PNSessionStateStarted){
+            if ([payload valueForKeyPath:PushResponse_InteractionUrl] != nil) {
+                NSString *lastDeviceToken = [_cache getDeviceToken];
+                
+                NSString *callbackurl = [payload valueForKeyPath:PushResponse_InteractionUrl];
+                // append required parameters to the interaction tracking url
+                NSString *trackedCallback = [callbackurl stringByAppendingFormat:@"&%@=%lld&%@=%@&%@=%@",
+                                             PushInteractionUrl_AppIdParam, self.applicationId,
+                                             PushInteractionUrl_UserIdParam, self.userId,
+                                             PushInteractionUrl_PushTokenParam, lastDeviceToken];
+                
+                UIApplicationState state = [[UIApplication sharedApplication] applicationState];
+                // only append the flag "pushIgnored" if the app is in Active state and either
+                // the game developer doesn't pass us the flag "pushIgnored" in the dictionary or they do pass the flag and set it to YES
+                if (state == UIApplicationStateActive && !([payload objectForKey:PushInteractionUrl_IgnoredParam] && [[payload objectForKey:PushInteractionUrl_IgnoredParam] isEqual:[NSNumber numberWithBool:NO]])) {
+                    trackedCallback = [trackedCallback stringByAppendingFormat:@"&%@",PushInteractionUrl_IgnoredParam];
+                }
+                [self pingUrlForCallback: trackedCallback];
             }
-            [self pingUrlForCallback: trackedCallback];
+        } else {
+            _newPushInfo = [payload copy];
         }
     }
     @catch (NSException *exception) {
