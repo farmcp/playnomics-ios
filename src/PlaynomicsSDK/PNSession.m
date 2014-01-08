@@ -185,6 +185,7 @@
         };
         void (^applicationTerminating)(NSNotification *notif) = ^(NSNotification *notif){
             [self stop];
+            [self release];
         };
         
         [_observers addObject: [center addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:mainQueue usingBlock:applicationPaused]];
@@ -523,7 +524,7 @@
 
 - (void) enablePushNotificationsWithToken:(NSData *)deviceToken {
     @try {
-        if(_state == PNSessionStateStarted){
+        if(_state != PNSessionStateUnkown && _state != PNSessionStateStopped){
             NSString *oldToken = [_cache getDeviceToken];
             NSString *newToken = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
             newToken = [newToken stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -549,7 +550,7 @@
     if(!payload){ return; }
     
     @try {
-        if(_state == PNSessionStateStarted){
+        if(_state != PNSessionStateUnkown && _state != PNSessionStateStopped){
             if ([payload valueForKeyPath:PushResponse_InteractionUrl] != nil) {
                 NSString *lastDeviceToken = [_cache getDeviceToken];
                 
