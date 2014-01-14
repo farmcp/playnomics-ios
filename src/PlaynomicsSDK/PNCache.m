@@ -43,7 +43,12 @@
         self.lastSessionId = [[[PNGeneratedHexId alloc] initWithValue: lastSessionIdHex] autorelease];
     }
     
-    self.lastUserId = [defaults stringForKey:PNUserDefaultsLastUserID];
+    //try to get the user ID from NSUserDefaults, fallback to the legacy pasteboard
+    //for obtaining the user ID. This is done for backwards compatibility with the old Unity SDK
+    self.lastUserId = [defaults stringForKey:PNUserDefaultsLastUserID]
+                ? [defaults stringForKey:PNUserDefaultsLastUserID]
+                : [self getLegacyUserId];
+    
     self.lastEventTime = [defaults doubleForKey:PNUserDefaultsLastSessionEventTime];
     self.deviceToken = [defaults stringForKey:PNUserDefaultsLastDeviceToken];
 }
@@ -122,6 +127,18 @@
     if(self.lastSessionId != value){
         self.lastSessionId = value;
     }
+}
+
+- (NSString *) getLegacyUserId {
+    //for previous versions of the Unity SDK
+    UIPasteboard *pasteBoard = [UIPasteboard pasteboardWithName:PNUserDefaultsLastDeviceID create:NO];
+    if(pasteBoard){
+        NSString *storedUUID = [pasteBoard string];
+        if ([storedUUID length] > 0) {
+            return storedUUID;
+        }
+    }
+    return nil;
 }
 
 - (NSString *) getLastUserId{
