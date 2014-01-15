@@ -6,6 +6,5 @@
   before_install:
     - brew update
     - brew upgrade xctool
-    - gem install cocoapods
     - cd src && pod install
   script: xctool -workspace PlaynomicsSDK.xcworkspace -configuration Debug -platform="iOS Simulator" -scheme PlaynomicsSDKTests clean test -freshInstall -sdk iphonesimulator 
