@@ -6,4 +6,5 @@
   before_install:
     - brew update
     - brew upgrade xctool
-  script: xctool -workspace src/PlaynomicsSDK.xcworkspace -configuration Debug -platform="iOS Simulator" -scheme PlaynomicsSDKTests clean test -freshInstall -sdk iphonesimulator 
+    - cd src && pod install
+  script: xctool -workspace PlaynomicsSDK.xcworkspace -configuration Debug -platform="iOS Simulator" -scheme PlaynomicsSDKTests clean test -freshInstall -sdk iphonesimulator 
