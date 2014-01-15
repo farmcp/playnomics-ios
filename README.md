@@ -408,6 +408,10 @@ If you have any questions or issues, please contact <a href="mailto:support@play
 
 Change Log
 ==========
+#### Version 1.5.0
+* Internal refactoring for working with the Unity SDK
+* Improved the quality of unit tests
+
 #### Version 1.4.2
 * Bug fix for tracking push notification at application launch
 
