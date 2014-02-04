@@ -40,7 +40,6 @@
 - (PNGameSessionInfo *) getGameSessionInfo{
     PNGameSessionInfo *info = [[PNGameSessionInfo alloc] initWithApplicationId:1
                                                                         userId:@"user-name"
-                                                                          idfa:@"idfa"
                                                                           idfv:@"idfv"
                                                                      sessionId:[[PNGeneratedHexId alloc] initAndGenerateValue]];
     return [info autorelease];
@@ -49,7 +48,6 @@
 -(void) assertCommonInfoIsAvailable: (PNEvent*) event sessionInfo: (PNGameSessionInfo *) session {
     XCTAssertEqualObjects([event.eventParameters valueForKey:@"a"], session.applicationId, @"Application ID is set");
     XCTAssertEqualObjects([event.eventParameters valueForKey:@"u"], session.userId, @"User ID is set");
-    XCTAssertEqualObjects([event.eventParameters valueForKey:@"idfa"], session.idfa, @"IDFA is set");
     XCTAssertEqualObjects([event.eventParameters valueForKey:@"idfv"], session.idfv, @"IDFV is set");
     XCTAssertEqualObjects([event.eventParameters valueForKey:@"t"], [NSNumber numberWithLongLong: event.eventTime * 1000], @"Event time is set");
     XCTAssertEqualObjects([event.eventParameters valueForKey:@"ever"], PNPropertyVersion, @"SDK Version is set");
@@ -227,11 +225,9 @@
 }
 
 -(void) testUserInfoDeviceSettings{
-    BOOL limitDeviceTracking = YES;
-    PNEventUserInfo *userInfo = [[PNEventUserInfo alloc] initWithSessionInfo:_info limitAdvertising:limitDeviceTracking];
+    PNEventUserInfo *userInfo = [[PNEventUserInfo alloc] initWithSessionInfo:_info];
     
     [self assertCommonInfoIsAvailable:userInfo sessionInfo:_info];
-    XCTAssertEqualObjects([userInfo.eventParameters valueForKey:@"limitAdvertising"], @"true", @"Limit Advertising is set");
 }
 
 @end

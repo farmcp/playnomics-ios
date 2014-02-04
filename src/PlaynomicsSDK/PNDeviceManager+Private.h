@@ -7,7 +7,5 @@
 //
 
 @interface PNDeviceManager(Private)
-- (BOOL) isAdvertisingTrackingEnabledFromDevice;
-- (NSString *) getAdvertisingIdentifierFromDevice;
 - (NSString *) getVendorIdentifierFromDevice;
 @end

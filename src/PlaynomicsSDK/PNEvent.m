@@ -14,9 +14,6 @@
         [_eventParameters setValue: info.applicationId forKey: PNEventParameterApplicationId];
         [_eventParameters setValue: info.userId forKey: PNEventParameterUserId];
         
-        if(info.idfa) {
-            [_eventParameters setValue: info.idfa forKey: PNEventParameterIdfa];
-        }
         if(info.idfv) {
             [_eventParameters setValue: info.idfv forKey: PNEventParameterIdfv];
         }

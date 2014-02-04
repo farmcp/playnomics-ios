@@ -35,6 +35,7 @@
 #define PNEventParameterUserInfoSource @"po"
 #define PNEventParameterUserInfoCampaign @"pm"
 #define PNEventParameterUserInfoInstallDate @"pi"
+#define PNEventParameterUserInfoAltUserId @"altUserId"
 
 //transactions
 #define PNEventParameterTransactionId @"r"

@@ -12,12 +12,15 @@
 
 @interface StubPNCache : NSObject
 
--(id) initWithIdfa: (NSString *) idfa idfv: (NSString *) idfv limitAdvertising: (BOOL) limitAdvertising;
+-(id) initWithIdfv: (NSString *) idfv;
 
--(id) initWithIdfa: (NSString *) idfa idfv: (NSString *) idfv limitAdvertising: (BOOL) limitAdvertising
-             lastEventTime: (NSTimeInterval) lastEventTime lastUserId: (NSString *)lastUserId lastSessionId: (PNGeneratedHexId *) sessionId;
+-(id) initWithIdfv: (NSString *) idfv
+     lastEventTime: (NSTimeInterval) lastEventTime
+        lastUserId: (NSString *)lastUserId
+     lastSessionId: (PNGeneratedHexId *) sessionId;
 
--(id) initWithIdfa: (NSString *) idfa idfv: (NSString *) idfv limitAdvertising: (BOOL) limitAdvertising deviceToken:(StubDeviceToken *) token;
+-(id) initWithIdfv: (NSString *) idfv
+       deviceToken:(StubDeviceToken *) token;
 
 -(void) loadDataFromCache;
 -(void) writeDataToCache;

@@ -51,7 +51,7 @@
     [Playnomics startWithApplicationId:appId];
     
     if (launchOptions && [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        NSDictionary *pushInfo = [notif.userInfo valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+        NSDictionary *pushInfo = [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
         [Playnomics pushNotificationsWithPayload:pushInfo];
     }
 

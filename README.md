@@ -235,7 +235,7 @@ After you've finished the installation, you should verify that your application 
 
 Using iOS SDK v1.4.0+ you can register your device as a Test Device and validate your events on the self-check page for your application: **`https://controlpanel.playnomics.com/applications/<APPID>`**
 
-To test your in-app campaigns, you can enter your device's IDFA and select which segments to fall into.  Optionally, you can opt to not select any segments to simply see your device's data flowing through the validator.
+To test your in-app campaigns, you can enter your IDFV (id for vendor) and select which segments to fall into.  Optionally, you can opt to not select any segments to simply see your device's data flowing through the validator.
 
 This page will update with events as they occur in real-time, with any errors flagged.
 
@@ -408,6 +408,11 @@ If you have any questions or issues, please contact <a href="mailto:support@play
 
 Change Log
 ==========
+#### Version 1.5.1
+* If userId was previously set, re-use it and ignore any new userId that is sent so DAU does not falsely fluctuate
+* userId defaults to IDFV if none is ever passed
+* Send IDFA and limit ad tracking flag only for ad requests
+
 #### Version 1.5.0
 * Internal refactoring for working with the Unity SDK
 * Improved the quality of unit tests

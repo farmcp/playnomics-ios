@@ -7,9 +7,7 @@
 //
 
 @interface PNCache()
-@property (copy) NSString *idfa;
 @property (copy) NSString *idfv;
-@property (assign) BOOL limitAdvertising;
 @property (retain) PNGeneratedHexId *lastSessionId;
 @property (copy) NSString *lastUserId;
 @property (assign) NSTimeInterval lastEventTime;

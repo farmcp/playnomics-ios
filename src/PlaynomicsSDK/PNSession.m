@@ -147,7 +147,7 @@
 
 #pragma mark - Session Control Methods
 -(PNGameSessionInfo *) getGameSessionInfo{
-    PNGameSessionInfo * info =  [[PNGameSessionInfo alloc] initWithApplicationId:self.applicationId userId:self.userId idfa:[_cache getIdfa] idfv:[_cache getIdfv] sessionId: self.sessionId];
+    PNGameSessionInfo * info =  [[PNGameSessionInfo alloc] initWithApplicationId:self.applicationId userId:self.userId idfv:[_cache getIdfv] sessionId: self.sessionId];
     [info autorelease];
     return info;
 }
@@ -224,14 +224,24 @@
     _state = PNSessionStateStarted;
     
     NSString *lastUserId = [_cache getLastUserId];
+    NSString *newUserId = nil;
+    // Fix made in v1.6.0
+    // Use case is that there are multiple user ids a publisher could provide
+    // If we want to ensure 1 user only gets counted as 1 DAU, we need to keep
+    // re-using the same userId no matter what they log in as.
+    // NOTE: If users share a device, this will result in a different bug
+    if (lastUserId) {
+        if (_userId && ![lastUserId isEqualToString:_userId]) {
+            settingsChanged = TRUE;
+            newUserId = [[_userId copy] autorelease];
+        }
+        _userId = [lastUserId retain];
+    }
     
-    // Set userId to cookieId if it isn't present
+    // Set userId to IDFV if it isn't present
     if (!(_userId && [_userId length] > 0)) {
-        if ([_cache getIdfa]) {
-            _userId = [[_cache getIdfa] retain];
-        } else if (lastUserId) {
-            //use the previous user ID
-            _userId = [lastUserId retain] ;
+        if ([_cache getIdfv]) {
+            _userId = [[_cache getIdfv] retain];
         } else {
             //autogenerate the user ID
             _userId = [[_deviceManager generateUserId] retain];
@@ -273,7 +283,7 @@
     [_apiClient start];
     
     if(settingsChanged){
-        [self onDeviceInfoChanged];
+        [self onDeviceInfoChanged: newUserId];
     }
     
     if(_newDeviceToken){
@@ -446,8 +456,11 @@
 
 #pragma mark - Device Identifiers
 
--(void)onDeviceInfoChanged{
-    PNEventUserInfo *userInfo = [[PNEventUserInfo alloc] initWithSessionInfo:[self getGameSessionInfo] limitAdvertising:[_cache getLimitAdvertising]];
+-(void)onDeviceInfoChanged:(NSString *) altUserId {
+    PNEventUserInfo *userInfo = [[PNEventUserInfo alloc] initWithSessionInfo:[self getGameSessionInfo]];
+    if(altUserId) {
+        [userInfo appendParameter:altUserId forKey:PNEventParameterUserInfoAltUserId];
+    }
     [userInfo autorelease];
     [_apiClient enqueueEvent:userInfo];
 }

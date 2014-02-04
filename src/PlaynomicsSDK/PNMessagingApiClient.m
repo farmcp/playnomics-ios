@@ -8,11 +8,15 @@
 
 #import "PNEventApiClient.h"
 #import "PNMessagingApiClient.h"
+#import <AdSupport/AdSupport.h>
 
 @implementation PNMessagingApiClient{
     PNSession *_session;
     NSMutableDictionary *_requestsByUrl;
 }
+
+@synthesize idfa;
+@synthesize limitAdvertising;
 
 -(id) initWithSession:(PNSession *) session{
     self = [super init];
@@ -20,6 +24,39 @@
         _session = session;
         _requestsByUrl = [[NSMutableDictionary alloc] init];
     }
+    
+    if(NSClassFromString(@"ASIdentifierManager")){
+        ASIdentifierManager *manager = [ASIdentifierManager sharedManager];
+        self.idfa = [manager.advertisingIdentifier UUIDString];
+        self.limitAdvertising = manager.isAdvertisingTrackingEnabled;
+    }
+    
+    // If we ever want to cache the IDFA, uncomment this code
+    /*
+     UIPasteboard *playnomicsPasteboard = [UIPasteboard pasteboardWithName:PNPasteboardName create:YES];
+     playnomicsPasteboard = YES;
+     if([[playnomicsPasteboard items] count] > 0){
+     NSDictionary *data = [[playnomicsPasteboard items] objectAtIndex:0];
+     self.idfa = [self deserializeStringFromData:data key:PNPasteboardLastIDFA];
+     
+     self.limitAdvertising = [PNUtil stringAsBool: [self deserializeStringFromData:data key:PNPasteboardLastLimitAdvertising]];
+     }
+     */
+    // If we ever want to write to the cache, uncomment this code
+    /*
+     if(_idfaChanged || _limitAdvertisingChanged){
+     UIPasteboard *playnomicsPasteboard = [self getPlaynomicsPasteboard];
+     NSMutableDictionary *pasteboardData = ([[playnomicsPasteboard items] count] == 1) ?
+     [[playnomicsPasteboard items] objectAtIndex:0] :
+     [[NSMutableDictionary new] autorelease];
+     
+     
+     [pasteboardData setValue:self.idfa forKey:PNPasteboardLastIDFA];
+     [pasteboardData setValue:[PNUtil boolAsString: self.limitAdvertising] forKey: PNPasteboardLastLimitAdvertising];
+     
+     playnomicsPasteboard.items = [[[NSArray alloc] initWithObjects:pasteboardData, nil] autorelease];
+     }
+     */
     return self;
 }
 
@@ -42,13 +79,13 @@
     [params setObject:[NSNumber numberWithInt: screenRect.size.height] forKey:@"c"];
     [params setObject:[NSNumber numberWithInt: screenRect.size.width] forKey:@"d"];
     
-    if(_session.cache.getIdfa){
-        [params setObject:_session.cache.getIdfa forKey:@"idfa"];
-    }
     if(_session.cache.getIdfv){
         [params setObject:_session.cache.getIdfv forKey:@"idfv"];
     }
-    [params setObject:[PNUtil boolAsString:!_session.cache.getLimitAdvertising] forKey:@"allowTracking"];
+    if(self.idfa){
+        [params setObject:self.idfa forKey:@"idfa"];
+    }
+    [params setObject:[PNUtil boolAsString:!self.limitAdvertising] forKey:@"allowTracking"];
     
     NSString *language = [PNUtil getLanguage];
     if (language) {

@@ -11,18 +11,10 @@
 
 @interface PNCache : NSObject
 
-@property (readonly) BOOL  idfaChanged;
 @property (readonly) BOOL  idfvChanged;
-@property (readonly) BOOL  limitAdvertisingChanged;
-
-- (NSString *) getIdfa;
-- (void) updateIdfa: (NSString *) value;
 
 - (NSString *) getIdfv;
 - (void) updateIdfv : (NSString *) value;
-
-- (BOOL) getLimitAdvertising;
-- (void) updateLimitAdvertising : (BOOL) value;
 
 - (PNGeneratedHexId *) getLastSessionId;
 - (void) updateLastSessionId: (PNGeneratedHexId *) value;

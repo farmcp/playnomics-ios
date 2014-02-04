@@ -5,8 +5,7 @@
 - (id) initWithSessionInfo:(PNGameSessionInfo *)info
                  pushToken:(NSString *) pushToken;
 
-- (id) initWithSessionInfo:(PNGameSessionInfo *)info
-          limitAdvertising:(BOOL) limitAdvertising;
+- (id) initWithSessionInfo:(PNGameSessionInfo *)info;
 
 -(id) initWithSessionInfo:(PNGameSessionInfo *)info
                    source:(NSString *) source

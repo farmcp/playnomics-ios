@@ -12,13 +12,9 @@
 
 @implementation PNCache
 
-@synthesize idfa;
 @synthesize idfv;
-@synthesize limitAdvertising;
 
-@synthesize idfaChanged = _idfaChanged;
 @synthesize idfvChanged = _idfvChanged;
-@synthesize limitAdvertisingChanged = _limitAdvertisingChanged;
 @synthesize deviceToken=_deviceToken;
 
 - (void)dealloc{
@@ -26,14 +22,6 @@
 }
 
 -(void) loadDataFromCache {
-    UIPasteboard *playnomicsPasteboard = [self getPlaynomicsPasteboard];
-    if([[playnomicsPasteboard items] count] > 0){
-        NSDictionary *data = [[playnomicsPasteboard items] objectAtIndex:0];
-        self.idfa = [self deserializeStringFromData:data key:PNPasteboardLastIDFA];
-        
-        self.limitAdvertising = [PNUtil stringAsBool: [self deserializeStringFromData:data key:PNPasteboardLastLimitAdvertising]];
-    }
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     self.idfv = [defaults stringForKey:PNUserDefaultsLastIDFV];
@@ -54,19 +42,6 @@
 }
 
 -(void) writeDataToCache {
-    if(_idfaChanged || _limitAdvertisingChanged){
-        UIPasteboard *playnomicsPasteboard = [self getPlaynomicsPasteboard];
-        NSMutableDictionary *pasteboardData = ([[playnomicsPasteboard items] count] == 1) ?
-                                    [[playnomicsPasteboard items] objectAtIndex:0] :
-                                    [[NSMutableDictionary new] autorelease];
-
-        
-        [pasteboardData setValue:self.idfa forKey:PNPasteboardLastIDFA];
-        [pasteboardData setValue:[PNUtil boolAsString: self.limitAdvertising] forKey: PNPasteboardLastLimitAdvertising];
-        
-        playnomicsPasteboard.items = [[[NSArray alloc] initWithObjects:pasteboardData, nil] autorelease];
-    }
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     if(_idfvChanged){
@@ -80,23 +55,6 @@
     [defaults synchronize];
 }
 
-- (UIPasteboard *) getPlaynomicsPasteboard {
-    UIPasteboard *pasteboard = [UIPasteboard pasteboardWithName:PNPasteboardName create:YES];
-    pasteboard.persistent = YES;
-    return pasteboard;
-}
-
-- (NSString *) getIdfa{
-    return self.idfa;
-}
-
-- (void) updateIdfa: (NSString *) value{
-    if(value && !(self.idfa && [value isEqualToString:self.idfa])){
-        self.idfa = value;
-        _idfaChanged = TRUE;
-    }
-}
-
 - (NSString *) getIdfv {
     return self.idfv;
 }
@@ -105,17 +63,6 @@
     if(value &&  !(self.idfv && [value isEqualToString: self.idfv])){
         self.idfv = value;
         _idfvChanged = TRUE;
-    }
-}
-
-- (BOOL) getLimitAdvertising{
-    return self.limitAdvertising;
-}
-
-- (void) updateLimitAdvertising : (BOOL) value{
-    if(self.limitAdvertising != value){
-        self.limitAdvertising = value;
-        _limitAdvertisingChanged = TRUE;
     }
 }
 

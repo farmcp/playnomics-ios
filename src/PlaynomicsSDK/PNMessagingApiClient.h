@@ -12,6 +12,11 @@
 #import "PNFrameRequest.h"
 
 @interface PNMessagingApiClient : NSObject<PNFrameRequestDelegate>
+
+@property (copy) NSString *idfa;
+@property (assign) BOOL limitAdvertising;
+
 -(id) initWithSession:(PNSession *) session;
 -(void) loadDataForFrame:(PNFrame *) frame;
+
 @end

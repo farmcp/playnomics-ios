@@ -11,11 +11,8 @@
     return self;
 }
 
-- (id) initWithSessionInfo:(PNGameSessionInfo *)info
-          limitAdvertising: (BOOL) limitAdvertising {
+- (id) initWithSessionInfo:(PNGameSessionInfo *)info {
     if((self = [super initWithSessionInfo: info])){
-        
-        [self appendParameter:[PNUtil boolAsString:limitAdvertising] forKey:PNEventParameterUserInfoLimitAdvertising];
         [self appendParameter:@"update" forKey:PNEventParameterUserInfoType];
     }
     return self;
