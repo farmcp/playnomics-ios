@@ -28,17 +28,14 @@
 
 + (BOOL) startWithApplicationId:(unsigned long long) applicationId{
     PNSession *session = [PNSession sharedInstance];
-    session.applicationId = applicationId;
-    [session start];
+    [session startWithApplicationId: applicationId userId: nil];
     return session.state == PNSessionStateStarted;
 }
 
 + (BOOL) startWithApplicationId:(unsigned long long) applicationId
                       andUserId: (NSString *) userId{
     PNSession *session = [PNSession sharedInstance];
-    session.applicationId = applicationId;
-    session.userId = userId;
-    [session start];
+    [session startWithApplicationId: applicationId userId: userId];
     return session.state == PNSessionStateStarted;
 }
 

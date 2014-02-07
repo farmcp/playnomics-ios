@@ -408,8 +408,10 @@ If you have any questions or issues, please contact <a href="mailto:support@play
 
 Change Log
 ==========
-#### Version 1.5.1
+#### Version 1.5.2
 * If userId was previously set, re-use it and ignore any new userId that is sent so DAU does not falsely fluctuate
+
+#### Version 1.5.1
 * userId defaults to IDFV if none is ever passed
 * Send IDFA and limit ad tracking flag only for ad requests
 

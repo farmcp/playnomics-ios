@@ -19,7 +19,7 @@
 #define PNPropertyMessagingTestUrl @"https://ads.b.playnomics.net/v2/"
 #define PNPropertyMessagingProdUrl @"https://ads.a.playnomics.net/v2/"
 
-#define PNPropertyVersion @"1.5.1"
+#define PNPropertyVersion @"1.5.2"
 // Connection timeout in seconds
 #define PNPropertyConnectionTimeout 60
 

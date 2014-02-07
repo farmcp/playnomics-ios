@@ -157,7 +157,7 @@
              @"PlayRM session could not be started! Can't send data to Playnomics API.");
 }
 
--(void) start {
+-(void) startWithApplicationId:(unsigned long long)applicationId userId:(NSString *)userId {
     @try {
         if (_state == PNSessionStateStarted) {
             return;
@@ -170,6 +170,9 @@
             [self resume];
             return;
         }
+        
+        _applicationId = applicationId;
+        _userId = userId;
         
         [self startSession];
         [self startEventTimer];

@@ -25,7 +25,7 @@ typedef enum {
 
 @property (atomic, readonly) NSString *sdkVersion;
 
-@property (atomic, assign) signed long long applicationId;
+@property (atomic, assign) unsigned long long applicationId;
 @property (atomic, copy) NSString *userId;
 
 @property (nonatomic, readonly) PNGeneratedHexId *sessionId;
@@ -41,7 +41,8 @@ typedef enum {
 - (NSString *) getEventsUrl;
 
 //Application Lifecycle
-- (void) start;
+- (void) startWithApplicationId:(unsigned long long) applicationId
+                         userId:(NSString *) userId;
 - (void) pause;
 - (void) resume;
 - (void) stop;

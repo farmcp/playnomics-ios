@@ -57,6 +57,8 @@
 
 //runs app start with no initial device data, expects 2 events: appStart and userInfo
 -(void) testAppStartNewDevice{
+    unsigned long long applicationId = 1L;
+    NSString *userId = @"test-user";
     NSString *idfv = nil;
     
     _cache = [[StubPNCache alloc] initWithIdfv:idfv];
@@ -67,14 +69,10 @@
     
     [self mockCurrentDeviceInfo: _session.deviceManager idfv:currentIdfv];
     
-    _session.applicationId = 1;
-    _session.userId = @"test-user";
+    [_session startWithApplicationId:applicationId userId:userId];
     
-    [_session start];
-    
-    
-    XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
-    XCTAssertEqualObjects(_session.userId,  @"test-user", @"User ID should be set");
+    XCTAssertTrue(_session.applicationId == applicationId, @"Application should be set");
+    XCTAssertEqualObjects(_session.userId,  userId, @"User ID should be set");
     
     XCTAssertTrue([_stubApiClient.events count] == 2, @"2 events should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart is the first event");
@@ -85,8 +83,9 @@
 
 //ios5 tests
 -(void) testAppStartPreviousUserId{
-    NSString *idfv = nil;
+    unsigned long long applicationId = 1L;
     NSString *lastUserId = @"lastUserId";
+    NSString *idfv = nil;
     
     NSTimeInterval tenMinutesAgo = NSTimeIntervalSince1970 - 10 * 60;
     PNGeneratedHexId *sessionId = [[PNGeneratedHexId alloc] initAndGenerateValue];
@@ -98,11 +97,9 @@
     //assume IDFA is not available
     [self mockCurrentDeviceInfo: _session.deviceManager idfv:idfv];
     
-    _session.applicationId = 1;
+    [_session startWithApplicationId:applicationId userId:nil];
     
-    [_session start];
-    
-    XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
+    XCTAssertTrue(_session.applicationId == applicationId, @"Application should be set");
     XCTAssertEqualObjects(_session.userId,  lastUserId, @"User ID should be loaded from cache");
     
     XCTAssertTrue([_stubApiClient.events count] == 1, @"1 event should be queued");
@@ -114,6 +111,8 @@
 
 //runs app start with initial device data, expects 1 event: appStart
 -(void) testAppStartNoDeviceChanges{
+    unsigned long long applicationId = 1L;
+    NSString *userId = @"test-user";
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
     _cache = [[StubPNCache alloc] initWithIdfv:idfv];
@@ -121,14 +120,11 @@
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
 
     [self mockCurrentDeviceInfo: _session.deviceManager idfv:idfv];
-
-    _session.applicationId = 1;
-    _session.userId = @"test-user";
     
-    [_session start];
+    [_session startWithApplicationId:applicationId userId:userId];
     
-    XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
-    XCTAssertEqualObjects(_session.userId,  @"test-user", @"User ID should be set");
+    XCTAssertTrue(_session.applicationId == applicationId, @"Application should be set");
+    XCTAssertEqualObjects(_session.userId,  userId, @"User ID should be set");
     
     XCTAssertTrue([_stubApiClient.events count] == 1, @"1 events should be queued");
     PNEventAppStart *appStart = [_stubApiClient.events objectAtIndex:0];
@@ -139,6 +135,7 @@
 
 //runs session start with initial device data, and lapsed previous session, expects 1 event: appStart
 -(void) testAppStartLapsedSession {
+    unsigned long long applicationId = 1L;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
     NSTimeInterval now = [[NSDate new] timeIntervalSinceNow];
@@ -152,10 +149,9 @@
     
     [self mockCurrentDeviceInfo: _session.deviceManager idfv:idfv];
     
-    _session.applicationId = 1;
-    [_session start];
+    [_session startWithApplicationId:applicationId userId:nil];
     
-    XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
+    XCTAssertTrue(_session.applicationId == applicationId, @"Application should be set");
     XCTAssertEqualObjects(_session.userId, [[_cache getMockCache] getIdfv], @"User ID should be same as IDFV");
     
     XCTAssertTrue([_stubApiClient.events count] == 1, @"1 events should be queued");
@@ -167,9 +163,10 @@
 
 //runs session start with initial device data, and lapsed previous session, expects 1 event: appStart
 -(void) testAppStartSwappedUser {
-    NSString *idfv = [[[NSUUID alloc] init] UUIDString];
+    unsigned long long applicationId = 1L;
     NSString *lastUserId = @"old-user-id";
     NSString *newUserId = @"new-user-id";
+    NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
     NSTimeInterval now = [[NSDate new] timeIntervalSinceNow];
     NSTimeInterval aMinuteAgo = now - 60 * 1;
@@ -182,11 +179,9 @@
     
     [self mockCurrentDeviceInfo: _session.deviceManager idfv:idfv];
     
-    _session.applicationId = 1;
-    _session.userId = newUserId;
-    [_session start];
+    [_session startWithApplicationId:applicationId userId:newUserId];
     
-    XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
+    XCTAssertTrue(_session.applicationId == applicationId, @"Application should be set");
     XCTAssertEqualObjects(_session.userId, lastUserId, @"User ID should be same as the last used user id");
 
     XCTAssertTrue([_stubApiClient.events count] == 2, @"2 events should be queued");
@@ -201,6 +196,7 @@
 
 //runs session start with initial device data, a previous startTime, expects 2 events: appPage
 -(void) testAppPauseNoDeviceChanges{
+    unsigned long long applicationId = 1L;
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     NSString *lastUserId = idfv;
     NSTimeInterval now = [[NSDate new] timeIntervalSince1970];
@@ -214,10 +210,9 @@
     
     [self mockCurrentDeviceInfo: _session.deviceManager idfv:idfv];
     
-    _session.applicationId = 1;
-    [_session start];
+    [_session startWithApplicationId:applicationId userId:nil];
     
-    XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
+    XCTAssertTrue(_session.applicationId == applicationId, @"Application should be set");
     XCTAssertEqualObjects(_session.userId, [[_cache getMockCache] getIdfv], @"User ID should be same as IDFV");
     XCTAssertTrue([_stubApiClient.events count] == 1, @"1 event should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppPage class]], @"appPage is the first event");
@@ -227,6 +222,8 @@
 
 //runs the start, and then milestone. expects 2 events: appStart and milestone
 -(void) testMilestone{
+    unsigned long long applicationId = 1L;
+    NSString *userId = @"test-user";
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
     _cache = [[StubPNCache alloc] initWithIdfv:idfv];
@@ -235,14 +232,11 @@
     
     [self mockCurrentDeviceInfo: _session.deviceManager idfv:idfv];
     
-    _session.applicationId = 1;
-    _session.userId = @"test-user";
-    
-    [_session start];
+    [_session startWithApplicationId:applicationId userId:userId];
     [_session milestone:PNMilestoneCustom1];
     
-    XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
-    XCTAssertEqualObjects(_session.userId, @"test-user", @"User ID should be set");
+    XCTAssertTrue(_session.applicationId == applicationId, @"Application should be set");
+    XCTAssertEqualObjects(_session.userId, userId, @"User ID should be set");
     XCTAssertTrue([_stubApiClient.events count] == 2, @"2 events should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart is the first event");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:1] isKindOfClass:[PNEventMilestone class]], @"milestone is the second event");
@@ -265,6 +259,8 @@
 
 //runs start, and then transaction. expects 2 events: appStart and milestone
 -(void) testTransaction{
+    unsigned long long applicationId = 1L;
+    NSString *userId = @"test-user";
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
     _cache = [[StubPNCache alloc] initWithIdfv:idfv];
@@ -273,14 +269,11 @@
     
     [self mockCurrentDeviceInfo: _session.deviceManager idfv:idfv];
     
-    _session.applicationId = 1;
-    _session.userId = @"test-user";
-    
-    [_session start];
+    [_session startWithApplicationId:applicationId userId:userId];
     [_session transactionWithUSDPrice:[NSNumber numberWithDouble:0.99] quantity:1];
     
-    XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
-    XCTAssertEqualObjects(_session.userId, @"test-user", @"User ID should be set");
+    XCTAssertTrue(_session.applicationId == applicationId, @"Application should be set");
+    XCTAssertEqualObjects(_session.userId, userId, @"User ID should be set");
     XCTAssertTrue([_stubApiClient.events count] == 2, @"2 events should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart is the first event");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:1] isKindOfClass:[PNEventTransaction class]], @"transaction is the second event");
@@ -303,6 +296,8 @@
 
 //runs start, and then enablePushNotifications, expects 2 events: appStart and enable push notifications
 -(void) testEnabledPush{
+    unsigned long long applicationId = 1L;
+    NSString *userId = @"test-user";
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
     StubDeviceToken *oldToken = [[StubDeviceToken alloc] initWithToken:@"<12345 6789>" cleanToken:@"123456789"];
@@ -313,17 +308,14 @@
     
     [self mockCurrentDeviceInfo: _session.deviceManager idfv:idfv];
     
-    _session.applicationId = 1;
-    _session.userId = @"test-user";
-    
-    [_session start];
+    [_session startWithApplicationId:applicationId userId:userId];
     //token gets updated
     StubDeviceToken *newToken = [[StubDeviceToken alloc] initWithToken:@"<9876 54321>" cleanToken:@"987654321"];
     [_session enablePushNotificationsWithToken: newToken];
     
     
-    XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
-    XCTAssertEqualObjects(_session.userId, @"test-user", @"User ID should be set");
+    XCTAssertTrue(_session.applicationId == applicationId, @"Application should be set");
+    XCTAssertEqualObjects(_session.userId, userId, @"User ID should be set");
     XCTAssertTrue([_stubApiClient.events count] == 2, @"2 events should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart is the first event");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:1] isKindOfClass:[PNEventUserInfo class]], @"userInfo is the second event");
@@ -350,6 +342,8 @@
 
 //runs enablePushTokens but the token has not changed. expects 1 event: appStart
 -(void) testEnabledPushNoTokenChange{
+    unsigned long long applicationId = 1L;
+    NSString *userId = @"test-user";
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
     StubDeviceToken *oldToken = [[StubDeviceToken alloc] initWithToken:@"<12345 6789>" cleanToken:@"123456789"];
@@ -360,21 +354,20 @@
     
     [self mockCurrentDeviceInfo: _session.deviceManager idfv:idfv];
     
-    _session.applicationId = 1;
-    _session.userId = @"test-user";
-    
-    [_session start];
+    [_session startWithApplicationId:applicationId userId:userId];
     //token does not change
     [_session enablePushNotificationsWithToken: oldToken];
 
-    XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
-    XCTAssertEqualObjects(_session.userId, @"test-user", @"User ID should be set");
+    XCTAssertTrue(_session.applicationId == applicationId, @"Application should be set");
+    XCTAssertEqualObjects(_session.userId, userId, @"User ID should be set");
     XCTAssertTrue([_stubApiClient.events count] == 1, @"1 event should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart is the first event");
 }
 
 
 -(void) testAttribution{
+    unsigned long long applicationId = 1L;
+    NSString *userId = @"test-user";
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
     StubDeviceToken *oldToken = [[StubDeviceToken alloc] initWithToken:@"<12345 6789>" cleanToken:@"123456789"];
@@ -384,19 +377,16 @@
     _session.deviceManager = [[PNDeviceManager alloc] initWithCache: _session.cache];
     
     [self mockCurrentDeviceInfo: _session.deviceManager idfv:idfv];
-    
-    _session.applicationId = 1;
-    _session.userId = @"test-user";
 
-    [_session start];
+    [_session startWithApplicationId:applicationId userId:userId];
     
     NSString *source=  @"source";
     NSString *campaign=  @"campaign";
     NSDate *installDate = [NSDate date];
     [_session attributeInstallToSource:source withCampaign:campaign onInstallDate:installDate];
 
-    XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
-    XCTAssertEqualObjects(_session.userId, @"test-user", @"User ID should be set");
+    XCTAssertTrue(_session.applicationId == applicationId, @"Application should be set");
+    XCTAssertEqualObjects(_session.userId, userId, @"User ID should be set");
     XCTAssertTrue([_stubApiClient.events count] == 2, @"2 events should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart is the first event");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:1] isKindOfClass:[PNEventUserInfo class]], @"userInfo is the second event");
@@ -426,6 +416,8 @@
 }
 
 -(void) testApplicationLifeCycle{
+    unsigned long long applicationId = 1L;
+    NSString *userId = @"test-user";
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
     _cache = [[StubPNCache alloc] initWithIdfv:idfv];
@@ -434,15 +426,12 @@
     
     [self mockCurrentDeviceInfo: _session.deviceManager idfv:idfv];
     
-    _session.applicationId = 1;
-    _session.userId = @"test-user";
-    
-    [_session start];
+    [_session startWithApplicationId:applicationId userId:userId];
     [_session pause];
     [_session resume];
 
-    XCTAssertTrue(_session.applicationId == 1L, @"Application should be set");
-    XCTAssertEqualObjects(_session.userId, @"test-user", @"User ID should be set");
+    XCTAssertTrue(_session.applicationId == applicationId, @"Application should be set");
+    XCTAssertEqualObjects(_session.userId, userId, @"User ID should be set");
     
     XCTAssertTrue([_stubApiClient.events count] == 3, @"3 events should be queued");
     XCTAssertTrue([[_stubApiClient.events objectAtIndex:0] isKindOfClass:[PNEventAppStart class]], @"appStart is the first event");
@@ -451,6 +440,8 @@
 }
 
 -(void) testApplicationRestartLifeCycle{
+    unsigned long long applicationId = 1L;
+    NSString *userId = @"test-user";
     NSString *idfv = [[[NSUUID alloc] init] UUIDString];
     
     _cache = [[StubPNCache alloc] initWithIdfv:idfv];
@@ -459,10 +450,7 @@
     
     [self mockCurrentDeviceInfo: _session.deviceManager idfv:idfv];
     
-    _session.applicationId = 1;
-    _session.userId = @"test-user";
-    
-    [_session start];
+    [_session startWithApplicationId:applicationId userId:userId];
     [_session pause];
     
     PNGeneratedHexId *lastSessionId = _session.sessionId;
