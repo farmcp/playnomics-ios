@@ -2,7 +2,7 @@
 //  PNLogger.h
 //
 //  Created by Jared Jenkins on 8/20/13.
-//
+//  Version 1.5.2
 //
 
 #import <UIKit/UIKit.h>

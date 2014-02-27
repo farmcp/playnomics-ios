@@ -2,7 +2,7 @@
 //  Playnomics.h
 //
 //  Created by Jared Jenkins on 8/23/13.
-//
+//  Version 1.5.2
 //
 
 #import <Foundation/Foundation.h>
