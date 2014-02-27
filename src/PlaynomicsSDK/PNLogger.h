@@ -1,7 +1,7 @@
 //
 //  PNLogger.h
 //
-//  Created by Jared Jenkins on 8/20/13.
+//  Created by Jared Jenkins
 //  Version 1.5.2
 //
 
